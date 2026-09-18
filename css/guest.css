@@ -12,7 +12,8 @@ html {
 }
 
 .font-esthetic {
-    font-family: 'Sacramento', cursive !important;
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 600;
 }
 
 .font-arabic {
