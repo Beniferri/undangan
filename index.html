@@ -750,9 +750,23 @@
     (() => {
         const API_BASE = 'https://api.benifin.my.id';
         const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const likeKey = (x) => `betastoria-like-${btoa(unescape(encodeURIComponent(`${x.name}:${x.message}`))).slice(0,32)}`;
+        window.betastoriaLike = (button) => {
+            const key = button.dataset.likeKey;
+            const active = localStorage.getItem(key) === '1';
+            const count = button.querySelector('[data-count-like]');
+            const icon = button.querySelector('i');
+            localStorage.setItem(key, active ? '0' : '1');
+            count.textContent = String(Number(count.textContent || 0) + (active ? -1 : 1));
+            icon.className = active ? 'me-1 fa-regular fa-heart' : 'me-1 fa-solid fa-heart text-danger';
+        };
+        const card = (x) => {
+            const key = likeKey(x), liked = localStorage.getItem(key) === '1';
+            return `<div class="bg-theme-auto rounded-4 shadow-sm p-3 mb-2"><div class="d-flex align-items-start"><div><strong>${esc(x.name)}</strong><p class="m-0 mt-1 small">${esc(x.message)}</p></div><button type="button" onclick="betastoriaLike(this)" data-like-key="${key}" class="btn btn-sm btn-outline-auto ms-auto rounded-3 p-0 shadow-sm d-flex justify-content-start align-items-center"><span class="my-0 mx-1" data-count-like="${liked ? 1 : 0}">${liked ? 1 : 0}</span><i class="me-1 ${liked ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'}"></i></button></div></div>`;
+        };
         const loadApproved = () => fetch(`${API_BASE}/api/guestbook`).then(r => r.ok ? r.json() : Promise.reject()).then(({data=[]}) => {
             const el = document.getElementById('comments');
-            if (el && data.length) el.innerHTML = data.map(x => `<div class="bg-theme-auto rounded-4 shadow-sm p-3 mb-2"><strong>${esc(x.name)}</strong><p class="m-0 mt-1 small">${esc(x.message)}</p></div>`).join('');
+            if (el && data.length) el.innerHTML = data.map(card).join('');
         }).catch(() => {});
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('comment')?.classList.remove('d-none');
@@ -774,7 +788,7 @@
                     if (comments) {
                         const card = document.createElement('div');
                         card.className = 'bg-theme-auto rounded-4 shadow-sm p-3 mb-2';
-                        card.innerHTML = `<strong>${esc(name)}</strong><p class="m-0 mt-1 small">${esc(message)}</p>`;
+                        card.innerHTML = `<div class="d-flex align-items-start"><div><strong>${esc(name)}</strong><p class="m-0 mt-1 small">${esc(message)}</p></div><button type="button" onclick="betastoriaLike(this)" data-like-key="${likeKey({name, message})}" class="btn btn-sm btn-outline-auto ms-auto rounded-3 p-0 shadow-sm d-flex justify-content-start align-items-center"><span class="my-0 mx-1" data-count-like="0">0</span><i class="me-1 fa-regular fa-heart"></i></button></div>`;
                         comments.prepend(card);
                     }
                     document.getElementById('form-comment').value = '';
