@@ -749,6 +749,15 @@
     <script>
     (() => {
         const API_BASE = 'https://api.benifin.my.id';
+        const clientId = (() => {
+            const key = 'betastoria-client-id';
+            let id = localStorage.getItem(key);
+            if (!id) {
+                id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+                localStorage.setItem(key, id);
+            }
+            return id;
+        })();
         const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
         const likeKey = (id) => `betastoria-liked-${id}`;
         window.betastoriaLike = async (button) => {
@@ -757,7 +766,7 @@
             if (!id) return;
             button.disabled = true;
             try {
-                const response = await fetch(`${API_BASE}/api/guestbook/${encodeURIComponent(id)}/like`, {method:'POST'});
+                const response = await fetch(`${API_BASE}/api/guestbook/${encodeURIComponent(id)}/like`, {method:'POST', headers:{'X-Guestbook-Client': clientId}});
                 const result = await response.json().catch(() => ({}));
                 if (!response.ok) throw new Error(result.error || 'Like gagal dikirim');
                 const count = button.querySelector('[data-count-like]');
