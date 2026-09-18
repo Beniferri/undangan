@@ -64,6 +64,15 @@
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
     <script src="./dist/guest.js"></script>
+    <script>
+    (() => {
+        const remove = Element.prototype.remove;
+        Element.prototype.remove = function () {
+            if (this.id === 'comment') return;
+            return remove.call(this);
+        };
+    })();
+    </script>
 </head>
 
 <!-- Jika tidak menggunakan komentar, hapus atribut data-key dan data-url, serta abaikan file dashboard.html. -->
@@ -746,6 +755,7 @@
             if (el && data.length) el.innerHTML = data.map(x => `<div class="bg-theme-auto rounded-4 shadow-sm p-3 mb-2"><strong>${esc(x.name)}</strong><p class="m-0 mt-1 small">${esc(x.message)}</p></div>`).join('');
         }).catch(() => {});
         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('comment')?.classList.remove('d-none');
             if (!window.undangan?.comment) return;
             window.undangan.comment.send = async (button) => {
                 const name = document.getElementById('form-name').value.trim();
