@@ -774,7 +774,7 @@
         };
         const loadApproved = () => fetch(`${API_BASE}/api/guestbook`).then(r => r.ok ? r.json() : Promise.reject()).then(({data=[]}) => {
             const el = document.getElementById('comments');
-            if (el) el.innerHTML = data.length ? data.map(card).join('') : '<p class="text-center text-secondary">Belum ada ucapan.</p>';
+            if (el && data.length) el.innerHTML = data.map(card).join('');
         }).catch(() => {});
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('comment')?.classList.remove('d-none');
@@ -800,7 +800,6 @@
                         comments.prepend(card);
                     }
                     document.getElementById('form-comment').value = '';
-                    loadApproved();
                 } catch (error) { alert(error.message || 'Konfirmasi belum tersambung. Silakan coba lagi.'); button.disabled = false; }
             };
             loadApproved();
