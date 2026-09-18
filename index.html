@@ -750,23 +750,31 @@
     (() => {
         const API_BASE = 'https://api.benifin.my.id';
         const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-        const likeKey = (x) => `betastoria-like-${btoa(unescape(encodeURIComponent(`${x.name}:${x.message}`))).slice(0,32)}`;
-        window.betastoriaLike = (button) => {
-            const key = button.dataset.likeKey;
-            const active = localStorage.getItem(key) === '1';
-            const count = button.querySelector('[data-count-like]');
-            const icon = button.querySelector('i');
-            localStorage.setItem(key, active ? '0' : '1');
-            count.textContent = String(Number(count.textContent || 0) + (active ? -1 : 1));
-            icon.className = active ? 'me-1 fa-regular fa-heart' : 'me-1 fa-solid fa-heart text-danger';
+        const likeKey = (id) => `betastoria-liked-${id}`;
+        window.betastoriaLike = async (button) => {
+            if (button.disabled) return;
+            const id = button.dataset.commentId;
+            if (!id) return;
+            button.disabled = true;
+            try {
+                const response = await fetch(`${API_BASE}/api/guestbook/${encodeURIComponent(id)}/like`, {method:'POST'});
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(result.error || 'Like gagal dikirim');
+                const count = button.querySelector('[data-count-like]');
+                const icon = button.querySelector('i');
+                count.textContent = String(result.data.like_count);
+                icon.className = 'me-1 fa-solid fa-heart text-danger';
+                localStorage.setItem(likeKey(id), '1');
+            } catch (error) { alert(error.message || 'Like gagal dikirim'); }
+            button.disabled = false;
         };
         const card = (x) => {
-            const key = likeKey(x), liked = localStorage.getItem(key) === '1';
-            return `<div class="bg-theme-auto rounded-4 shadow-sm p-3 mb-2"><div class="d-flex align-items-start"><div><strong>${esc(x.name)}</strong><p class="m-0 mt-1 small">${esc(x.message)}</p></div><button type="button" onclick="betastoriaLike(this)" data-like-key="${key}" class="btn btn-sm btn-outline-auto ms-auto rounded-3 p-0 shadow-sm d-flex justify-content-start align-items-center"><span class="my-0 mx-1" data-count-like="${liked ? 1 : 0}">${liked ? 1 : 0}</span><i class="me-1 ${liked ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'}"></i></button></div></div>`;
+            const id = String(x.id), liked = localStorage.getItem(likeKey(id)) === '1';
+            return `<div class="bg-theme-auto rounded-4 shadow-sm p-3 mb-2"><div class="d-flex align-items-start"><div><strong>${esc(x.name)}</strong><p class="m-0 mt-1 small">${esc(x.message)}</p></div><button type="button" onclick="betastoriaLike(this)" data-comment-id="${esc(id)}" class="btn btn-sm btn-outline-auto ms-auto rounded-3 p-0 shadow-sm d-flex justify-content-start align-items-center"><span class="my-0 mx-1" data-count-like="${Number(x.like_count || 0)}">${Number(x.like_count || 0)}</span><i class="me-1 ${liked ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'}"></i></button></div></div>`;
         };
         const loadApproved = () => fetch(`${API_BASE}/api/guestbook`).then(r => r.ok ? r.json() : Promise.reject()).then(({data=[]}) => {
             const el = document.getElementById('comments');
-            if (el && data.length) el.innerHTML = data.map(card).join('');
+            if (el) el.innerHTML = data.length ? data.map(card).join('') : '<p class="text-center text-secondary">Belum ada ucapan.</p>';
         }).catch(() => {});
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('comment')?.classList.remove('d-none');
@@ -788,7 +796,7 @@
                     if (comments) {
                         const card = document.createElement('div');
                         card.className = 'bg-theme-auto rounded-4 shadow-sm p-3 mb-2';
-                        card.innerHTML = `<div class="d-flex align-items-start"><div><strong>${esc(name)}</strong><p class="m-0 mt-1 small">${esc(message)}</p></div><button type="button" onclick="betastoriaLike(this)" data-like-key="${likeKey({name, message})}" class="btn btn-sm btn-outline-auto ms-auto rounded-3 p-0 shadow-sm d-flex justify-content-start align-items-center"><span class="my-0 mx-1" data-count-like="0">0</span><i class="me-1 fa-regular fa-heart"></i></button></div>`;
+                        card.innerHTML = `<div class="d-flex align-items-start"><div><strong>${esc(name)}</strong><p class="m-0 mt-1 small">${esc(message)}</p></div><button type="button" onclick="betastoriaLike(this)" data-comment-id="${esc(result.data.id)}" class="btn btn-sm btn-outline-auto ms-auto rounded-3 p-0 shadow-sm d-flex justify-content-start align-items-center"><span class="my-0 mx-1" data-count-like="0">0</span><i class="me-1 fa-regular fa-heart"></i></button></div>`;
                         comments.prepend(card);
                     }
                     document.getElementById('form-comment').value = '';
