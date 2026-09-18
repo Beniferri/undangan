@@ -68,7 +68,7 @@
     (() => {
         const remove = Element.prototype.remove;
         Element.prototype.remove = function () {
-            if (this.id === 'comment') return;
+            if (this.id === 'comment' || (this.matches('li.nav-item') && this.querySelector('a[href=\"#comment\"]'))) return;
             return remove.call(this);
         };
     })();
@@ -770,6 +770,13 @@
                     if (!response.ok) throw new Error(result.error || 'RSVP gagal dikirim');
                     if (result.data?.notion_synced === false) throw new Error('RSVP masuk database tetapi belum tersinkron ke Notion');
                     button.innerHTML = '<i class="fa-solid fa-check me-2"></i>Tersimpan';
+                    const comments = document.getElementById('comments');
+                    if (comments) {
+                        const card = document.createElement('div');
+                        card.className = 'bg-theme-auto rounded-4 shadow-sm p-3 mb-2';
+                        card.innerHTML = `<strong>${esc(name)}</strong><p class="m-0 mt-1 small">${esc(message)}</p>`;
+                        comments.prepend(card);
+                    }
                     document.getElementById('form-comment').value = '';
                     loadApproved();
                 } catch (error) { alert(error.message || 'Konfirmasi belum tersambung. Silakan coba lagi.'); button.disabled = false; }
