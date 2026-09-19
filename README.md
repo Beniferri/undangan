@@ -1,27 +1,22 @@
-# 💌 Template website undangan pernikahan sederhana
+# 💌 Beta Storia Wedding Invitation
 
 ![Thumbnail](/assets/images/banner.webp)
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/cef32dbf-f26f-4865-84a9-b85a439c9994/deploy-status)](https://app.netlify.com/sites/ulems/deploys)
-[![Hits](https://dikit.my.id/0b3y8q)](https://cie.my.id)
-[![GitHub repo size](https://img.shields.io/github/repo-size/dewanakl/undangan?color=brightgreen)](https://shields.io)
-[![GitHub License](https://img.shields.io/github/license/dewanakl/undangan?color=brightgreen)](https://shields.io)
+[![GitHub repo](https://img.shields.io/badge/GitHub-Beniferri%2Fundangan-181717?logo=github)](https://github.com/Beniferri/undangan)
 
 ## 🚀 Demo
 Untuk kamu yang ingin melihat demo terlebih dahulu:
 
-[https://ulems.my.id/?to=Teman teman semua](https://ulems.my.id/?to=Teman%20teman%20semua)
+[https://wedding.benifin.my.id/](https://wedding.benifin.my.id/)
 
 ## 📦 Documentation
 
 * Jalankan perintah `npm install`, lalu `npm run dev`, dan buka `http://localhost:8080`.
 * Ubah isi file `index.html` sesuai keinginanmu.
-* Jika tidak ingin menggunakan **fitur komentar**, hapus atribut `data-url` dan `data-key` di elemen `<body>` pada index.html.
-* Sesuaikan `data-url` pada `<body>` di index dan dashboard sesuai dengan URL backend (jika kamu meng-hosting sendiri).
-* Sesuaikan juga `data-key` di index dengan access key yang bisa kamu ambil dari dashboard.
-* Jika ingin menggunakan GIF, dapatkan Tenor API key di [developers.google.com/tenor](https://developers.google.com/tenor/guides/quickstart).
-* Untuk deployment, jalankan `npm run build:public`. Folder `public` adalah yang akan kamu upload.
-* Untuk backend self-hosting, lihat penjelasan di bawah, atau gunakan **trial API** secara gratis.
+* Konten publik berada di `index.html`, sedangkan interaksi RSVP dan guestbook menggunakan API production.
+* Untuk menjalankan lokal, gunakan API yang aman dan jangan masukkan credential production ke source code.
+* Untuk deployment, ikuti [deployment runbook](docs/DEPLOYMENT.md).
+* Perubahan production harus divalidasi melalui GitHub dan Coolify.
 
 > Undangan ini hanya menggunakan HTML, CSS, dan JavaScript biasa. NPM digunakan agar file JavaScript bisa langsung dieksekusi (bukan bertipe module lagi).
 
@@ -29,8 +24,7 @@ Untuk kamu yang ingin melihat demo terlebih dahulu:
 
 > Jika kamu punya pertanyaan, gunakan fitur `discussions` agar bisa dibaca juga oleh teman-teman lainnya.
 
-> [!WARNING]  
-> Gunakan versi 3.14.0, untuk versi 4 masih tahap pengembangan dan berpotensi teredapat bug 🐛
+> Branch production project ini menggunakan `4.x`. Selalu jalankan smoke test setelah deployment.
 
 ## 🔥 Deployment API
 
@@ -39,11 +33,6 @@ Untuk kamu yang ingin melihat demo terlebih dahulu:
 
 - Presentation
     [https://docs.google.com/presentation](https://docs.google.com/presentation/d/1EY2YmWdZUI7ASoo0f2wvU7ec_Yt0uZanYa8YLbfNysk/edit)
-
-## ⏰ Trial API
-Untuk kamu yang ingin mencoba secara gratis:
-
-[https://trial.ulems.my.id](https://trial.ulems.my.id)
 
 ## ⚙️ Tech stack
 
@@ -63,7 +52,7 @@ I'm very open to those of you who want to contribute to the undangan!
 
 ## 🐞 Security Vulnerabilities
 
-If you find any security vulnerabilities in this undangan, please email DKL via [dewanakretarta29@gmail.com](mailto:dewanakretarta29@gmail.com).
+If you find a security vulnerability, please report it privately to the repository maintainer.
 
 ## 📜 License
 
