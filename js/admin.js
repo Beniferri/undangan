@@ -2,6 +2,8 @@
 const API_BASE = 'https://api.benifin.my.id';
 const csrfStorageKey = 'betastoria-admin-csrf';
 let csrfToken = sessionStorage.getItem(csrfStorageKey) || '';
+let rsvpRows = [];
+let guestbookRows = [];
 
 const byId = (id) => document.getElementById(id);
 const setNotice = (message, type = 'info') => {
@@ -14,6 +16,15 @@ const clearNotice = () => byId('notice').classList.add('d-none');
 const formatNumber = (value) => new Intl.NumberFormat('id-ID').format(Number(value || 0));
 const formatDate = (value) => new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
 const statusLabel = { hadir: 'Hadir', belum_pasti: 'Belum pasti', tidak_hadir: 'Tidak hadir' };
+const csvEscape = (value) => `"${String(value ?? '').replaceAll('"', '""')}"`;
+const downloadCsv = (filename, headers, rows) => {
+    const content = [headers, ...rows].map((row) => row.map(csvEscape).join(',')).join('\r\n');
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([`\ufeff${content}`], { type: 'text/csv;charset=utf-8' }));
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+};
 
 const request = async (path, options = {}) => {
     const headers = new Headers(options.headers || {});
@@ -60,6 +71,7 @@ const cell = (value, className = '') => {
     return element;
 };
 const renderRsvps = (rows) => {
+    rsvpRows = rows;
     const table = byId('rsvp-table');
     table.replaceChildren();
     if (!rows.length) {
@@ -74,6 +86,7 @@ const renderRsvps = (rows) => {
     });
 };
 const renderGuestbook = (rows) => {
+    guestbookRows = rows;
     const table = byId('guestbook-table');
     table.replaceChildren();
     if (!rows.length) {
@@ -150,4 +163,6 @@ byId('logout-button').addEventListener('click', async () => {
 });
 byId('refresh-button').addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
 byId('guestbook-status').addEventListener('change', () => loadGuestbook().catch((error) => setNotice(error.message, 'danger')));
+byId('export-rsvp').addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at])));
+byId('export-guestbook').addEventListener('click', () => downloadCsv('betastoria-guestbook.csv', ['Nama', 'Pesan', 'Like', 'Status', 'Waktu'], guestbookRows.map((row) => [row.name, row.message, row.like_count, row.status, row.created_at])));
 restoreSession();

@@ -69,7 +69,7 @@
             <div class="card-body p-3 p-md-4">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <h2 class="h3 mb-0">Data RSVP</h2>
-                    <span class="text-secondary small">Maksimal 500 data terbaru</span>
+                    <div class="d-flex align-items-center gap-2"><span class="text-secondary small d-none d-md-inline">Maksimal 500 data terbaru</span><button id="export-rsvp" class="btn btn-outline-success btn-sm rounded-3" type="button">Export CSV</button></div>
                 </div>
                 <div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Nama</th><th>Jumlah</th><th>Status</th><th>Pesan</th><th>Waktu</th></tr></thead><tbody id="rsvp-table"><tr><td colspan="5" class="text-secondary">Memuat data…</td></tr></tbody></table></div>
             </div>
@@ -79,9 +79,9 @@
             <div class="card-body p-3 p-md-4">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <h2 class="h3 mb-0">Moderasi Guestbook</h2>
-                    <label class="d-flex align-items-center gap-2 small">Status
+                    <div class="d-flex align-items-center gap-2"><button id="export-guestbook" class="btn btn-outline-success btn-sm rounded-3" type="button">Export CSV</button><label class="d-flex align-items-center gap-2 small">Status
                         <select id="guestbook-status" class="form-select form-select-sm rounded-3" aria-label="Filter status guestbook"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">Semua</option></select>
-                    </label>
+                    </label></div>
                 </div>
                 <div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Nama</th><th>Pesan</th><th>Like</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="guestbook-table"><tr><td colspan="5" class="text-secondary">Memuat data…</td></tr></tbody></table></div>
             </div>
