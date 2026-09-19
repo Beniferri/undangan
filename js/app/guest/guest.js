@@ -22,11 +22,6 @@ export const guest = (() => {
     let information = null;
 
     /**
-     * @type {ReturnType<typeof storage>|null}
-     */
-    let config = null;
-
-    /**
      * @returns {void}
      */
     const countDownDate = () => {
@@ -63,7 +58,7 @@ export const guest = (() => {
     const showGuestName = () => {
         /**
          * Make sure "to=" is the last query string.
-         * Ex. ulems.my.id/?id=some-uuid-here&to=name
+         * Ex. wedding.benifin.my.id/?id=some-uuid-here&to=name
          */
         const raw = window.location.search.split('to=');
         let name = null;
@@ -250,16 +245,13 @@ export const guest = (() => {
          * @param {string} d 
          * @returns {string}
          */
-        const formatDate = (d) => (new Date(d.replace(' ', 'T') + ':00Z')).toISOString().replace(/[-:]/g, '').split('.').shift();
-
         const url = new URL('https://calendar.google.com/calendar/render');
         const data = new URLSearchParams({
             action: 'TEMPLATE',
-            text: 'The Wedding of Wahyu and Riski',
-            dates: `${formatDate('2023-03-15 10:00')}/${formatDate('2023-03-15 11:00')}`,
-            details: 'Tanpa mengurangi rasa hormat, kami mengundang Anda untuk berkenan menghadiri acara pernikahan kami. Terima kasih atas perhatian dan doa restu Anda, yang menjadi kebahagiaan serta kehormatan besar bagi kami.',
-            location: 'RT 10 RW 02, Desa Pajerukan, Kec. Kalibagor, Kab. Banyumas, Jawa Tengah 53191.',
-            ctz: config.get('tz'),
+            text: 'Pernikahan Muhammad Fikri Ramadhan & Aisyah Nur Zahra',
+            dates: '20270117/20270118',
+            details: 'Undangan pernikahan Muhammad Fikri Ramadhan dan Aisyah Nur Zahra.',
+            location: 'Masjid Suciati Saliman, Jl. Gito Gati, Grojogan, Pandowoharjo, Sleman, Daerah Istimewa Yogyakarta 55512',
         });
 
         url.search = data.toString();
@@ -322,7 +314,6 @@ export const guest = (() => {
         comment.init();
         progress.init();
 
-        config = storage('config');
         information = storage('information');
 
         const vid = video.init();
