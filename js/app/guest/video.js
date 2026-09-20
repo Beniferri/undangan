@@ -37,6 +37,7 @@ export const video = (() => {
             frame.referrerPolicy = 'strict-origin-when-cross-origin';
             frame.style.aspectRatio = '16 / 9';
             frame.style.border = '0';
+            frame.style.pointerEvents = 'none';
             wrap.appendChild(frame);
             document.getElementById('video-love-stroy-loading')?.remove();
             progress.complete('video');

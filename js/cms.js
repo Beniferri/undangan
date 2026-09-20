@@ -68,6 +68,9 @@ const youtubeEmbedUrl = (value) => {
             autoplay: '1',
             mute: '1',
             playsinline: '1',
+            loop: '1',
+            playlist: id,
+            end: '47',
         });
         if (start !== null) {
             params.set('start', String(start));
