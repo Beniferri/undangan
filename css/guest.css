@@ -265,7 +265,9 @@ svg {
 .editorial-dresscode::after,
 .editorial-gallery::after,
 .editorial-gift::after,
-.editorial-rsvp::after {
+.editorial-rsvp-form::after,
+.editorial-wishes::after,
+.editorial-footer::after {
     position: absolute;
     z-index: 0;
     color: var(--bstoria-gold);
@@ -319,14 +321,26 @@ svg {
     left: 1.5rem;
 }
 
-.editorial-rsvp::after {
+.editorial-rsvp-form::after {
     content: '09 / RSVP';
     top: 1.5rem;
     right: 1.5rem;
 }
 
+.editorial-wishes::after {
+    content: '10 / WISHES';
+    top: 1.5rem;
+    left: 1.5rem;
+}
+
+.editorial-footer::after {
+    content: '12 / FOOTER';
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
 .editorial-gift::after {
-    content: '10 / GIFT';
+    content: '11 / GIFT';
     top: 1.5rem;
     left: 1.5rem;
 }
@@ -337,7 +351,9 @@ svg {
 
 .editorial-story,
 .editorial-gallery,
-.editorial-rsvp {
+.editorial-rsvp-form,
+.editorial-wishes,
+.editorial-footer {
     background-image: linear-gradient(135deg, rgba(184, 138, 68, 0.06), transparent 42%);
 }
 
@@ -382,6 +398,16 @@ svg {
     transform: translateZ(0);
 }
 
+.editorial-footer {
+    min-height: 100svh;
+    padding-bottom: max(6rem, 12vh) !important;
+}
+
+.editorial-wishes .wishes-panel {
+    width: min(100%, 42rem);
+    margin-inline: auto;
+}
+
 @media screen and (max-width: 576px) {
     html {
         scroll-snap-type: y mandatory;
@@ -424,8 +450,13 @@ svg {
     }
 
     .editorial-countdown,
-    .editorial-dresscode {
+    .editorial-dresscode,
+    .editorial-footer {
         min-height: 100svh;
+    }
+
+    .editorial-footer {
+        padding-bottom: max(6rem, 12vh) !important;
     }
 }
 
