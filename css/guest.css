@@ -256,7 +256,8 @@ svg {
     min-height: max(42rem, 88vh);
 }
 
-.editorial-section::after {
+.editorial-section::after,
+.editorial-person::after {
     display: none !important;
     content: none !important;
 }
