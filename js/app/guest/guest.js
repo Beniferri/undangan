@@ -302,7 +302,10 @@ export const guest = (() => {
         await util.changeOpacity(document.getElementById('welcome'), true);
 
         // remove loading screen and show welcome screen.
-        await util.changeOpacity(document.getElementById('loading'), false).then((el) => el.remove());
+        const loading = document.getElementById('loading');
+        if (loading) {
+            await util.changeOpacity(loading, false).then((el) => el.remove());
+        }
     };
 
     /**
@@ -394,6 +397,15 @@ export const guest = (() => {
             storage('session').clear();
             storage('comment').clear();
         }
+
+        const revealWelcome = async () => {
+            const welcome = document.getElementById('welcome');
+            if (welcome) {
+                await util.changeOpacity(welcome, true);
+            }
+            document.getElementById('loading')?.remove();
+        };
+        window.addEventListener('DOMContentLoaded', () => window.setTimeout(revealWelcome, 1000), { once: true });
 
         window.addEventListener('DOMContentLoaded', () => {
             pool.init(pageLoaded, [
