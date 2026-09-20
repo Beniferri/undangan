@@ -395,7 +395,7 @@ export const guest = (() => {
             storage('comment').clear();
         }
 
-        window.addEventListener('load', () => {
+        window.addEventListener('DOMContentLoaded', () => {
             pool.init(pageLoaded, [
                 'image',
                 'video',
