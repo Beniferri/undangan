@@ -27,6 +27,23 @@ export const video = (() => {
             return Promise.resolve();
         }
 
+        if (wrap.dataset.videoType === 'youtube' && /^https:\/\/www\.youtube-nocookie\.com\/embed\//.test(src)) {
+            const frame = document.createElement('iframe');
+            frame.className = wrap.getAttribute('data-vid-class');
+            frame.src = src;
+            frame.title = 'Video kisah cinta';
+            frame.loading = 'lazy';
+            frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+            frame.allowFullscreen = true;
+            frame.referrerPolicy = 'strict-origin-when-cross-origin';
+            frame.style.aspectRatio = '16 / 9';
+            frame.style.border = '0';
+            wrap.appendChild(frame);
+            document.getElementById('video-love-stroy-loading')?.remove();
+            progress.complete('video');
+            return Promise.resolve();
+        }
+
         const vid = document.createElement('video');
         vid.className = wrap.getAttribute('data-vid-class');
         vid.loop = true;

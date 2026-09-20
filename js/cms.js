@@ -43,6 +43,48 @@ const weddingImageUrl = (wedding, options = '') => {
     const fileId = wedding.og_image_id || wedding.cover_image_id;
     return fileId ? directusAssetUrl(fileId, options) : wedding.cover_image_url;
 };
+const youtubeEmbedUrl = (value) => {
+    try {
+        const url = new URL(value);
+        let id = url.searchParams.get('v');
+        if (url.hostname === 'youtu.be') {
+            id = url.pathname.slice(1);
+        }
+        if (!id && url.pathname.startsWith('/embed/')) {
+            id = url.pathname.split('/')[2];
+        }
+        return id && /^[A-Za-z0-9_-]{6,}$/.test(id)
+            ? `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`
+            : null;
+    } catch {
+        return null;
+    }
+};
+const configureVideo = (wedding) => {
+    const wrap = document.getElementById('video-love-stroy');
+    if (!wrap) {
+        return;
+    }
+    const source = wedding.video_source || '';
+    const youtube = source === 'youtube' || (!source && wedding.video_url && youtubeEmbedUrl(wedding.video_url));
+    if (youtube) {
+        const embed = youtubeEmbedUrl(wedding.video_url);
+        if (embed) {
+            wrap.dataset.src = embed;
+            wrap.dataset.videoType = 'youtube';
+        }
+        return;
+    }
+    if (wedding.video_file_id) {
+        wrap.dataset.src = directusAssetUrl(wedding.video_file_id);
+        wrap.dataset.videoType = 'file';
+        return;
+    }
+    if (wedding.video_url && source !== 'youtube') {
+        wrap.dataset.src = wedding.video_url;
+        wrap.dataset.videoType = 'file';
+    }
+};
 const setStructuredData = (wedding, events) => {
     const element = document.querySelector('#wedding-jsonld');
     if (!element) {
@@ -81,6 +123,7 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     setCmsText('quote', wedding.quote);
     setCmsText('dress-code', wedding.dress_code);
     document.body.dataset.time = wedding.wedding_date;
+    configureVideo(wedding);
     document.querySelectorAll('[data-cms="maps-url"]').forEach((element) => { element.href = wedding.maps_url || element.href; });
     const coverImage = wedding.cover_image_id
         ? directusAssetUrl(wedding.cover_image_id, '?width=1600&quality=82&format=webp')
@@ -116,6 +159,19 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     stories.slice(0, 6).forEach((story, index) => {
         setCmsText(`story-${index + 1}-title`, story.title);
         setCmsText(`story-${index + 1}-body`, story.body);
+    });
+    document.querySelectorAll('[data-cms-gallery]').forEach((image, index) => {
+        const slide = image.closest('.carousel-item');
+        const carousel = image.closest('.carousel');
+        const offset = carousel?.id === 'carousel-image-two' ? 3 : 0;
+        const slot = carousel ? Array.from(carousel.querySelectorAll('[data-cms-gallery]')).indexOf(image) : index;
+        const shouldHide = gallery.length > 0 && offset + slot >= Math.min(gallery.length, 6);
+        if (slide) {
+            slide.hidden = shouldHide;
+        }
+        if (carousel?.id === 'carousel-image-two') {
+            carousel.hidden = gallery.length > 0 && gallery.length <= 3;
+        }
     });
     gallery.slice(0, 6).forEach((item, index) => {
         const image = document.querySelector(`[data-cms-gallery="${index + 1}"]`);
@@ -164,4 +220,4 @@ const loadCms = async () => {
         console.warn('CMS unavailable; using static invitation content.', error);
     }
 };
-loadCms();
+window.cmsReady = loadCms();

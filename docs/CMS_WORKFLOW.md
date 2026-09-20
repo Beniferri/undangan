@@ -52,6 +52,17 @@ Jangan melakukan rollback langsung pada production tanpa preview dan verifikasi 
 
 Upload gambar melalui Directus Files, hubungkan ke `directus_file_id`, isi alt text, caption, dan sort. Frontend memakai asset Directus dengan transform WebP dan fallback ke `image_url` lama.
 
+Slot slider frontend 1–6 dipetakan dari record gallery berdasarkan `sort`. Jika collection gallery berisi record, slider kedua disembunyikan otomatis bila jumlah foto tidak lebih dari tiga. Jika CMS gagal atau kosong, fallback static tetap dipakai.
+
+## Video
+
+Pada collection `weddings`, pilih `video_source`:
+
+- `file`: upload MP4 ke Directus Files dan isi `video_file_id`;
+- `youtube`: isi `video_url` dengan URL YouTube biasa, `youtu.be`, atau `/embed/`.
+
+Frontend mengubah URL YouTube menjadi embed `youtube-nocookie.com`, sedangkan file Directus diputar sebagai video HTML5. Jika field CMS kosong, file video lokal lama tetap menjadi fallback.
+
 ## SEO dan structured data
 
 Field SEO wedding:

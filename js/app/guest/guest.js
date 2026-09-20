@@ -334,7 +334,7 @@ export const guest = (() => {
             document.getElementById('comment')?.remove();
             document.querySelector('a.nav-link[href="#comment"]')?.closest('li.nav-item')?.remove();
 
-            vid.load();
+            Promise.resolve(window.cmsReady).then(() => vid.load());
             img.load();
             aud.load();
             lib.load({ confetti: document.body.getAttribute('data-confetti') === 'true' });
@@ -359,7 +359,7 @@ export const guest = (() => {
                     img.load();
                 }
 
-                vid.load();
+                Promise.resolve(window.cmsReady).then(() => vid.load());
                 aud.load();
                 lib.load({ confetti: data.is_confetti_animation });
 
