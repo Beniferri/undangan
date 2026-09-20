@@ -184,6 +184,21 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         const favicon = directusAssetUrl(faviconFile, '?width=192&height=192&fit=cover&format=png');
         document.querySelectorAll('[data-cms-favicon]').forEach((element) => { element.href = favicon; });
     }
+    const coupleImages = [
+        ['groom-image', wedding.groom_image_id, `Foto mempelai pria ${wedding.groom_name}`],
+        ['bride-image', wedding.bride_image_id, `Foto mempelai wanita ${wedding.bride_name}`],
+    ];
+    coupleImages.forEach(([selector, file, alt]) => {
+        if (!file) {
+            return;
+        }
+        const image = directusAssetUrl(file, '?width=900&height=900&fit=cover&quality=82&format=webp');
+        document.querySelectorAll(`[data-cms="${selector}"]`).forEach((element) => {
+            element.src = image;
+            element.dataset.src = image;
+            element.alt = alt;
+        });
+    });
     const seoTitle = wedding.seo_title || `Undangan Pernikahan ${couple}`;
     const seoDescription = wedding.seo_description || `Undangan Pernikahan ${couple}`;
     const ogImage = weddingImageUrl(wedding);
@@ -246,7 +261,7 @@ const loadCms = async () => {
         const params = new URLSearchParams({
             'filter[slug][_eq]': CMS_SLUG,
             limit: '1',
-            fields: '*,cover_image_id.id,cover_image_id.filename_download,profile_image_id.id,profile_image_id.filename_download,favicon_image_id.id,favicon_image_id.filename_download,og_image_id.id,og_image_id.filename_download',
+            fields: '*,cover_image_id.id,cover_image_id.filename_download,profile_image_id.id,profile_image_id.filename_download,groom_image_id.id,groom_image_id.filename_download,bride_image_id.id,bride_image_id.filename_download,favicon_image_id.id,favicon_image_id.filename_download,og_image_id.id,og_image_id.filename_download',
         });
         if (previewMode) {
             params.set('version', previewVersion);
