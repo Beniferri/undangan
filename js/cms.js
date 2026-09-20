@@ -39,6 +39,10 @@ const setCanonical = (value) => {
     document.querySelectorAll('link[rel="canonical"]').forEach((element) => { element.href = value; });
 };
 const directusAssetUrl = (id, options = '') => `${CMS_BASE}/assets/${encodeURIComponent(id)}${options}`;
+const weddingImageUrl = (wedding, options = '') => {
+    const fileId = wedding.og_image_id || wedding.cover_image_id;
+    return fileId ? directusAssetUrl(fileId, options) : wedding.cover_image_url;
+};
 const setStructuredData = (wedding, events) => {
     const element = document.querySelector('#wedding-jsonld');
     if (!element) {
@@ -58,7 +62,7 @@ const setStructuredData = (wedding, events) => {
             address: events[0].address,
         } : undefined,
         url: wedding.canonical_url || window.location.href,
-        image: wedding.og_image_id ? directusAssetUrl(wedding.og_image_id) : wedding.cover_image_url,
+        image: weddingImageUrl(wedding),
     });
 };
 const formatDate = (value, timezone) => new Intl.DateTimeFormat('id-ID', {
@@ -78,10 +82,22 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     setCmsText('dress-code', wedding.dress_code);
     document.body.dataset.time = wedding.wedding_date;
     document.querySelectorAll('[data-cms="maps-url"]').forEach((element) => { element.href = wedding.maps_url || element.href; });
-    document.querySelectorAll('[data-cms="cover-image"]').forEach((element) => { element.src = wedding.cover_image_url || element.src; });
+    const coverImage = wedding.cover_image_id
+        ? directusAssetUrl(wedding.cover_image_id, '?width=1600&quality=82&format=webp')
+        : wedding.cover_image_url;
+    document.querySelectorAll('[data-cms="cover-image"]').forEach((element) => {
+        if (!coverImage) {
+            return;
+        }
+        element.src = coverImage;
+        element.dataset.src = coverImage;
+        element.alt = wedding.groom_name && wedding.bride_name
+            ? `Background pernikahan ${wedding.groom_name} dan ${wedding.bride_name}`
+            : element.alt;
+    });
     const seoTitle = wedding.seo_title || `Undangan Pernikahan ${couple}`;
     const seoDescription = wedding.seo_description || `Undangan Pernikahan ${couple}`;
-    const ogImage = wedding.og_image_id ? directusAssetUrl(wedding.og_image_id) : wedding.cover_image_url;
+    const ogImage = weddingImageUrl(wedding);
     document.title = seoTitle;
     setMeta('title', seoTitle);
     setMeta('description', seoDescription);
