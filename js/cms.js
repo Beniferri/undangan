@@ -169,6 +169,10 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         element.dataset.src = profileImage;
         element.alt = `Foto ${couple}`;
     });
+    if (wedding.favicon_image_id) {
+        const favicon = directusAssetUrl(wedding.favicon_image_id, '?width=192&height=192&fit=cover&format=png');
+        document.querySelectorAll('[data-cms-favicon]').forEach((element) => { element.href = favicon; });
+    }
     const seoTitle = wedding.seo_title || `Undangan Pernikahan ${couple}`;
     const seoDescription = wedding.seo_description || `Undangan Pernikahan ${couple}`;
     const ogImage = weddingImageUrl(wedding);

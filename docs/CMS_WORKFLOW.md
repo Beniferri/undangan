@@ -72,6 +72,12 @@ Pada collection `weddings`, pilih `video_source`:
 
 Frontend mengubah URL YouTube menjadi embed `youtube-nocookie.com`, sedangkan file Directus diputar sebagai video HTML5. Jika field CMS kosong, file video lokal lama tetap menjadi fallback.
 
+## Frontend loading dan favicon
+
+Loading screen hanya menahan tampilan sekitar 900 ms agar visitor tidak menunggu seluruh asset berat. Gambar, video, audio, dan library tetap dilanjutkan secara asynchronous dengan fallback existing.
+
+Field `favicon_image_id` pada `weddings` dapat diisi dengan file PNG dari Directus Files. Jika kosong, frontend memakai favicon static bawaan.
+
 ## SEO dan structured data
 
 Field SEO wedding:
