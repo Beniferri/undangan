@@ -239,7 +239,7 @@ svg {
 /* Section-as-page layout: editorial rhythm without creating separate routes. */
 .editorial-section {
     position: relative;
-    min-height: clamp(38rem, 82vh, 58rem);
+    min-height: 100svh;
     display: flex;
     align-items: center;
     isolation: isolate;
