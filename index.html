@@ -64,6 +64,7 @@
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
     <script src="./dist/guest.js?v=c664ec1"></script>
+    <script src="./dist/cms.js?v=cms-draft-1"></script>
     <script>
     (() => {
         const remove = Element.prototype.remove;
@@ -118,8 +119,8 @@
                 </div>
 
                 <div class="text-center p-4 bg-overlay-auto rounded-5">
-                    <h2 class="font-esthetic mb-4" style="font-size: 2rem;">Muhammad Fikri Ramadhan &amp; Aisyah Nur Zahra</h2>
-                    <p class="m-0" style="font-size: 1rem;">17 Januari 2027</p>
+                    <h2 class="font-esthetic mb-4" style="font-size: 2rem;" data-cms="couple-names">Muhammad Fikri Ramadhan &amp; Aisyah Nur Zahra</h2>
+                    <p class="m-0" style="font-size: 1rem;" data-cms="wedding-date">17 Januari 2027</p>
                 </div>
             </div>
         </div>
@@ -138,8 +139,8 @@
 
                         <img src="./assets/images/placeholder.webp" data-src="./assets/images/bg.webp" alt="bg" onclick="undangan.guest.modal(this)" class="img-center-crop rounded-circle border border-3 border-light shadow my-4 mx-auto cursor-pointer">
 
-                        <h2 class="font-esthetic my-4" style="font-size: 2.25rem;">Muhammad Fikri Ramadhan &amp; Aisyah Nur Zahra</h2>
-                        <p class="my-2" style="font-size: 1.25rem;">17 Januari 2027</p>
+                        <h2 class="font-esthetic my-4" style="font-size: 2.25rem;" data-cms="couple-names">Muhammad Fikri Ramadhan &amp; Aisyah Nur Zahra</h2>
+                        <p class="my-2" style="font-size: 1.25rem;" data-cms="wedding-date">17 Januari 2027</p>
 
                         <button class="btn btn-outline-auto btn-sm shadow rounded-pill px-3 py-1" style="font-size: 0.825rem;">
                             <i class="fa-solid fa-calendar-check me-2"></i>Save Google Calendar
@@ -180,11 +181,9 @@
 
                             <div data-aos="fade-right" data-aos-duration="2000" class="pb-1">
                                 <img src="./assets/images/placeholder.webp" data-src="./assets/images/cowo.webp" alt="cowo" onclick="undangan.guest.modal(this)" class="img-center-crop rounded-circle border border-3 border-light shadow my-4 mx-auto cursor-pointer">
-                                <h2 class="font-esthetic m-0" style="font-size: 2.125rem;">Muhammad Fikri Ramadhan</h2>
+                                <h2 class="font-esthetic m-0" style="font-size: 2.125rem;" data-cms="groom-name">Muhammad Fikri Ramadhan</h2>
                                 <p class="mt-3 mb-1" style="font-size: 1.25rem;">Putra ke-1</p>
-                                <p class="mb-0" style="font-size: 0.95rem;">Bapak Ahmad Fauzan</p>
-                                <p class="mb-0" style="font-size: 0.95rem;">dan</p>
-                                <p class="mb-0" style="font-size: 0.95rem;">Ibu Siti Rahmawati</p>
+                                <p class="mb-0" style="font-size: 0.95rem;" data-cms="groom-parents">Bapak Ahmad Fauzan dan Ibu Siti Rahmawati</p>
                             </div>
 
                             <!-- Love animation -->
@@ -207,11 +206,9 @@
 
                             <div data-aos="fade-left" data-aos-duration="2000" class="pb-1">
                                 <img src="./assets/images/placeholder.webp" data-src="./assets/images/cewe.webp" alt="cewe" onclick="undangan.guest.modal(this)" class="img-center-crop rounded-circle border border-3 border-light shadow my-4 mx-auto cursor-pointer">
-                                <h2 class="font-esthetic m-0" style="font-size: 2.125rem;">Aisyah Nur Zahra</h2>
+                                <h2 class="font-esthetic m-0" style="font-size: 2.125rem;" data-cms="bride-name">Aisyah Nur Zahra</h2>
                                 <p class="mt-3 mb-1" style="font-size: 1.25rem;">Putri ke-2</p>
-                                <p class="mb-0" style="font-size: 0.95rem;">Bapak H. Abdul Hakim</p>
-                                <p class="mb-0" style="font-size: 0.95rem;">dan</p>
-                                <p class="mb-0" style="font-size: 0.95rem;">Ibu Hj. Nur Aini</p>
+                                <p class="mb-0" style="font-size: 0.95rem;" data-cms="bride-parents">Bapak H. Abdul Hakim dan Ibu Hj. Nur Aini</p>
                             </div>
 
                             <!-- Love animation -->
@@ -356,13 +353,13 @@
 
                         <div class="overflow-x-hidden">
                             <div class="py-2" data-aos="fade-right" data-aos-duration="1500">
-                                <h2 class="font-esthetic m-0 py-2" style="font-size: 2rem;">Akad</h2>
-                                <p style="font-size: 0.95rem;">Pukul 10.00 WIB - Selesai</p>
+                                <h2 class="font-esthetic m-0 py-2" style="font-size: 2rem;" data-cms="event-1-name">Akad</h2>
+                                <p style="font-size: 0.95rem;" data-cms="event-1-time">Pukul 10.00 WIB - Selesai</p>
                             </div>
 
                             <div class="py-2" data-aos="fade-left" data-aos-duration="1500">
-                                <h2 class="font-esthetic m-0 py-2" style="font-size: 2rem;">Resepsi</h2>
-                                <p style="font-size: 0.95rem;">Pukul 13.00 WIB - Selesai</p>
+                                <h2 class="font-esthetic m-0 py-2" style="font-size: 2rem;" data-cms="event-2-name">Resepsi</h2>
+                                <p style="font-size: 0.95rem;" data-cms="event-2-time">Pukul 13.00 WIB - Selesai</p>
                             </div>
                         </div>
 
@@ -387,8 +384,8 @@
                         </div>
 
                         <div class="py-2" data-aos="fade-down" data-aos-duration="1500">
-                            <a href="https://maps.google.com/?q=Masjid+Suciati+Saliman" target="_blank" class="btn btn-outline-auto btn-sm rounded-pill shadow mb-2 px-3"><i class="fa-solid fa-map-location-dot me-2"></i>Lihat Google Maps</a>
-                            <small class="d-block my-1">Masjid Suciati Saliman<br>Jl. Gito Gati, Grojogan, Pandowoharjo, Sleman, Daerah Istimewa Yogyakarta 55512.</small>
+                            <a href="https://maps.google.com/?q=Masjid+Suciati+Saliman" target="_blank" class="btn btn-outline-auto btn-sm rounded-pill shadow mb-2 px-3" data-cms="maps-url"><i class="fa-solid fa-map-location-dot me-2"></i>Lihat Google Maps</a>
+                            <small class="d-block my-1" data-cms="event-1-venue">Masjid Suciati Saliman<br>Jl. Gito Gati, Grojogan, Pandowoharjo, Sleman, Daerah Istimewa Yogyakarta 55512.</small>
                         </div>
                     </div>
                 </section>
@@ -409,13 +406,13 @@
 
                                 <div class="carousel-inner rounded-4">
                                     <div class="carousel-item active">
-                                        <img src="./assets/images/placeholder.webp" data-src="https://picsum.photos/1280/720?random=1" alt="image 1" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="https://picsum.photos/1280/720?random=1" data-cms-gallery="1" alt="image 1" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="https://picsum.photos/1280/720?random=2" alt="image 2" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="https://picsum.photos/1280/720?random=2" data-cms-gallery="2" alt="image 2" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="https://picsum.photos/1280/720?random=3" alt="image 3" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="https://picsum.photos/1280/720?random=3" data-cms-gallery="3" alt="image 3" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
                                     </div>
                                 </div>
 
@@ -477,15 +474,15 @@
                         <p class="mb-1" style="font-size: 0.95rem;">Bagi yang ingin memberikan tanda kasih, dapat melalui rekening berikut.</p>
                         <div class="bg-theme-auto rounded-4 shadow p-3 mx-4 mt-4 text-start" data-aos="fade-up" data-aos-duration="2500">
                             <i class="fa-solid fa-gift fa-lg me-2"></i>
-                            <strong>Gift</strong>
+                            <strong data-cms="gift-label">Gift</strong>
                             <p class="small mt-2 mb-2">Bagi yang ingin memberikan tanda kasih, dapat melalui rekening berikut.</p>
                             <div class="border-top pt-2 small">
                                 <p class="mb-1"><i class="fa-solid fa-building-columns me-2"></i>Bank Syariah Indonesia (BSI)</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span><i class="fa-solid fa-credit-card me-2"></i>7123456789</span>
+                                    <span><i class="fa-solid fa-credit-card me-2"></i><span data-cms="gift-account-number">7123456789</span></span>
                                     <button class="btn btn-outline-auto btn-sm rounded-4 py-0" data-copy="7123456789" onclick="undangan.util.copy(this)" aria-label="Salin nomor rekening"><i class="fa-solid fa-copy"></i></button>
                                 </div>
-                                <p class="mb-0 mt-1"><i class="fa-solid fa-user me-2"></i>Muhammad Fikri Ramadhan</p>
+                                <p class="mb-0 mt-1"><i class="fa-solid fa-user me-2"></i><span data-cms="gift-account-name">Muhammad Fikri Ramadhan</span></p>
                             </div>
                         </div>
                     </div>
