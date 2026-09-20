@@ -248,6 +248,20 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         image.loading = 'lazy';
         image.decoding = 'async';
     });
+    const giftType = (item) => item?.gift_type || item?.type || item?.category;
+    const groomGift = gifts.find((item) => giftType(item) === 'groom') || gifts[0];
+    const brideGift = gifts.find((item) => giftType(item) === 'bride') || gifts[1];
+    const homeGift = gifts.find((item) => giftType(item) === 'home') || gifts.find((item) => giftType(item) === 'address');
+    const setGift = (item, nameSelector, numberSelector, addressSelector = null) => {
+        if (!item) {
+            return;
+        }
+        setCmsText(nameSelector, item.account_name || item.name || item.label);
+        setCmsText(numberSelector, item.account_number || item.address);
+        if (addressSelector) {
+            setCmsText(addressSelector, item.address || item.account_number);
+        }
+    };
     const gift = gifts[0];
     if (gift) {
         setCmsText('gift-label', gift.label);
@@ -255,6 +269,9 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         setCmsText('gift-account-number', gift.account_number);
         document.querySelectorAll('[data-cms="gift-account-number"]').forEach((element) => { element.dataset.copy = gift.account_number; });
     }
+    setGift(groomGift, 'gift-groom-account-name', 'gift-groom-account-number');
+    setGift(brideGift, 'gift-bride-account-name', 'gift-bride-account-number');
+    setGift(homeGift, 'gift-home-name', 'gift-home-address');
 };
 const loadCms = async () => {
     try {

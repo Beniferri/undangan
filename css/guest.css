@@ -505,6 +505,120 @@ svg {
     opacity: 0.72;
 }
 
+.gift-reveal-button {
+    margin: 0.35rem auto 0;
+    padding: 0.7rem 1.15rem;
+    border: 1px solid var(--bstoria-gold);
+    border-radius: 999px;
+    background: var(--bstoria-gold);
+    color: #172019;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.gift-reveal-button:hover,
+.gift-reveal-button:focus-visible {
+    box-shadow: 0 0.5rem 1.25rem rgba(184, 138, 68, 0.25);
+    transform: translateY(-2px);
+}
+
+.gift-reveal-button.is-open {
+    background: transparent;
+    color: inherit;
+}
+
+.gift-options {
+    width: min(100%, 30rem);
+    margin: 1.25rem auto 0;
+}
+
+.gift-option-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.45rem;
+    margin-bottom: 0.7rem;
+}
+
+.gift-option-button {
+    display: grid;
+    min-height: 4rem;
+    place-items: center;
+    gap: 0.25rem;
+    padding: 0.55rem 0.35rem;
+    border: 1px solid rgba(184, 138, 68, 0.32);
+    border-radius: 0.9rem;
+    background: transparent;
+    color: inherit;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.67rem;
+    line-height: 1.2;
+}
+
+.gift-option-button > :where(i) {
+    color: var(--bstoria-gold);
+    font-size: 1rem;
+}
+
+.gift-option-button.is-active {
+    border-color: var(--bstoria-gold);
+    background: rgba(184, 138, 68, 0.13);
+}
+
+.gift-detail-card {
+    padding: 1rem;
+    border: 1px solid rgba(184, 138, 68, 0.35);
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.08);
+    text-align: left;
+}
+
+.gift-detail-label {
+    margin: 0 0 0.45rem;
+    color: var(--bstoria-gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.gift-detail-card strong {
+    display: block;
+    font-size: 0.88rem;
+}
+
+.gift-detail-value {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.7rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgba(184, 138, 68, 0.22);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.gift-address-value span {
+    font-weight: 500;
+}
+
+.gift-detail-copy {
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--bstoria-gold);
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+}
+
+
 @media screen and (max-width: 576px) {
     .gift-panel {
         width: 100%;

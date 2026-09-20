@@ -381,6 +381,48 @@ export const guest = (() => {
     };
 
     /**
+     * @returns {void}
+     */
+    const initGift = () => {
+        const toggle = document.getElementById('gift-toggle');
+        const options = document.getElementById('gift-options');
+        if (!toggle || !options) {
+            return;
+        }
+
+        toggle.addEventListener('click', () => {
+            const isHidden = options.hidden;
+            options.hidden = !isHidden;
+            toggle.setAttribute('aria-expanded', `${isHidden}`);
+            toggle.classList.toggle('is-open', isHidden);
+        });
+
+        options.querySelectorAll('[data-gift-view]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const view = button.dataset.giftView;
+                options.querySelectorAll('[data-gift-view]').forEach((item) => {
+                    const active = item === button;
+                    item.classList.toggle('is-active', active);
+                    item.setAttribute('aria-selected', `${active}`);
+                });
+                options.querySelectorAll('[data-gift-panel]').forEach((panel) => {
+                    const active = panel.dataset.giftPanel === view;
+                    panel.hidden = !active;
+                    panel.classList.toggle('is-active', active);
+                });
+            });
+        });
+
+        options.querySelectorAll('[data-copy-from]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const source = document.querySelector(`[data-cms="${button.dataset.copyFrom}"]`);
+                button.dataset.copy = source?.textContent.trim() ?? '';
+                util.copy(button);
+            });
+        });
+    };
+
+    /**
      * Keep the editorial reading order explicit when legacy markup changes.
      * RSVP belongs before gift and the closing credit.
      * @returns {void}
@@ -422,6 +464,7 @@ export const guest = (() => {
         window.addEventListener('DOMContentLoaded', () => window.setTimeout(revealWelcome, 1000), { once: true });
 
         window.addEventListener('DOMContentLoaded', () => {
+            initGift();
             arrangeEditorialFlow();
             pool.init(pageLoaded, [
                 'image',
