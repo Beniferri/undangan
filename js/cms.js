@@ -199,8 +199,9 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
             element.alt = alt;
         });
     });
-    const seoTitle = wedding.seo_title || `Undangan Pernikahan ${couple}`;
-    const seoDescription = wedding.seo_description || `Undangan Pernikahan ${couple}`;
+    const staleNames = /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_title || '') || /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_description || '');
+    const seoTitle = !staleNames && wedding.seo_title ? wedding.seo_title : `Undangan Pernikahan ${couple}`;
+    const seoDescription = !staleNames && wedding.seo_description ? wedding.seo_description : `Undangan Pernikahan ${couple}`;
     const ogImage = weddingImageUrl(wedding);
     document.title = seoTitle;
     setMeta('title', seoTitle);
