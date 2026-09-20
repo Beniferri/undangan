@@ -181,6 +181,7 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         image.src = item.directus_file_id
             ? directusAssetUrl(item.directus_file_id, '?width=1280&quality=80&format=webp')
             : item.image_url;
+        image.dataset.src = image.src;
         image.alt = item.alt_text || image.alt;
         image.title = item.caption || image.alt;
         image.loading = 'lazy';
