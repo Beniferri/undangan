@@ -57,7 +57,7 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         if (!image) {
             return;
         }
-        image.src = item.image_url;
+        image.src = item.directus_file_id ? `${CMS_BASE}/assets/${item.directus_file_id}` : item.image_url;
         image.alt = item.alt_text || image.alt;
     });
     const gift = gifts[0];
