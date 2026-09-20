@@ -258,8 +258,11 @@ svg {
 
 .editorial-hero::after,
 .editorial-couple::after,
+.editorial-person::after,
 .editorial-story::after,
 .editorial-events::after,
+.editorial-countdown::after,
+.editorial-dresscode::after,
 .editorial-gallery::after,
 .editorial-gift::after,
 .editorial-rsvp::after {
@@ -298,20 +301,32 @@ svg {
     right: 1.5rem;
 }
 
+.editorial-countdown::after {
+    content: '06 / COUNTDOWN';
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+.editorial-dresscode::after {
+    content: '07 / DRESSCODE';
+    top: 1.5rem;
+    left: 1.5rem;
+}
+
 .editorial-gallery::after {
-    content: '06 / GALLERY';
+    content: '08 / GALLERY';
     top: 1.5rem;
     left: 1.5rem;
 }
 
 .editorial-rsvp::after {
-    content: '07 / RSVP';
+    content: '09 / RSVP';
     top: 1.5rem;
     right: 1.5rem;
 }
 
 .editorial-gift::after {
-    content: '08 / GIFT';
+    content: '10 / GIFT';
     top: 1.5rem;
     left: 1.5rem;
 }
@@ -327,8 +342,34 @@ svg {
 }
 
 .editorial-events,
+.editorial-countdown,
+.editorial-dresscode,
 .editorial-gift {
     background-image: linear-gradient(315deg, rgba(47, 111, 94, 0.08), transparent 42%);
+}
+
+.editorial-lead {
+    max-width: 36rem;
+    margin: 0 auto 1.5rem;
+    font-size: clamp(0.92rem, 1.8vw, 1.05rem);
+    line-height: 1.75;
+}
+
+.countdown-panel {
+    width: min(100%, 34rem);
+}
+
+.dress-swatch {
+    width: 3rem;
+    height: 3rem;
+    margin-left: -0.75rem;
+    border: 2px solid var(--bs-secondary);
+    border-radius: 50%;
+    box-shadow: var(--bs-box-shadow);
+}
+
+.dress-swatch:first-child {
+    margin-left: 0;
 }
 
 .editorial-section .story-panel,
@@ -350,13 +391,13 @@ svg {
         scroll-snap-align: start;
         scroll-snap-stop: always;
         scroll-margin-bottom: 4.25rem;
-        min-height: auto;
+        min-height: 100svh;
         padding-top: 4rem !important;
         padding-bottom: 4rem !important;
     }
 
     .editorial-hero {
-        min-height: 86vh;
+        min-height: 100svh;
     }
 
     .editorial-section::after {
@@ -367,6 +408,24 @@ svg {
     .editorial-section .story-panel,
     .editorial-section .gallery-panel {
         width: 100%;
+    }
+
+    .editorial-section > .container {
+        padding-inline: 1.1rem;
+    }
+
+    .editorial-section h2.font-esthetic {
+        font-size: clamp(1.85rem, 8vw, 2.25rem) !important;
+        line-height: 1.05;
+    }
+
+    .editorial-lead {
+        line-height: 1.65;
+    }
+
+    .editorial-countdown,
+    .editorial-dresscode {
+        min-height: 100svh;
     }
 }
 
@@ -469,9 +528,10 @@ svg {
 .editorial-bride::after {
     position: absolute;
     top: 1.25rem;
-    right: 1.5rem;
+    left: 1.5rem;
+    right: auto;
     color: #e3bd78;
-    content: '02 / 07';
+    content: '02 / GROOM';
     font-size: 0.62rem;
     font-weight: 600;
     letter-spacing: 0.2em;
@@ -479,7 +539,7 @@ svg {
 }
 
 .editorial-bride::after {
-    content: '03 / 07';
+    content: '03 / BRIDE';
 }
 
 @media screen and (max-width: 576px) {
