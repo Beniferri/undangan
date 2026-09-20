@@ -343,8 +343,9 @@ export const guest = (() => {
         });
 
         if (!token || token.length <= 0) {
+            document.getElementById('rsvp')?.remove();
             document.getElementById('comment')?.remove();
-            document.querySelector('a.nav-link[href="#comment"]')?.closest('li.nav-item')?.remove();
+            document.querySelector('a.nav-link[href="#rsvp"]')?.closest('li.nav-item')?.remove();
 
             Promise.resolve(window.cmsReady).then(() => vid.load());
             img.load();
@@ -390,9 +391,13 @@ export const guest = (() => {
      */
     const arrangeEditorialFlow = () => {
         const gift = document.getElementById('gift');
-        const rsvp = document.getElementById('comment');
+        const rsvp = document.getElementById('rsvp');
+        const wishes = document.getElementById('comment');
         if (gift && rsvp) {
             gift.before(rsvp);
+        }
+        if (gift && wishes) {
+            gift.before(wishes);
         }
     };
 
