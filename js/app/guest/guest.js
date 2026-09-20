@@ -343,10 +343,6 @@ export const guest = (() => {
         });
 
         if (!token || token.length <= 0) {
-            document.getElementById('rsvp')?.remove();
-            document.getElementById('comment')?.remove();
-            document.querySelector('a.nav-link[href="#rsvp"]')?.closest('li.nav-item')?.remove();
-
             Promise.resolve(window.cmsReady).then(() => vid.load());
             img.load();
             aud.load();
