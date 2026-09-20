@@ -204,9 +204,26 @@ section#bride > h2.font-arabic {
     backdrop-filter: blur(1rem);
 }
 
+#navbar-menu .navbar-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+#navbar-menu .navbar-nav::-webkit-scrollbar {
+    display: none;
+}
+
+#navbar-menu .nav-item {
+    flex: 1 0 4.25rem;
+}
+
 #navbar-menu .nav-link {
     min-height: 3.7rem;
     padding: 0.55rem 0.25rem 0.35rem;
+    font-size: 0.68rem;
+    white-space: nowrap;
     transition: color 180ms ease, transform 180ms ease;
 }
 
