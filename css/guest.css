@@ -238,6 +238,140 @@ section#bride > h2.font-arabic {
     margin-bottom: 0.2rem;
 }
 
+/* Section-as-page layout: editorial rhythm without creating separate routes. */
+.editorial-section {
+    position: relative;
+    min-height: clamp(38rem, 82vh, 58rem);
+    display: flex;
+    align-items: center;
+    isolation: isolate;
+}
+
+.editorial-section > .container,
+.editorial-section > .overflow-x-hidden {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+}
+
+.editorial-hero {
+    min-height: max(42rem, 88vh);
+}
+
+.editorial-hero::after,
+.editorial-couple::after,
+.editorial-story::after,
+.editorial-events::after,
+.editorial-gallery::after,
+.editorial-gift::after,
+.editorial-rsvp::after {
+    position: absolute;
+    z-index: 0;
+    color: var(--bstoria-gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    opacity: 0.55;
+    text-transform: uppercase;
+}
+
+.editorial-hero::after {
+    content: '01 / OPENING';
+    top: 1.5rem;
+    left: 1.5rem;
+}
+
+.editorial-couple::after {
+    content: '02 / PASANGAN';
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+.editorial-story::after {
+    content: '03 / STORY';
+    top: 1.5rem;
+    left: 1.5rem;
+}
+
+.editorial-events::after {
+    content: '04 / ACARA';
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+.editorial-gallery::after {
+    content: '05 / GALLERY';
+    top: 1.5rem;
+    left: 1.5rem;
+}
+
+.editorial-rsvp::after {
+    content: '06 / RSVP';
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+.editorial-gift::after {
+    content: '07 / GIFT';
+    top: 1.5rem;
+    left: 1.5rem;
+}
+
+.editorial-couple {
+    background-image: radial-gradient(circle at 12% 20%, rgba(184, 138, 68, 0.1), transparent 30%);
+}
+
+.editorial-story,
+.editorial-gallery,
+.editorial-rsvp {
+    background-image: linear-gradient(135deg, rgba(184, 138, 68, 0.06), transparent 42%);
+}
+
+.editorial-events,
+.editorial-gift {
+    background-image: linear-gradient(315deg, rgba(47, 111, 94, 0.08), transparent 42%);
+}
+
+.editorial-section .story-panel,
+.editorial-section .gallery-panel {
+    width: min(100%, 34rem);
+    margin-inline: auto;
+}
+
+.editorial-section .event-card {
+    transform: translateZ(0);
+}
+
+@media screen and (max-width: 576px) {
+    .editorial-section {
+        min-height: auto;
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
+
+    .editorial-hero {
+        min-height: 86vh;
+    }
+
+    .editorial-section::after {
+        top: 1rem;
+        font-size: 0.56rem;
+    }
+
+    .editorial-section .story-panel,
+    .editorial-section .gallery-panel {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 577px) {
+    .editorial-section:not(.editorial-hero) {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
+}
+
 @media screen and (max-width: 576px) {
     .welcome-card {
         padding: 2rem 1rem;
