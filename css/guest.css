@@ -177,9 +177,7 @@ svg {
 }
 
 .story-panel > h2,
-.gallery-panel > h2,
-section#bride h2.font-arabic + h2,
-section#bride > h2.font-arabic {
+.gallery-panel > h2 {
     letter-spacing: 0.03em;
 }
 
@@ -289,31 +287,31 @@ section#bride > h2.font-arabic {
 }
 
 .editorial-story::after {
-    content: '03 / STORY';
+    content: '04 / STORY';
     top: 1.5rem;
     left: 1.5rem;
 }
 
 .editorial-events::after {
-    content: '04 / ACARA';
+    content: '05 / ACARA';
     top: 1.5rem;
     right: 1.5rem;
 }
 
 .editorial-gallery::after {
-    content: '05 / GALLERY';
+    content: '06 / GALLERY';
     top: 1.5rem;
     left: 1.5rem;
 }
 
 .editorial-rsvp::after {
-    content: '06 / RSVP';
+    content: '07 / RSVP';
     top: 1.5rem;
     right: 1.5rem;
 }
 
 .editorial-gift::after {
-    content: '07 / GIFT';
+    content: '08 / GIFT';
     top: 1.5rem;
     left: 1.5rem;
 }
@@ -390,6 +388,124 @@ section#bride > h2.font-arabic {
 
     .event-card {
         margin-inline: 0.25rem;
+    }
+}
+
+.editorial-person {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+    background: #101713;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
+.editorial-person > img {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    cursor: pointer;
+    transition: transform 700ms ease;
+}
+
+.editorial-person:hover > img,
+.editorial-person:focus-within > img {
+    transform: scale(1.03);
+}
+
+.editorial-person-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(9, 17, 13, 0.04) 28%, rgba(9, 17, 13, 0.86) 100%);
+}
+
+.editorial-person-caption {
+    position: absolute;
+    right: 1.5rem;
+    bottom: 2.5rem;
+    left: 1.5rem;
+    max-width: 28rem;
+    color: #fff;
+    text-align: left;
+    text-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.35);
+}
+
+.editorial-person-kicker {
+    display: inline-block;
+    margin-bottom: 0.7rem;
+    color: #e3bd78;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.editorial-person-caption h2 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    line-height: 0.95;
+}
+
+.editorial-person-caption p {
+    max-width: 24rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.9rem;
+}
+
+.editorial-person-caption small {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+}
+
+.editorial-groom::after,
+.editorial-bride::after {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    color: #e3bd78;
+    content: '02 / 07';
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    opacity: 0.8;
+}
+
+.editorial-bride::after {
+    content: '03 / 07';
+}
+
+@media screen and (max-width: 576px) {
+    .editorial-person {
+        min-height: 100svh;
+    }
+
+    .editorial-person-caption {
+        right: 1.25rem;
+        bottom: 2rem;
+        left: 1.25rem;
+    }
+
+    .editorial-person-caption h2 {
+        font-size: clamp(2.6rem, 13vw, 4.3rem);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .editorial-person > img {
+        transition: none;
+    }
+
+    .editorial-person:hover > img,
+    .editorial-person:focus-within > img {
+        transform: none;
     }
 }
 
