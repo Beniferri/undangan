@@ -253,8 +253,61 @@ svg {
 }
 
 .editorial-hero {
-    min-height: max(42rem, 88vh);
+    min-height: 100svh;
+    padding-block: 3rem 4rem !important;
 }
+
+.editorial-hero > .bg-overlay-auto {
+    display: flex;
+    width: 100%;
+    min-height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1.5rem, 5vh, 3.5rem) 1rem;
+}
+
+.editorial-hero > .bg-overlay-auto > h1 {
+    margin: 0 !important;
+    padding: 0 0 1rem !important;
+    font-size: clamp(1.8rem, 4vw, 3rem) !important;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.editorial-hero [data-cms="profile-image"] {
+    width: clamp(9rem, 20vw, 13rem);
+    height: clamp(9rem, 20vw, 13rem);
+    margin: 1rem auto !important;
+}
+
+.editorial-hero [data-cms="couple-names"] {
+    max-width: 32rem;
+    margin: 1rem auto !important;
+    font-size: clamp(2rem, 5vw, 3.5rem) !important;
+    letter-spacing: 0.035em;
+    line-height: 0.98;
+}
+
+.editorial-hero [data-cms="wedding-date"] {
+    margin: 0.35rem 0 0.9rem !important;
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.95rem, 2vw, 1.2rem) !important;
+    letter-spacing: 0.08em;
+}
+
+.editorial-hero .mouse-animation {
+    margin-top: 1.5rem !important;
+}
+
+.editorial-hero .text-secondary {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
 
 .editorial-section::after,
 .editorial-person::after {
@@ -624,6 +677,43 @@ svg {
     color: inherit;
 }
 
+@media screen and (min-width: 577px) {
+    .editorial-hero {
+        height: 100svh;
+        min-height: 100svh;
+        padding-block: 2rem !important;
+    }
+
+    .editorial-hero > .bg-overlay-auto {
+        padding-block: 0.75rem;
+    }
+
+    .editorial-hero > .bg-overlay-auto > h1 {
+        padding-bottom: 0.55rem !important;
+        font-size: clamp(1.6rem, 3vw, 2.25rem) !important;
+    }
+
+    .editorial-hero [data-cms="profile-image"] {
+        width: clamp(8rem, 14vw, 10rem);
+        height: clamp(8rem, 14vw, 10rem);
+        margin: 0.5rem auto !important;
+    }
+
+    .editorial-hero [data-cms="couple-names"] {
+        max-width: 28rem;
+        margin: 0.6rem auto !important;
+        font-size: clamp(1.8rem, 3.5vw, 2.6rem) !important;
+    }
+
+    .editorial-hero [data-cms="wedding-date"] {
+        margin: 0.2rem 0 0.55rem !important;
+        font-size: 0.95rem !important;
+    }
+
+    .editorial-hero .mouse-animation {
+        margin-top: 0.75rem !important;
+    }
+}
 
 @media screen and (max-width: 576px) {
     .gift-panel {
