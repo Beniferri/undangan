@@ -33,8 +33,7 @@ export const video = (() => {
             frame.src = src;
             frame.title = 'Video kisah cinta';
             frame.loading = 'lazy';
-            frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-            frame.allowFullscreen = true;
+            frame.allow = 'autoplay; encrypted-media; picture-in-picture';
             frame.referrerPolicy = 'strict-origin-when-cross-origin';
             frame.style.aspectRatio = '16 / 9';
             frame.style.border = '0';

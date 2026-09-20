@@ -54,6 +54,15 @@ Upload gambar melalui Directus Files, hubungkan ke `directus_file_id`, isi alt t
 
 Slot slider frontend 1–6 dipetakan dari record gallery berdasarkan `sort`. Jika collection gallery berisi record, slider kedua disembunyikan otomatis bila jumlah foto tidak lebih dari tiga. Jika CMS gagal atau kosong, fallback static tetap dipakai.
 
+## Cover dan foto profil
+
+Pada collection `weddings`:
+
+- `cover_image_id`: background halaman; tidak memakai modal foto;
+- `profile_image_id`: foto hero/profil; tetap memakai `undangan.guest.modal(this)`.
+
+Keduanya diupload melalui Directus Files dan dapat diganti tanpa mengubah source frontend.
+
 ## Video
 
 Pada collection `weddings`, pilih `video_source`:
