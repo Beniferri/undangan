@@ -398,6 +398,143 @@ svg {
     transform: translateZ(0);
 }
 
+.gift-panel {
+    width: min(100%, 30rem);
+    margin-inline: auto;
+    text-align: center;
+}
+
+.gift-eyebrow {
+    margin-bottom: 0.65rem;
+    color: var(--bstoria-gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+}
+
+.gift-title {
+    margin: 0;
+    font-size: clamp(2.5rem, 6vw, 4.2rem);
+    line-height: 0.95;
+}
+
+.gift-intro {
+    max-width: 30rem;
+    margin: 1.25rem auto 1.75rem;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    line-height: 1.75;
+}
+
+.gift-card {
+    width: min(100%, 30rem);
+    margin-inline: auto;
+    padding: 2rem 1.75rem 1.6rem;
+    border: 1px solid rgba(184, 138, 68, 0.45);
+    border-radius: 1.5rem;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+    box-shadow: 0 1.25rem 3rem rgba(16, 23, 19, 0.16);
+    text-align: center;
+}
+
+.gift-card-mark {
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1rem;
+    place-items: center;
+    border: 1px solid rgba(184, 138, 68, 0.6);
+    border-radius: 50%;
+    color: var(--bstoria-gold);
+    font-size: 1.15rem;
+}
+
+.gift-bank-label {
+    color: var(--bstoria-gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.gift-bank-name {
+    margin-top: 0.45rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.gift-account-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 1.25rem 0 0.85rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(184, 138, 68, 0.25);
+}
+
+.gift-account-number {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.gift-copy-button {
+    flex: 0 0 auto;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--bstoria-gold);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+}
+
+.gift-account-owner {
+    font-size: 0.84rem;
+    opacity: 0.78;
+}
+
+.gift-thanks {
+    margin: 1.5rem 0 0;
+    font-size: 0.82rem;
+    opacity: 0.72;
+}
+
+@media screen and (max-width: 576px) {
+    .gift-panel {
+        width: 100%;
+    }
+
+    .gift-intro {
+        margin: 1rem auto 1.25rem;
+        line-height: 1.55;
+    }
+
+    .gift-card {
+        padding: 1.4rem 1rem 1.15rem;
+        border-radius: 1.25rem;
+    }
+
+    .gift-account-row {
+        gap: 0.45rem;
+    }
+
+    .gift-account-number {
+        font-size: 1.08rem;
+        letter-spacing: 0.04em;
+    }
+
+    .gift-copy-button {
+        padding: 0.35rem 0.55rem;
+        font-size: 0.68rem;
+    }
+}
+
 .editorial-footer {
     min-height: 100svh;
     padding-bottom: max(6rem, 12vh) !important;
