@@ -384,6 +384,19 @@ export const guest = (() => {
     };
 
     /**
+     * Keep the editorial reading order explicit when legacy markup changes.
+     * RSVP belongs before gift and the closing credit.
+     * @returns {void}
+     */
+    const arrangeEditorialFlow = () => {
+        const gift = document.getElementById('gift');
+        const rsvp = document.getElementById('comment');
+        if (gift && rsvp) {
+            gift.before(rsvp);
+        }
+    };
+
+    /**
      * @returns {object}
      */
     const init = () => {
@@ -408,6 +421,7 @@ export const guest = (() => {
         window.addEventListener('DOMContentLoaded', () => window.setTimeout(revealWelcome, 1000), { once: true });
 
         window.addEventListener('DOMContentLoaded', () => {
+            arrangeEditorialFlow();
             pool.init(pageLoaded, [
                 'image',
                 'video',
