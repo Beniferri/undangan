@@ -50,12 +50,19 @@ const youtubeEmbedUrl = (value) => {
         if (url.hostname === 'youtu.be') {
             id = url.pathname.slice(1);
         }
+        const startValue = url.searchParams.get('start') || url.searchParams.get('t');
+        const start = startValue && /^\d+s?$/.test(startValue) ? Number.parseInt(startValue, 10) : null;
         if (!id && url.pathname.startsWith('/embed/')) {
             id = url.pathname.split('/')[2];
         }
-        return id && /^[A-Za-z0-9_-]{6,}$/.test(id)
-            ? `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`
-            : null;
+        if (!id || !/^[A-Za-z0-9_-]{6,}$/.test(id)) {
+            return null;
+        }
+        const params = new URLSearchParams({ rel: '0', modestbranding: '1', autoplay: '1', mute: '1', playsinline: '1' });
+        if (start !== null) {
+            params.set('start', String(start));
+        }
+        return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
     } catch {
         return null;
     }
