@@ -458,6 +458,71 @@ svg {
     .editorial-footer {
         padding-bottom: max(6rem, 12vh) !important;
     }
+
+    .editorial-rsvp-form {
+        height: 100svh;
+        min-height: 100svh;
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+        overflow: hidden;
+    }
+
+    .editorial-rsvp-form > .container {
+        padding-inline: 0.85rem;
+    }
+
+    .editorial-rsvp-form .border.rounded-5 {
+        padding: 0.85rem !important;
+        margin-bottom: 0 !important;
+    }
+
+    .editorial-rsvp-form h2 {
+        margin-top: 0.25rem !important;
+        margin-bottom: 0.85rem !important;
+        font-size: 1.9rem !important;
+    }
+
+    .editorial-rsvp-form .mb-3 {
+        margin-bottom: 0.6rem !important;
+    }
+
+    .editorial-rsvp-form .form-label {
+        margin-top: 0 !important;
+        margin-bottom: 0.2rem !important;
+        font-size: 0.78rem;
+    }
+
+    .editorial-rsvp-form .form-control,
+    .editorial-rsvp-form .form-select {
+        min-height: 2.25rem;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.84rem;
+    }
+
+    .editorial-rsvp-form #form-comment {
+        min-height: 4.1rem;
+        padding-top: 0.55rem;
+    }
+
+    .editorial-rsvp-form #information {
+        margin-bottom: 0.55rem !important;
+        padding: 0.65rem 2.5rem 0.65rem 0.75rem;
+    }
+
+    .editorial-rsvp-form #information p:first-of-type {
+        font-size: 1.05rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+
+    .editorial-rsvp-form #information p:last-of-type {
+        font-size: 0.78rem;
+        line-height: 1.35;
+    }
+
+    .editorial-rsvp-form .d-grid button {
+        padding-block: 0.4rem;
+        font-size: 0.84rem;
+    }
 }
 
 @media screen and (min-width: 577px) {
