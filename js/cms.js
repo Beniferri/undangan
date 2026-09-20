@@ -24,7 +24,7 @@ const setMeta = (name, value, property = false) => {
 const formatDate = (value, timezone) => new Intl.DateTimeFormat('id-ID', {
     dateStyle: 'long', timeZone: timezone || 'Asia/Jakarta',
 }).format(new Date(value));
-const applyWedding = ({ wedding, events = [], gallery = [], gifts = [] }) => {
+const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories = [] }) => {
     const couple = `${wedding.groom_name} & ${wedding.bride_name}`;
     const dateLabel = formatDate(wedding.wedding_date, wedding.timezone);
     setCmsText('couple-names', couple);
@@ -47,6 +47,10 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [] }) => {
         setCmsText(`event-${index + 1}-name`, event.name);
         setCmsText(`event-${index + 1}-time`, event.time_label || formatDate(event.event_date, wedding.timezone));
         setCmsText(`event-${index + 1}-venue`, `${event.venue}\n${event.address}`);
+    });
+    stories.slice(0, 6).forEach((story, index) => {
+        setCmsText(`story-${index + 1}-title`, story.title);
+        setCmsText(`story-${index + 1}-body`, story.body);
     });
     gallery.slice(0, 6).forEach((item, index) => {
         const image = document.querySelector(`[data-cms-gallery="${index + 1}"]`);
@@ -73,12 +77,13 @@ const loadCms = async () => {
             return;
         }
         const filter = encodeURIComponent(JSON.stringify({ wedding_id: { _eq: wedding.id } }));
-        const [events, gallery, gifts] = await Promise.all([
+        const [events, gallery, gifts, stories] = await Promise.all([
             cmsFetch(`/items/wedding_events?filter=${filter}&sort=sort`),
             cmsFetch(`/items/wedding_gallery?filter=${filter}&sort=sort`),
             cmsFetch(`/items/wedding_gifts?filter=${filter}&sort=sort`),
+            cmsFetch(`/items/wedding_stories?filter=${filter}&sort=sort`),
         ]);
-        applyWedding({ wedding, events: events.data, gallery: gallery.data, gifts: gifts.data });
+        applyWedding({ wedding, events: events.data, gallery: gallery.data, gifts: gifts.data, stories: stories.data });
     } catch (error) {
         console.warn('CMS unavailable; using static invitation content.', error);
     }
