@@ -38,10 +38,18 @@ const setCanonical = (value) => {
     }
     document.querySelectorAll('link[rel="canonical"]').forEach((element) => { element.href = value; });
 };
-const directusAssetUrl = (id, options = '') => `${CMS_BASE}/assets/${encodeURIComponent(id)}${options}`;
+const directusAssetUrl = (file, options = '') => {
+    const id = typeof file === 'object' ? file?.id : file;
+    const version = typeof file === 'object' ? file?.filename_download : '';
+    if (!id) {
+        return '';
+    }
+    const cacheBust = version ? `${options ? '&' : '?'}v=${encodeURIComponent(version)}` : '';
+    return `${CMS_BASE}/assets/${encodeURIComponent(id)}${options}${cacheBust}`;
+};
 const weddingImageUrl = (wedding, options = '') => {
-    const fileId = wedding.og_image_id || wedding.cover_image_id;
-    return fileId ? directusAssetUrl(fileId, options) : wedding.cover_image_url;
+    const file = wedding.og_image_id || wedding.cover_image_id;
+    return file ? directusAssetUrl(file, options) : wedding.cover_image_url;
 };
 const youtubeEmbedUrl = (value) => {
     try {
@@ -145,8 +153,9 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     document.body.dataset.time = wedding.wedding_date;
     configureVideo(wedding);
     document.querySelectorAll('[data-cms="maps-url"]').forEach((element) => { element.href = wedding.maps_url || element.href; });
-    const coverImage = wedding.cover_image_id
-        ? directusAssetUrl(wedding.cover_image_id, '?width=1600&quality=82&format=webp')
+    const coverFile = wedding.cover_image_id;
+    const coverImage = coverFile
+        ? directusAssetUrl(coverFile, '?width=1600&quality=82&format=webp')
         : wedding.cover_image_url;
     document.querySelectorAll('[data-cms="cover-image"]').forEach((element) => {
         if (!coverImage) {
@@ -158,8 +167,9 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
             ? `Background pernikahan ${wedding.groom_name} dan ${wedding.bride_name}`
             : element.alt;
     });
-    const profileImage = wedding.profile_image_id
-        ? directusAssetUrl(wedding.profile_image_id, '?width=1200&quality=82&format=webp')
+    const profileFile = wedding.profile_image_id;
+    const profileImage = profileFile
+        ? directusAssetUrl(profileFile, '?width=1200&quality=82&format=webp')
         : null;
     document.querySelectorAll('[data-cms="profile-image"]').forEach((element) => {
         if (!profileImage) {
@@ -170,7 +180,8 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         element.alt = `Foto ${couple}`;
     });
     if (wedding.favicon_image_id) {
-        const favicon = directusAssetUrl(wedding.favicon_image_id, '?width=192&height=192&fit=cover&format=png');
+        const faviconFile = wedding.favicon_image_id;
+        const favicon = directusAssetUrl(faviconFile, '?width=192&height=192&fit=cover&format=png');
         document.querySelectorAll('[data-cms-favicon]').forEach((element) => { element.href = favicon; });
     }
     const seoTitle = wedding.seo_title || `Undangan Pernikahan ${couple}`;
@@ -232,7 +243,11 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
 };
 const loadCms = async () => {
     try {
-        const params = new URLSearchParams({ 'filter[slug][_eq]': CMS_SLUG, limit: '1' });
+        const params = new URLSearchParams({
+            'filter[slug][_eq]': CMS_SLUG,
+            limit: '1',
+            fields: '*,cover_image_id.id,cover_image_id.filename_download,profile_image_id.id,profile_image_id.filename_download,favicon_image_id.id,favicon_image_id.filename_download,og_image_id.id,og_image_id.filename_download',
+        });
         if (previewMode) {
             params.set('version', previewVersion);
         } else {
