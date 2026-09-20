@@ -32,6 +32,35 @@ const setMeta = (name, value, property = false) => {
     const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
     document.querySelectorAll(selector).forEach((element) => { element.setAttribute('content', value); });
 };
+const setCanonical = (value) => {
+    if (!value) {
+        return;
+    }
+    document.querySelectorAll('link[rel="canonical"]').forEach((element) => { element.href = value; });
+};
+const directusAssetUrl = (id, options = '') => `${CMS_BASE}/assets/${encodeURIComponent(id)}${options}`;
+const setStructuredData = (wedding, events) => {
+    const element = document.querySelector('#wedding-jsonld');
+    if (!element) {
+        return;
+    }
+    element.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: `Pernikahan ${wedding.groom_name} & ${wedding.bride_name}`,
+        description: wedding.seo_description,
+        startDate: wedding.wedding_date,
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        location: events[0] ? {
+            '@type': 'Place',
+            name: events[0].venue,
+            address: events[0].address,
+        } : undefined,
+        url: wedding.canonical_url || window.location.href,
+        image: wedding.og_image_id ? directusAssetUrl(wedding.og_image_id) : wedding.cover_image_url,
+    });
+};
 const formatDate = (value, timezone) => new Intl.DateTimeFormat('id-ID', {
     dateStyle: 'long', timeZone: timezone || 'Asia/Jakarta',
 }).format(new Date(value));
@@ -50,15 +79,24 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     document.body.dataset.time = wedding.wedding_date;
     document.querySelectorAll('[data-cms="maps-url"]').forEach((element) => { element.href = wedding.maps_url || element.href; });
     document.querySelectorAll('[data-cms="cover-image"]').forEach((element) => { element.src = wedding.cover_image_url || element.src; });
-    setMeta('title', `Undangan Pernikahan ${couple}`);
-    setMeta('description', wedding.seo_description);
-    setMeta('og:title', `Undangan Pernikahan ${couple}`, true);
-    setMeta('og:description', wedding.seo_description, true);
+    const seoTitle = wedding.seo_title || `Undangan Pernikahan ${couple}`;
+    const seoDescription = wedding.seo_description || `Undangan Pernikahan ${couple}`;
+    const ogImage = wedding.og_image_id ? directusAssetUrl(wedding.og_image_id) : wedding.cover_image_url;
+    document.title = seoTitle;
+    setMeta('title', seoTitle);
+    setMeta('description', seoDescription);
+    setMeta('keywords', wedding.seo_keywords);
+    setMeta('og:title', seoTitle, true);
+    setMeta('og:description', seoDescription, true);
+    setMeta('og:image', ogImage, true);
+    setMeta('og:image:secure_url', ogImage, true);
+    setCanonical(wedding.canonical_url || window.location.href.split('?')[0]);
     events.slice(0, 2).forEach((event, index) => {
         setCmsText(`event-${index + 1}-name`, event.name);
         setCmsText(`event-${index + 1}-time`, event.time_label || formatDate(event.event_date, wedding.timezone));
         setCmsText(`event-${index + 1}-venue`, `${event.venue}\n${event.address}`);
     });
+    setStructuredData(wedding, events);
     stories.slice(0, 6).forEach((story, index) => {
         setCmsText(`story-${index + 1}-title`, story.title);
         setCmsText(`story-${index + 1}-body`, story.body);
@@ -68,8 +106,13 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         if (!image) {
             return;
         }
-        image.src = item.directus_file_id ? `${CMS_BASE}/assets/${item.directus_file_id}` : item.image_url;
+        image.src = item.directus_file_id
+            ? directusAssetUrl(item.directus_file_id, '?width=1280&quality=80&format=webp')
+            : item.image_url;
         image.alt = item.alt_text || image.alt;
+        image.title = item.caption || image.alt;
+        image.loading = 'lazy';
+        image.decoding = 'async';
     });
     const gift = gifts[0];
     if (gift) {
