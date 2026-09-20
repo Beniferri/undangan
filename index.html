@@ -60,7 +60,7 @@
     <!-- Dependencies CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/guest.css?v=section-snap-1">
+    <link rel="stylesheet" href="./css/guest.css?v=full-page-couple-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
@@ -164,61 +164,27 @@
                     </svg>
                 </div>
 
+                <!-- Groom -->
+                <section class="editorial-person editorial-groom" id="groom">
+                    <img src="./assets/images/placeholder.webp" data-src="./assets/images/cowo.webp" data-cms="groom-image" alt="Foto mempelai pria" onclick="undangan.guest.modal(this)">
+                    <div class="editorial-person-overlay"></div>
+                    <div class="editorial-person-caption">
+                        <span class="editorial-person-kicker">Mempelai Pria</span>
+                        <h2 class="font-esthetic" data-cms="groom-name">Muhammad Fikri Ramadhan</h2>
+                        <p class="mb-1" data-cms="groom-parents">Bapak Ahmad Fauzan dan Ibu Siti Rahmawati</p>
+                        <small>Putra ke-1</small>
+                    </div>
+                </section>
+
                 <!-- Bride -->
-                <section class="bg-white-black text-center editorial-section editorial-couple" id="bride">
-                    <h2 class="font-arabic py-4 m-0" style="font-size: 2rem;">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</h2>
-                    <h2 class="font-esthetic py-4 m-0" style="font-size: 2rem;">Assalamualaikum Warahmatullahi Wabarakatuh</h2>
-                    <p class="pb-4 px-2 m-0" style="font-size: 0.95rem;">Tanpa mengurangi rasa hormat, kami mengundang Anda untuk berkenan menghadiri acara pernikahan kami:</p>
-
-                    <div class="overflow-x-hidden pb-4">
-
-                        <div class="position-relative">
-                            <!-- Love animation -->
-                            <div class="position-absolute" style="top: 0%; right: 5%;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="opacity-50" data-time="500" data-class="animate-love" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                </svg>
-                            </div>
-
-                            <div data-aos="fade-right" data-aos-duration="2000" class="pb-1">
-                                <img src="./assets/images/placeholder.webp" data-src="./assets/images/cowo.webp" data-cms="groom-image" alt="cowo" onclick="undangan.guest.modal(this)" class="img-center-crop rounded-circle border border-3 border-light shadow my-4 mx-auto cursor-pointer">
-                                <h2 class="font-esthetic m-0" style="font-size: 2.125rem;" data-cms="groom-name">Muhammad Fikri Ramadhan</h2>
-                                <p class="mt-3 mb-1" style="font-size: 1.25rem;">Putra ke-1</p>
-                                <p class="mb-0" style="font-size: 0.95rem;" data-cms="groom-parents">Bapak Ahmad Fauzan dan Ibu Siti Rahmawati</p>
-                            </div>
-
-                            <!-- Love animation -->
-                            <div class="position-absolute" style="top: 90%; left: 5%;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="opacity-50" data-time="2000" data-class="animate-love" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <h2 class="font-esthetic mt-4" style="font-size: 4.5rem;">&amp;</h2>
-
-                        <div class="position-relative">
-                            <!-- Love animation -->
-                            <div class="position-absolute" style="top: 0%; right: 5%;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="opacity-50" data-time="3000" data-class="animate-love" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                </svg>
-                            </div>
-
-                            <div data-aos="fade-left" data-aos-duration="2000" class="pb-1">
-                                <img src="./assets/images/placeholder.webp" data-src="./assets/images/cewe.webp" data-cms="bride-image" alt="cewe" onclick="undangan.guest.modal(this)" class="img-center-crop rounded-circle border border-3 border-light shadow my-4 mx-auto cursor-pointer">
-                                <h2 class="font-esthetic m-0" style="font-size: 2.125rem;" data-cms="bride-name">Aisyah Nur Zahra</h2>
-                                <p class="mt-3 mb-1" style="font-size: 1.25rem;">Putri ke-2</p>
-                                <p class="mb-0" style="font-size: 0.95rem;" data-cms="bride-parents">Bapak H. Abdul Hakim dan Ibu Hj. Nur Aini</p>
-                            </div>
-
-                            <!-- Love animation -->
-                            <div class="position-absolute" style="top: 90%; left: 5%;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="opacity-50" data-time="2500" data-class="animate-love" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                </svg>
-                            </div>
-                        </div>
+                <section class="editorial-person editorial-bride" id="bride">
+                    <img src="./assets/images/placeholder.webp" data-src="./assets/images/cewe.webp" data-cms="bride-image" alt="Foto mempelai wanita" onclick="undangan.guest.modal(this)">
+                    <div class="editorial-person-overlay"></div>
+                    <div class="editorial-person-caption">
+                        <span class="editorial-person-kicker">Mempelai Wanita</span>
+                        <h2 class="font-esthetic" data-cms="bride-name">Aisyah Nur Zahra</h2>
+                        <p class="mb-1" data-cms="bride-parents">Bapak H. Abdul Hakim dan Ibu Hj. Nur Aini</p>
+                        <small>Putri ke-2</small>
                     </div>
                 </section>
 
@@ -587,7 +553,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#bride">
+                        <a class="nav-link" href="#groom">
                             <i class="fa-solid fa-user-group"></i>
                             <span class="d-block">Pasangan</span>
                         </a>
