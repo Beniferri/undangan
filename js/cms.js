@@ -58,7 +58,17 @@ const youtubeEmbedUrl = (value) => {
         if (!id || !/^[A-Za-z0-9_-]{6,}$/.test(id)) {
             return null;
         }
-        const params = new URLSearchParams({ rel: '0', modestbranding: '1', autoplay: '1', mute: '1', playsinline: '1' });
+        const params = new URLSearchParams({
+            rel: '0',
+            modestbranding: '1',
+            controls: '0',
+            disablekb: '1',
+            fs: '0',
+            iv_load_policy: '3',
+            autoplay: '1',
+            mute: '1',
+            playsinline: '1',
+        });
         if (start !== null) {
             params.set('start', String(start));
         }
@@ -144,6 +154,17 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         element.alt = wedding.groom_name && wedding.bride_name
             ? `Background pernikahan ${wedding.groom_name} dan ${wedding.bride_name}`
             : element.alt;
+    });
+    const profileImage = wedding.profile_image_id
+        ? directusAssetUrl(wedding.profile_image_id, '?width=1200&quality=82&format=webp')
+        : null;
+    document.querySelectorAll('[data-cms="profile-image"]').forEach((element) => {
+        if (!profileImage) {
+            return;
+        }
+        element.src = profileImage;
+        element.dataset.src = profileImage;
+        element.alt = `Foto ${couple}`;
     });
     const seoTitle = wedding.seo_title || `Undangan Pernikahan ${couple}`;
     const seoDescription = wedding.seo_description || `Undangan Pernikahan ${couple}`;
