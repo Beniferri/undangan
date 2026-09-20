@@ -60,7 +60,7 @@
     <!-- Dependencies CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/guest.css?v=931375c">
+    <link rel="stylesheet" href="./css/guest.css?v=sora-editorial-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
@@ -119,7 +119,7 @@
                     </div>
                 </div>
 
-                <div class="text-center p-4 bg-overlay-auto rounded-5">
+                <div class="text-center p-4 bg-overlay-auto rounded-5 hero-panel">
                     <h2 class="font-esthetic mb-4" style="font-size: 2rem;" data-cms="couple-names">Muhammad Fikri Ramadhan &amp; Aisyah Nur Zahra</h2>
                     <p class="m-0" style="font-size: 1rem;" data-cms="wedding-date">17 Januari 2027</p>
                 </div>
@@ -249,7 +249,7 @@
                 <!-- Love Story -->
                 <section class="bg-light-dark pt-2 pb-4">
                     <div class="container">
-                        <div class="bg-theme-auto rounded-5 shadow p-3">
+                        <div class="bg-theme-auto rounded-5 shadow p-3 story-panel">
                             <h2 class="font-esthetic text-center py-2 mb-2" style="font-size: 2.125rem;">Kisah Cinta</h2>
 
                             <!-- Jika tidak ingin menggunakan video, hapus seluruh tag dengan id="video-love-story" di bawah ini. -->
@@ -353,12 +353,12 @@
                         </div>
 
                         <div class="overflow-x-hidden">
-                            <div class="py-2" data-aos="fade-right" data-aos-duration="1500">
+                            <div class="py-2 event-card" data-aos="fade-right" data-aos-duration="1500">
                                 <h2 class="font-esthetic m-0 py-2" style="font-size: 2rem;" data-cms="event-1-name">Akad</h2>
                                 <p style="font-size: 0.95rem;" data-cms="event-1-time">Pukul 10.00 WIB - Selesai</p>
                             </div>
 
-                            <div class="py-2" data-aos="fade-left" data-aos-duration="1500">
+                            <div class="py-2 event-card" data-aos="fade-left" data-aos-duration="1500">
                                 <h2 class="font-esthetic m-0 py-2" style="font-size: 2rem;" data-cms="event-2-name">Resepsi</h2>
                                 <p style="font-size: 0.95rem;" data-cms="event-2-time">Pukul 13.00 WIB - Selesai</p>
                             </div>
@@ -394,7 +394,7 @@
                 <!-- Gallery -->
                 <section class="bg-white-black pb-5 pt-3" id="gallery">
                     <div class="container">
-                        <div class="border rounded-5 shadow p-3">
+                        <div class="border rounded-5 shadow p-3 gallery-panel">
 
                             <h2 class="font-esthetic text-center py-2 m-0" style="font-size: 2.25rem;">Galeri</h2>
 
@@ -618,7 +618,7 @@
     <!-- Welcome Page -->
     <div class="loading-page bg-white-black" id="welcome" style="opacity: 1;">
         <div class="d-flex justify-content-center align-items-center vh-100 overflow-y-auto">
-            <div class="d-flex flex-column text-center">
+            <div class="d-flex flex-column text-center welcome-card">
                 <h2 class="font-esthetic mb-4" style="font-size: 2.25rem;">The Wedding Of</h2>
 
                 <img src="./assets/images/placeholder.webp" data-src="./assets/images/bg.webp" data-cms="profile-image" alt="background" class="img-center-crop rounded-circle border border-3 border-light shadow mb-4 mx-auto">
@@ -626,7 +626,7 @@
                 <h2 class="font-esthetic mb-4" style="font-size: 2.25rem;" data-cms="couple-names">Muhammad Fikri Ramadhan &amp; Aisyah Nur Zahra</h2>
                 <div id="guest-name" data-message="Kepada Yth Bapak/Ibu/Saudara/i"></div>
 
-                <button type="button" class="btn btn-light shadow rounded-4 mt-3 mx-auto" onclick="undangan.guest.open(this)"><i class="fa-solid fa-envelope-open fa-bounce me-2"></i>Open Invitation</button>
+                <button type="button" class="btn btn-light shadow rounded-4 mt-3 mx-auto welcome-cta" onclick="undangan.guest.open(this)"><i class="fa-solid fa-envelope-open fa-bounce me-2"></i>Open Invitation</button>
             </div>
         </div>
     </div>
