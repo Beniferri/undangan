@@ -1,8 +1,19 @@
 const CMS_BASE = 'https://directus.benifin.my.id';
 const CMS_SLUG = 'beta-storia-2027';
+const previewParams = new URLSearchParams(window.location.search);
+const previewVersion = previewParams.get('version');
+const previewMode = previewParams.get('preview') === 'true' && Boolean(previewVersion);
+const previewToken = previewParams.get('access_token');
 
 const cmsFetch = async (path) => {
-    const response = await fetch(`${CMS_BASE}${path}`, { headers: { Accept: 'application/json' } });
+    const headers = { Accept: 'application/json' };
+    if (previewToken) {
+        headers.Authorization = `Bearer ${previewToken}`;
+    }
+    const response = await fetch(`${CMS_BASE}${path}`, {
+        headers,
+        credentials: previewMode && !previewToken ? 'include' : 'same-origin',
+    });
     if (!response.ok) {
         throw new Error(`CMS request failed: ${response.status}`);
     }
@@ -70,18 +81,24 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
 };
 const loadCms = async () => {
     try {
-        const params = new URLSearchParams({ 'filter[slug][_eq]': CMS_SLUG, 'filter[status][_eq]': 'published', limit: '1' });
+        const params = new URLSearchParams({ 'filter[slug][_eq]': CMS_SLUG, limit: '1' });
+        if (previewMode) {
+            params.set('version', previewVersion);
+        } else {
+            params.set('filter[status][_eq]', 'published');
+        }
         const weddingResponse = await cmsFetch(`/items/weddings?${params.toString()}`);
         const wedding = weddingResponse.data?.[0];
         if (!wedding) {
             return;
         }
         const filter = encodeURIComponent(JSON.stringify({ wedding_id: { _eq: wedding.id } }));
+        const versionSuffix = previewMode ? `&version=${encodeURIComponent(previewVersion)}` : '';
         const [events, gallery, gifts, stories] = await Promise.all([
-            cmsFetch(`/items/wedding_events?filter=${filter}&sort=sort`),
-            cmsFetch(`/items/wedding_gallery?filter=${filter}&sort=sort`),
-            cmsFetch(`/items/wedding_gifts?filter=${filter}&sort=sort`),
-            cmsFetch(`/items/wedding_stories?filter=${filter}&sort=sort`),
+            cmsFetch(`/items/wedding_events?filter=${filter}&sort=sort${versionSuffix}`),
+            cmsFetch(`/items/wedding_gallery?filter=${filter}&sort=sort${versionSuffix}`),
+            cmsFetch(`/items/wedding_gifts?filter=${filter}&sort=sort${versionSuffix}`),
+            cmsFetch(`/items/wedding_stories?filter=${filter}&sort=sort${versionSuffix}`),
         ]);
         applyWedding({ wedding, events: events.data, gallery: gallery.data, gifts: gifts.data, stories: stories.data });
     } catch (error) {
