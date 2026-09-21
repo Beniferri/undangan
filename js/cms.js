@@ -229,26 +229,6 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
             link.href = url;
         }
     });
-    const frameUrl = safeInstagramUrl(wedding.instagram_filter_url || wedding.wedding_frame_url);
-    if (frameUrl) {
-        document.querySelectorAll('[data-frame-url]').forEach((link) => { link.href = frameUrl; });
-    }
-    const frameVideoUrl = (() => {
-        try {
-            const url = new URL(wedding.wedding_frame_video_url);
-            return url.protocol === 'https:' ? url.toString() : null;
-        } catch {
-            return null;
-        }
-    })();
-    if (frameVideoUrl) {
-        const video = document.querySelector('.wedding-frame-media video');
-        const source = video?.querySelector('source');
-        if (video && source) {
-            source.src = frameVideoUrl;
-            video.load();
-        }
-    }
     const staleNames = /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_title || '') || /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_description || '');
     const seoTitle = !staleNames && wedding.seo_title ? wedding.seo_title : `Undangan Pernikahan ${couple}`;
     const seoDescription = !staleNames && wedding.seo_description ? wedding.seo_description : `Undangan Pernikahan ${couple}`;

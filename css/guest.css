@@ -99,21 +99,6 @@ html[data-bs-theme="dark"] .bg-white-black {
     }
 }
 
-svg {
-    display: block;
-    line-height: 0;
-    shape-rendering: geometricPrecision;
-    backface-visibility: hidden;
-}
-
-.svg-wrapper {
-    overflow: hidden !important;
-    transform: translateZ(0) !important;
-}
-
-.no-gap-bottom {
-    margin-bottom: -0.75rem !important;
-}
 
 /* Editorial wedding treatment inspired by the Sora reference, kept within Beta Storia's palette. */
 :root {
@@ -205,7 +190,12 @@ svg {
 #navbar-menu .navbar-nav {
     display: flex;
     flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: max-content !important;
+    min-width: 100%;
     overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
     scrollbar-width: none;
 }
 
@@ -214,7 +204,9 @@ svg {
 }
 
 #navbar-menu .nav-item {
-    flex: 1 0 4.25rem;
+    flex: 0 0 25%;
+    min-width: 5.5rem;
+    scroll-snap-align: start;
 }
 
 #navbar-menu .nav-link {
@@ -1403,107 +1395,6 @@ body.islamic-modern {
     padding-inline: 1.4rem;
 }
 
-.islamic-modern .wedding-frame-card {
-    width: min(100%, 44rem);
-    margin-inline: auto;
-    border: 1px solid var(--islamic-border);
-    border-radius: var(--islamic-radius);
-    background: rgba(255, 253, 248, 0.86);
-    box-shadow: var(--islamic-shadow);
-    backdrop-filter: blur(0.7rem);
-}
-
-.islamic-modern .wedding-frame-media {
-    position: relative;
-    min-height: 24rem;
-    overflow: hidden;
-    background: var(--islamic-emerald-950);
-}
-
-.islamic-modern .wedding-frame-media video {
-    width: 100%;
-    height: 100%;
-    min-height: 24rem;
-    object-fit: cover;
-}
-
-.islamic-modern .wedding-frame-badge {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.36);
-    border-radius: 999px;
-    background: rgba(14, 45, 38, 0.72);
-    color: #fff;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    backdrop-filter: blur(0.5rem);
-}
-
-.islamic-modern .wedding-frame-video-toggle {
-    position: absolute;
-    right: 1rem;
-    bottom: 1rem;
-    display: grid;
-    width: 2.75rem;
-    height: 2.75rem;
-    place-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    background: rgba(14, 45, 38, 0.78);
-    color: #fff;
-    box-shadow: 0 0.5rem 1.5rem rgba(14, 45, 38, 0.24);
-    backdrop-filter: blur(0.5rem);
-}
-
-.islamic-modern .wedding-frame-video-toggle:hover,
-.islamic-modern .wedding-frame-video-toggle:focus-visible {
-    border-color: var(--islamic-gold-200);
-    background: var(--islamic-emerald-950);
-}
-
-.islamic-modern .wedding-frame-content {
-    padding: var(--panel-space);
-}
-
-.islamic-modern .wedding-frame-eyebrow {
-    margin-bottom: 0.75rem;
-    color: var(--islamic-gold-text);
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-}
-
-.islamic-modern .wedding-frame-content h2 {
-    margin-bottom: 1.25rem !important;
-}
-
-.islamic-modern .wedding-frame-content > p:not(.wedding-frame-eyebrow) {
-    color: #3b6155;
-    font-size: 0.9rem;
-    line-height: 1.75;
-}
-
-.islamic-modern .wedding-frame-steps {
-    display: grid;
-    gap: 0.6rem;
-    margin: 1.25rem 0 1.5rem;
-    padding-left: 1.25rem;
-    color: #3b6155;
-    font-size: 0.82rem;
-}
-
-.islamic-modern .wedding-frame-button {
-    min-height: 2.75rem;
-    padding-inline: 1.2rem;
-}
-
 .islamic-modern .copy-feedback-toast {
     position: fixed;
     bottom: 5.5rem;
@@ -1561,28 +1452,19 @@ html[data-bs-theme="dark"] .islamic-modern .gallery-panel,
 html[data-bs-theme="dark"] .islamic-modern .editorial-rsvp-form > .container > .border,
 html[data-bs-theme="dark"] .islamic-modern .wishes-panel,
 html[data-bs-theme="dark"] .islamic-modern .gift-panel,
-html[data-bs-theme="dark"] .islamic-modern .wedding-frame-card,
 html[data-bs-theme="dark"] .islamic-modern .verse-card,
 html[data-bs-theme="dark"] .islamic-modern .event-card,
 html[data-bs-theme="dark"] .islamic-modern .countdown-panel {
     background: rgba(16, 45, 38, 0.82) !important;
 }
 
-html[data-bs-theme="dark"] .islamic-modern .event-timeline-marker {
-    background: #10251f;
-    color: var(--islamic-gold-200);
-    box-shadow: 0 0 0 0.35rem rgba(16, 37, 31, 0.94);
+html[data-bs-theme="dark"] .islamic-modern .event-time,
+html[data-bs-theme="dark"] .islamic-modern .event-venue {
+    color: rgba(255, 255, 255, 0.76);
 }
 
 html[data-bs-theme="dark"] .islamic-modern .event-timeline .event-card h3 {
     color: var(--islamic-gold-200);
-}
-
-html[data-bs-theme="dark"] .islamic-modern .event-time,
-html[data-bs-theme="dark"] .islamic-modern .event-venue,
-html[data-bs-theme="dark"] .islamic-modern .wedding-frame-content > p:not(.wedding-frame-eyebrow),
-html[data-bs-theme="dark"] .islamic-modern .wedding-frame-steps {
-    color: rgba(255, 255, 255, 0.76);
 }
 
 @media screen and (max-width: 576px) {
@@ -1620,15 +1502,6 @@ html[data-bs-theme="dark"] .islamic-modern .wedding-frame-steps {
         height: 2.5rem;
     }
 
-    .islamic-modern .wedding-frame-media,
-    .islamic-modern .wedding-frame-media video {
-        min-height: 20rem;
-        max-height: 24rem;
-    }
-
-    .islamic-modern .wedding-frame-content {
-        padding: 1.5rem;
-    }
 
     .islamic-modern .editorial-section.editorial-rsvp-form {
         padding-top: 3rem !important;
