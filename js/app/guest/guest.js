@@ -25,10 +25,39 @@ export const guest = (() => {
      * @returns {void}
      */
     const countDownDate = () => {
-        const count = (new Date(document.body.getAttribute('data-time').replace(' ', 'T'))).getTime();
+        const rawTime = document.body.getAttribute('data-time') || '';
+        const timezone = document.body.getAttribute('data-timezone') || 'Asia/Jakarta';
+
+        // Build a UTC instant from the raw timestamp interpreted in the wedding timezone.
+        // If the value is already a full ISO string (contains 'T' and offset), use it directly;
+        // otherwise treat it as a local wall-clock time in the wedding timezone.
+        let count;
+        if (/T.*[Z+\d][-+]\d{2}/u.test(rawTime) || /Z$/u.test(rawTime)) {
+            count = new Date(rawTime).getTime();
+        } else {
+            // Normalise "YYYY-MM-DD HH:MM:SS" → "YYYY-MM-DDTHH:MM:SS" and interpret in wedding tz.
+            const normalised = rawTime.replace(' ', 'T');
+            try {
+                // Intl trick: create a formatter in the target TZ to get the UTC offset at that wall-clock moment.
+                const parts = new Intl.DateTimeFormat('en-CA', {
+                    timeZone: timezone,
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hour12: false,
+                }).formatToParts(new Date(normalised + 'Z'));
+                // We need the offset — easier: use a temporary UTC date and compare it to the zone's local time.
+                const tempUtc = new Date(normalised + 'Z');
+                const localStr = tempUtc.toLocaleString('sv-SE', { timeZone: timezone }); // "YYYY-MM-DD HH:MM:SS"
+                const offsetMs = tempUtc.getTime() - new Date(localStr.replace(' ', 'T') + 'Z').getTime();
+                count = new Date(normalised + 'Z').getTime() + offsetMs;
+                void parts; // suppress unused warning
+            } catch {
+                count = new Date(normalised).getTime();
+            }
+        }
 
         /**
-         * @param {number} num 
+         * @param {number} num
          * @returns {string}
          */
         const pad = (num) => num < 10 ? `0${num}` : `${num}`;
@@ -39,12 +68,37 @@ export const guest = (() => {
         const second = document.getElementById('second');
 
         const updateCountdown = () => {
-            const distance = Math.abs(count - Date.now());
+            const distance = count - Date.now();
 
-            day.textContent = pad(Math.floor(distance / (1000 * 60 * 60 * 24)));
-            hour.textContent = pad(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-            minute.textContent = pad(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-            second.textContent = pad(Math.floor((distance % (1000 * 60)) / 1000));
+            if (distance <= 0) {
+                // Event has passed — show zeroes and stop
+                if (day) {
+                    day.textContent = '00';
+                }
+                if (hour) {
+                    hour.textContent = '00';
+                }
+                if (minute) {
+                    minute.textContent = '00';
+                }
+                if (second) {
+                    second.textContent = '00';
+                }
+                return;
+            }
+
+            if (day) {
+                day.textContent = pad(Math.floor(distance / (1000 * 60 * 60 * 24)));
+            }
+            if (hour) {
+                hour.textContent = pad(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            }
+            if (minute) {
+                minute.textContent = pad(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+            }
+            if (second) {
+                second.textContent = pad(Math.floor((distance % (1000 * 60)) / 1000));
+            }
 
             util.timeOut(updateCountdown, 1000 - (Date.now() % 1000));
         };
@@ -59,8 +113,11 @@ export const guest = (() => {
         /**
          * Read the guest name from the dedicated "to" query parameter.
          * Ex. wedding.benifin.my.id/?id=some-uuid-here&to=name
+         * Hardened: strip control characters and cap length to prevent cover-layout abuse.
          */
-        const name = new URLSearchParams(window.location.search).get('to')?.trim() || null;
+        const raw = new URLSearchParams(window.location.search).get('to') || '';
+        // eslint-disable-next-line no-control-regex
+        const name = raw.replace(/[\x00-\x1F\x7F]/g, '').trim().slice(0, 80) || null;
 
         const guestName = document.getElementById('guest-name');
         const guestValue = guestName?.querySelector('.opening-guest-value');
@@ -144,8 +201,28 @@ export const guest = (() => {
      */
     const open = (button) => {
         button.disabled = true;
-        document.body.scrollIntoView({ behavior: 'instant' });
-        document.getElementById('root').classList.remove('opacity-0');
+
+        // Remove scroll lock from html + body
+        document.documentElement.classList.remove('invitation-locked');
+        document.body.classList.remove('invitation-locked');
+        document.body.classList.add('invitation-opened');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+
+        // Expose main content to keyboard/AT users
+        const root = document.getElementById('root');
+        if (root) {
+            root.removeAttribute('inert');
+            root.removeAttribute('aria-hidden');
+            root.classList.remove('opacity-0');
+        }
+
+        // Move focus to main content (accessible)
+        const firstFocus = document.getElementById('home') || document.querySelector('main');
+        if (firstFocus) {
+            firstFocus.setAttribute('tabindex', '-1');
+            firstFocus.focus({ preventScroll: true });
+        }
 
         if (theme.isAutoMode()) {
             document.getElementById('button-theme').classList.remove('d-none');
@@ -158,7 +235,13 @@ export const guest = (() => {
         util.timeOut(confetti.openAnimation, 1500);
 
         document.dispatchEvent(new Event('undangan.open'));
-        util.changeOpacity(document.getElementById('welcome'), false).then((el) => el.remove());
+        const welcome = document.getElementById('welcome');
+        if (welcome) {
+            const removeWelcome = () => welcome.remove();
+            welcome.classList.add('is-closing');
+            welcome.addEventListener('transitionend', removeWelcome, { once: true });
+            window.setTimeout(removeWelcome, 800);
+        }
     };
 
     /**
@@ -486,6 +569,58 @@ export const guest = (() => {
         }
     };
 
+    const initRevealMotion = () => {
+        const elements = document.querySelectorAll([
+            'main h2.font-esthetic',
+            'main .editorial-lead',
+            'main .editorial-person-caption',
+            'main .section-eyebrow',
+            'main .event-card',
+            'main .countdown-panel',
+            'main .story-panel',
+            'main .gallery-panel',
+            'main .gift-card',
+            'main .wishes-panel',
+        ].join(','));
+        if (!elements.length) {
+            return;
+        }
+        document.documentElement.classList.add('reveal-enabled', 'reveal-preparing');
+        elements.forEach((element, index) => {
+            element.classList.add('premium-reveal');
+            element.style.setProperty('--reveal-delay', `${Math.min(index % 3, 2) * 70}ms`);
+        });
+        void document.documentElement.offsetWidth;
+        document.documentElement.classList.remove('reveal-preparing');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reducedMotion || !('IntersectionObserver' in window)) {
+            elements.forEach((element) => element.classList.add('is-revealed'));
+            return;
+        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
+        elements.forEach((element) => observer.observe(element));
+    };
+
+    const initSmoothNavigation = () => {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.querySelectorAll('#navbar-menu a[href^="#"]')?.forEach((link) => {
+            link.addEventListener('click', () => {
+                const menu = link.closest('.navbar-nav');
+                menu?.scrollTo({
+                    left: Math.max(0, link.offsetLeft - (menu.clientWidth - link.offsetWidth) / 2),
+                    behavior: reducedMotion ? 'auto' : 'smooth',
+                });
+            });
+        });
+    };
+
     /**
      * @returns {object}
      */
@@ -513,6 +648,8 @@ export const guest = (() => {
         window.addEventListener('DOMContentLoaded', () => {
             initGift();
             arrangeEditorialFlow();
+            initSmoothNavigation();
+            document.addEventListener('undangan.open', initRevealMotion, { once: true });
             pool.init(pageLoaded, [
                 'image',
                 'video',

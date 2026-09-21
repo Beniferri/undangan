@@ -156,7 +156,21 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     document.body.dataset.time = wedding.wedding_date;
     document.body.dataset.timezone = wedding.timezone || 'Asia/Jakarta';
     configureVideo(wedding);
-    document.querySelectorAll('[data-cms="maps-url"]').forEach((element) => { element.href = wedding.maps_url || element.href; });
+    const safeMapUrl = (value) => {
+        try {
+            const url = new URL(value);
+            // Only allow https: URLs to safe mapping hosts to prevent javascript: injection
+            const safeMappingHosts = ['maps.google.com', 'www.google.com', 'maps.app.goo.gl',
+                'goo.gl', 'maps.apple.com', 'www.openstreetmap.org', 'waze.com', 'www.waze.com'];
+            if (url.protocol !== 'https:') {
+                return null;
+            }
+            const hostOk = safeMappingHosts.some((h) => url.hostname === h || url.hostname.endsWith(`.${h}`));
+            return hostOk ? url.toString() : null;
+        } catch {
+            return null;
+        }
+    };
     const coverFile = wedding.cover_image_id;
     const coverImage = coverFile
         ? directusAssetUrl(coverFile, '?width=1600&quality=82&format=webp')
@@ -248,7 +262,14 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     events.slice(0, 2).forEach((event, index) => {
         setCmsText(`event-${index + 1}-name`, event.name);
         setCmsText(`event-${index + 1}-time`, event.time_label || formatDate(event.event_date, wedding.timezone));
-        setCmsText(`event-${index + 1}-venue`, `${event.venue}\n${event.address}`);
+        const venue = [event.venue, event.address].filter(Boolean).join('\n');
+        setCmsText(`event-${index + 1}-venue`, venue);
+        const mapLink = document.querySelector(`[data-cms-event-map="${index + 1}"]`);
+        const mapUrl = safeMapUrl(event.maps_url || event.map_url || wedding.maps_url);
+        if (mapLink && mapUrl) {
+            mapLink.href = mapUrl;
+            mapLink.hidden = false;
+        }
     });
     setStructuredData(wedding, events);
     stories.slice(0, 6).forEach((story, index) => {
@@ -326,13 +347,21 @@ const loadCms = async () => {
         }
         const filter = encodeURIComponent(JSON.stringify({ wedding_id: { _eq: wedding.id } }));
         const versionSuffix = previewMode ? `&version=${encodeURIComponent(previewVersion)}` : '';
-        const [events, gallery, gifts, stories] = await Promise.all([
+        // Use allSettled so one failing optional collection does not discard all CMS content.
+        const [eventsResult, galleryResult, giftsResult, storiesResult] = await Promise.allSettled([
             cmsFetch(`/items/wedding_events?filter=${filter}&sort=sort${versionSuffix}`),
             cmsFetch(`/items/wedding_gallery?filter=${filter}&sort=sort${versionSuffix}`),
             cmsFetch(`/items/wedding_gifts?filter=${filter}&sort=sort${versionSuffix}`),
             cmsFetch(`/items/wedding_stories?filter=${filter}&sort=sort${versionSuffix}`),
         ]);
-        applyWedding({ wedding, events: events.data, gallery: gallery.data, gifts: gifts.data, stories: stories.data });
+        const safeData = (result) => (result.status === 'fulfilled' ? result.value?.data : null) ?? [];
+        applyWedding({
+            wedding,
+            events: safeData(eventsResult),
+            gallery: safeData(galleryResult),
+            gifts: safeData(giftsResult),
+            stories: safeData(storiesResult),
+        });
     } catch (error) {
         console.warn('CMS unavailable; using static invitation content.', error);
     }
