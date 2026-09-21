@@ -140,8 +140,11 @@ const formatDate = (value, timezone) => new Intl.DateTimeFormat('id-ID', {
 }).format(new Date(value));
 const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories = [] }) => {
     const couple = `${wedding.groom_name} & ${wedding.bride_name}`;
+    const shortName = (value, nickname, fallback) => String(nickname || value || fallback).trim().split(/\s+/)[0] || fallback;
+    const shortCouple = `${shortName(wedding.groom_name, wedding.groom_nickname || wedding.groom_short_name, 'Daniyal')} & ${shortName(wedding.bride_name, wedding.bride_nickname || wedding.bride_short_name, 'Balqis')}`;
     const dateLabel = formatDate(wedding.wedding_date, wedding.timezone);
     setCmsText('couple-names', couple);
+    setCmsText('couple-short-names', shortCouple);
     setCmsText('wedding-date', dateLabel);
     setCmsText('groom-name', wedding.groom_name);
     setCmsText('bride-name', wedding.bride_name);
