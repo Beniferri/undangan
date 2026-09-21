@@ -46,6 +46,174 @@ html[data-bs-theme="light"] .btn-transparent {
     z-index: 1056;
 }
 
+.opening-cover {
+    display: grid;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-y: auto;
+    place-items: center;
+    isolation: isolate;
+    background: #f5efe4;
+    color: #173d34;
+}
+
+.opening-cover-backdrop {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(184, 138, 68, 0.18), transparent 28%),
+        radial-gradient(circle at 88% 82%, rgba(47, 111, 94, 0.18), transparent 32%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.68), transparent 48%),
+        repeating-linear-gradient(45deg, rgba(47, 111, 94, 0.035) 0 1px, transparent 1px 22px);
+}
+
+.opening-cover-content {
+    display: flex;
+    width: min(100% - 2rem, 34rem);
+    min-height: min(100dvh, 52rem);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.5rem, 4vh, 2.75rem);
+    padding: clamp(2rem, 6vh, 4.5rem) 0;
+    text-align: center;
+}
+
+.opening-cover-heading {
+    display: grid;
+    justify-items: center;
+    gap: 0.8rem;
+}
+
+.opening-cover-kicker {
+    margin: 0;
+    color: #9a7138;
+    font-size: clamp(0.68rem, 1.8vw, 0.8rem);
+    font-weight: 700;
+    letter-spacing: 0.32em;
+}
+
+.opening-cover-rule {
+    width: 3.5rem;
+    height: 1px;
+    background: #b88a44;
+}
+
+.opening-cover-names {
+    margin: 0;
+    color: #173d34;
+    font-size: clamp(3.2rem, 12vw, 5.8rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 0.88;
+}
+
+.opening-cover-date {
+    margin: 0;
+    color: #426b5d;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.opening-guest-card {
+    width: min(100%, 25rem);
+    padding: 1.35rem 1.5rem 1.25rem;
+    border: 1px solid rgba(184, 138, 68, 0.38);
+    border-radius: 1.25rem;
+    background: rgba(255, 253, 248, 0.74);
+    box-shadow: 0 1rem 2.5rem rgba(23, 61, 52, 0.11);
+    backdrop-filter: blur(0.75rem);
+}
+
+.opening-guest-icon {
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0 auto 0.85rem;
+    place-items: center;
+    border: 1px solid rgba(184, 138, 68, 0.5);
+    border-radius: 50%;
+    color: #9a7138;
+}
+
+.opening-guest-label,
+.opening-guest-note {
+    margin: 0;
+    color: #527568;
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+.opening-guest-name {
+    margin: 0.4rem 0 0.5rem;
+    color: #173d34;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.05;
+}
+
+.opening-guest-note {
+    color: #708d82;
+    font-size: 0.68rem;
+}
+
+.opening-cover-cta {
+    display: inline-flex;
+    min-height: 3.25rem;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.8rem 1.45rem;
+    border: 1px solid #b88a44;
+    border-radius: 999px;
+    background: #2f6f5e;
+    color: #fffdf8;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    box-shadow: 0 0.75rem 1.5rem rgba(47, 111, 94, 0.2);
+    transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.opening-cover-cta:hover,
+.opening-cover-cta:focus-visible {
+    background: #245747;
+    color: #fffdf8;
+    transform: translateY(-2px);
+    box-shadow: 0 1rem 2rem rgba(47, 111, 94, 0.28);
+}
+
+html[data-bs-theme="dark"] .opening-cover {
+    background: #102d26;
+    color: #fffdf8;
+}
+
+html[data-bs-theme="dark"] .opening-cover-backdrop {
+    background:
+        radial-gradient(circle at 15% 20%, rgba(184, 138, 68, 0.2), transparent 28%),
+        radial-gradient(circle at 88% 82%, rgba(77, 145, 119, 0.18), transparent 32%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 48%),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 22px);
+}
+
+html[data-bs-theme="dark"] .opening-cover-names,
+html[data-bs-theme="dark"] .opening-guest-name {
+    color: #fffdf8;
+}
+
+html[data-bs-theme="dark"] .opening-cover-date,
+html[data-bs-theme="dark"] .opening-guest-label {
+    color: #c5ddd2;
+}
+
+html[data-bs-theme="dark"] .opening-guest-card {
+    background: rgba(16, 45, 38, 0.76);
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.2);
+}
+
 html[data-bs-theme="light"] .color-theme-svg {
     color: rgb(255, 255, 255);
     background-color: var(--bs-light);

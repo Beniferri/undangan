@@ -57,25 +57,15 @@ export const guest = (() => {
      */
     const showGuestName = () => {
         /**
-         * Make sure "to=" is the last query string.
+         * Read the guest name from the dedicated "to" query parameter.
          * Ex. wedding.benifin.my.id/?id=some-uuid-here&to=name
          */
-        const raw = window.location.search.split('to=');
-        let name = null;
+        const name = new URLSearchParams(window.location.search).get('to')?.trim() || null;
 
-        if (raw.length > 1 && raw[1].length >= 1) {
-            name = window.decodeURIComponent(raw[1]);
-        }
-
-        if (name) {
-            const guestName = document.getElementById('guest-name');
-            const div = document.createElement('div');
-            div.classList.add('m-2');
-
-            const template = `<small class="mt-0 mb-1 mx-0 p-0">${util.escapeHtml(guestName?.getAttribute('data-message'))}</small><p class="m-0 p-0" style="font-size: 1.25rem">${util.escapeHtml(name)}</p>`;
-            util.safeInnerHTML(div, template);
-
-            guestName?.appendChild(div);
+        const guestName = document.getElementById('guest-name');
+        const guestValue = guestName?.querySelector('.opening-guest-value');
+        if (guestValue) {
+            guestValue.textContent = name || 'Tamu Undangan';
         }
 
         const form = document.getElementById('form-name');
