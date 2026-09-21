@@ -241,21 +241,58 @@ export const guest = (() => {
      * @returns {void}
      */
     const buildGoogleCalendar = () => {
-        /**
-         * @param {string} d 
-         * @returns {string}
-         */
-        const url = new URL('https://calendar.google.com/calendar/render');
-        const data = new URLSearchParams({
-            action: 'TEMPLATE',
-            text: 'Pernikahan Muhammad Fikri Ramadhan & Aisyah Nur Zahra',
-            dates: '20270117/20270118',
-            details: 'Undangan pernikahan Muhammad Fikri Ramadhan dan Aisyah Nur Zahra.',
-            location: 'Masjid Suciati Saliman, Jl. Gito Gati, Grojogan, Pandowoharjo, Sleman, Daerah Istimewa Yogyakarta 55512',
-        });
+        const parseDate = (value) => {
+            const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+            if (match) {
+                return [Number(match[1]), Number(match[2]), Number(match[3])];
+            }
+            const now = new Date();
+            return [now.getUTCFullYear(), now.getUTCMonth() + 1, now.getUTCDate()];
+        };
+        const parseTime = (value) => {
+            const match = String(value || '').match(/(\d{1,2})[.:](\d{2})/);
+            return match ? [Number(match[1]), Number(match[2])] : null;
+        };
+        const formatCalendarDate = (timestamp) => {
+            const date = new Date(timestamp);
+            const pad = (value) => String(value).padStart(2, '0');
+            return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}00`;
+        };
+        const createUrl = () => {
+            const couple = document.querySelector('[data-cms="couple-names"]')?.textContent.trim() || 'Mempelai';
+            const firstName = document.querySelector('[data-cms="event-1-name"]')?.textContent.trim() || 'Akad';
+            const secondName = document.querySelector('[data-cms="event-2-name"]')?.textContent.trim() || 'Resepsi';
+            const firstTime = document.querySelector('[data-cms="event-1-time"]')?.textContent.trim() || '';
+            const secondTime = document.querySelector('[data-cms="event-2-time"]')?.textContent.trim() || '';
+            const location = document.querySelector('[data-cms="event-1-venue"]')?.innerText.replace(/\s+/g, ' ').trim() || '';
+            const rawDate = document.body.dataset.time?.trim() || '';
+            const timezone = document.body.dataset.timezone?.trim() || 'Asia/Jakarta';
+            const [year, month, day] = parseDate(rawDate);
+            const sourceTime = parseTime(rawDate) || [9, 0];
+            const [startHour, startMinute] = parseTime(firstTime) || sourceTime;
+            const secondClock = parseTime(secondTime);
+            const calendarStart = Date.UTC(year, month - 1, day, startHour, startMinute);
+            let calendarEnd = secondClock
+                ? Date.UTC(year, month - 1, day, secondClock[0] + 3, secondClock[1])
+                : calendarStart + (4 * 60 * 60 * 1000);
+            if (calendarEnd <= calendarStart) {
+                calendarEnd += 24 * 60 * 60 * 1000;
+            }
+            const url = new URL('https://calendar.google.com/calendar/render');
+            url.search = new URLSearchParams({
+                action: 'TEMPLATE',
+                text: `Pernikahan ${couple}`,
+                dates: `${formatCalendarDate(calendarStart)}/${formatCalendarDate(calendarEnd)}`,
+                details: `${firstName}: ${firstTime}\n${secondName}: ${secondTime}\n\nKami menantikan kehadiran dan doa restu Anda.`,
+                location,
+                ctz: timezone,
+            }).toString();
+            return url;
+        };
 
-        url.search = data.toString();
-        document.querySelector('#home button')?.addEventListener('click', () => window.open(url, '_blank'));
+        document.querySelectorAll('[data-calendar-button]').forEach((button) => {
+            button.addEventListener('click', () => window.open(createUrl(), '_blank', 'noopener,noreferrer'));
+        });
     };
 
     /**
@@ -383,6 +420,76 @@ export const guest = (() => {
     /**
      * @returns {void}
      */
+    const initWeddingFrame = () => {
+        const frameVideo = document.querySelector('.wedding-frame-media video');
+        const button = document.querySelector('.wedding-frame-video-toggle');
+        if (!frameVideo || !button) {
+            return;
+        }
+        let userPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let inViewport = false;
+        const updateButton = () => {
+            const isPaused = frameVideo.paused;
+            button.setAttribute('aria-pressed', `${isPaused}`);
+            button.setAttribute('aria-label', isPaused ? 'Putar video' : 'Jeda video');
+            const icon = button.querySelector('i');
+            const label = button.querySelector('.visually-hidden');
+            if (icon) {
+                icon.className = isPaused ? 'fa-solid fa-play' : 'fa-solid fa-pause';
+            }
+            if (label) {
+                label.textContent = isPaused ? 'Putar video' : 'Jeda video';
+            }
+        };
+        const syncPlayback = () => {
+            if (!userPaused && inViewport && !document.hidden) {
+                frameVideo.play().catch(updateButton);
+            } else {
+                frameVideo.pause();
+            }
+            updateButton();
+        };
+        button.addEventListener('click', () => {
+            if (frameVideo.paused) {
+                userPaused = false;
+                frameVideo.play().catch(updateButton);
+            } else {
+                userPaused = true;
+                frameVideo.pause();
+            }
+            updateButton();
+        });
+        frameVideo.addEventListener('play', updateButton);
+        frameVideo.addEventListener('pause', updateButton);
+        frameVideo.addEventListener('canplay', syncPlayback);
+        frameVideo.addEventListener('emptied', updateButton);
+        document.addEventListener('visibilitychange', syncPlayback);
+        const observer = new IntersectionObserver(([entry]) => {
+            inViewport = entry.isIntersecting;
+            syncPlayback();
+        }, { threshold: 0.35 });
+        observer.observe(frameVideo);
+        if (userPaused) {
+            frameVideo.pause();
+        }
+        updateButton();
+    };
+
+    const showCopyFeedback = (message) => {
+        document.querySelector('.copy-feedback-toast')?.remove();
+        const toast = document.createElement('div');
+        toast.className = 'copy-feedback-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        toast.classList.add('is-visible');
+        util.timeOut(() => {
+            toast.classList.remove('is-visible');
+            util.timeOut(() => toast.remove(), 250);
+        }, 1800);
+    };
+
     const initGift = () => {
         const toggle = document.getElementById('gift-toggle');
         const options = document.getElementById('gift-options');
@@ -414,10 +521,18 @@ export const guest = (() => {
         });
 
         options.querySelectorAll('[data-copy-from]').forEach((button) => {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', async () => {
                 const source = document.querySelector(`[data-cms="${button.dataset.copyFrom}"]`);
-                button.dataset.copy = source?.textContent.trim() ?? '';
-                util.copy(button);
+                const value = source?.textContent.trim() ?? '';
+                if (!value || /belum tersedia/i.test(value)) {
+                    util.notify('Data belum tersedia').warning();
+                    return;
+                }
+                button.dataset.copy = value;
+                const copied = await util.copy(button);
+                if (copied) {
+                    showCopyFeedback(button.dataset.copyFeedback || 'Berhasil disalin!');
+                }
             });
         });
     };
@@ -465,6 +580,7 @@ export const guest = (() => {
 
         window.addEventListener('DOMContentLoaded', () => {
             initGift();
+            initWeddingFrame();
             arrangeEditorialFlow();
             pool.init(pageLoaded, [
                 'image',

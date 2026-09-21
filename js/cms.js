@@ -151,6 +151,7 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     setCmsText('quote', wedding.quote);
     setCmsText('dress-code', wedding.dress_code);
     document.body.dataset.time = wedding.wedding_date;
+    document.body.dataset.timezone = wedding.timezone || 'Asia/Jakarta';
     configureVideo(wedding);
     document.querySelectorAll('[data-cms="maps-url"]').forEach((element) => { element.href = wedding.maps_url || element.href; });
     const coverFile = wedding.cover_image_id;
@@ -199,6 +200,55 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
             element.alt = alt;
         });
     });
+    const safeInstagramUrl = (value) => {
+        try {
+            const url = new URL(value);
+            const hostname = url.hostname.toLowerCase().replace(/^www\./, '');
+            return url.protocol === 'https:' && hostname === 'instagram.com' ? url.toString() : null;
+        } catch {
+            return null;
+        }
+    };
+    const normalizeInstagramUrl = (value) => {
+        if (!value) {
+            return null;
+        }
+        if (/^https:\/\//i.test(value)) {
+            return safeInstagramUrl(value);
+        }
+        const handle = String(value).trim().replace(/^@/, '');
+        return /^[a-z0-9._]{1,30}$/i.test(handle) ? `https://www.instagram.com/${handle}/` : null;
+    };
+    [
+        ['groom-instagram', wedding.groom_instagram_url || wedding.groom_instagram],
+        ['bride-instagram', wedding.bride_instagram_url || wedding.bride_instagram],
+    ].forEach(([selector, value]) => {
+        const link = document.querySelector(`[data-cms-social="${selector}"]`);
+        const url = normalizeInstagramUrl(value);
+        if (link && url) {
+            link.href = url;
+        }
+    });
+    const frameUrl = safeInstagramUrl(wedding.instagram_filter_url || wedding.wedding_frame_url);
+    if (frameUrl) {
+        document.querySelectorAll('[data-frame-url]').forEach((link) => { link.href = frameUrl; });
+    }
+    const frameVideoUrl = (() => {
+        try {
+            const url = new URL(wedding.wedding_frame_video_url);
+            return url.protocol === 'https:' ? url.toString() : null;
+        } catch {
+            return null;
+        }
+    })();
+    if (frameVideoUrl) {
+        const video = document.querySelector('.wedding-frame-media video');
+        const source = video?.querySelector('source');
+        if (video && source) {
+            source.src = frameVideoUrl;
+            video.load();
+        }
+    }
     const staleNames = /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_title || '') || /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_description || '');
     const seoTitle = !staleNames && wedding.seo_title ? wedding.seo_title : `Undangan Pernikahan ${couple}`;
     const seoDescription = !staleNames && wedding.seo_description ? wedding.seo_description : `Undangan Pernikahan ${couple}`;

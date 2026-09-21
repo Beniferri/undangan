@@ -180,24 +180,49 @@ export const util = (() => {
      * @param {HTMLElement} button
      * @param {string} [message=null]
      * @param {number} [timeout=1500]
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
     const copy = async (button, message = null, timeout = 1500) => {
         const data = button.getAttribute('data-copy');
 
         if (!data || data.length === 0) {
             notify('Nothing to copy').warning();
-            return;
+            return false;
         }
 
         button.disabled = true;
 
+        const fallbackCopy = () => {
+            const textarea = document.createElement('textarea');
+            textarea.value = data;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            try {
+                textarea.select();
+                if (!document.execCommand('copy')) {
+                    throw new Error('Clipboard fallback failed');
+                }
+            } finally {
+                textarea.remove();
+            }
+        };
+
         try {
-            await navigator.clipboard.writeText(data);
+            if (navigator.clipboard?.writeText && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(data);
+                } catch {
+                    fallbackCopy();
+                }
+            } else {
+                fallbackCopy();
+            }
         } catch {
             button.disabled = false;
             notify('Failed to copy').error();
-            return;
+            return false;
         }
 
         const tmp = button.innerHTML;
@@ -207,6 +232,7 @@ export const util = (() => {
             button.disabled = false;
             button.innerHTML = tmp;
         }, timeout);
+        return true;
     };
 
     /**
