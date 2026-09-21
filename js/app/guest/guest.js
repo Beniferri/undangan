@@ -417,64 +417,6 @@ export const guest = (() => {
         }
     };
 
-    /**
-     * @returns {void}
-     */
-    const initWeddingFrame = () => {
-        const frameVideo = document.querySelector('.wedding-frame-media video');
-        const button = document.querySelector('.wedding-frame-video-toggle');
-        if (!frameVideo || !button) {
-            return;
-        }
-        let userPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        let inViewport = false;
-        const updateButton = () => {
-            const isPaused = frameVideo.paused;
-            button.setAttribute('aria-pressed', `${isPaused}`);
-            button.setAttribute('aria-label', isPaused ? 'Putar video' : 'Jeda video');
-            const icon = button.querySelector('i');
-            const label = button.querySelector('.visually-hidden');
-            if (icon) {
-                icon.className = isPaused ? 'fa-solid fa-play' : 'fa-solid fa-pause';
-            }
-            if (label) {
-                label.textContent = isPaused ? 'Putar video' : 'Jeda video';
-            }
-        };
-        const syncPlayback = () => {
-            if (!userPaused && inViewport && !document.hidden) {
-                frameVideo.play().catch(updateButton);
-            } else {
-                frameVideo.pause();
-            }
-            updateButton();
-        };
-        button.addEventListener('click', () => {
-            if (frameVideo.paused) {
-                userPaused = false;
-                frameVideo.play().catch(updateButton);
-            } else {
-                userPaused = true;
-                frameVideo.pause();
-            }
-            updateButton();
-        });
-        frameVideo.addEventListener('play', updateButton);
-        frameVideo.addEventListener('pause', updateButton);
-        frameVideo.addEventListener('canplay', syncPlayback);
-        frameVideo.addEventListener('emptied', updateButton);
-        document.addEventListener('visibilitychange', syncPlayback);
-        const observer = new IntersectionObserver(([entry]) => {
-            inViewport = entry.isIntersecting;
-            syncPlayback();
-        }, { threshold: 0.35 });
-        observer.observe(frameVideo);
-        if (userPaused) {
-            frameVideo.pause();
-        }
-        updateButton();
-    };
-
     const showCopyFeedback = (message) => {
         document.querySelector('.copy-feedback-toast')?.remove();
         const toast = document.createElement('div');
@@ -580,7 +522,6 @@ export const guest = (() => {
 
         window.addEventListener('DOMContentLoaded', () => {
             initGift();
-            initWeddingFrame();
             arrangeEditorialFlow();
             pool.init(pageLoaded, [
                 'image',
