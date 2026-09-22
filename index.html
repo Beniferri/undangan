@@ -60,20 +60,20 @@
     <!-- Dependencies CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/guest.css?v=opening-cover-1">
+    <link rel="stylesheet" href="./css/guest.css?v=premium-ui-2">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
-    <script src="./dist/guest.js?v=opening-cover-1"></script>
-    <script src="./dist/cms.js?v=opening-cover-1"></script>
+    <script src="./dist/guest.js?v=premium-ui-2"></script>
+    <script src="./dist/cms.js?v=premium-ui-2"></script>
     <script>
-    (() => {
-        const remove = Element.prototype.remove;
-        Element.prototype.remove = function () {
-            if (this.id === 'comment' || (this.matches('li.nav-item') && this.querySelector('a[href=\"#comment\"]'))) return;
-            return remove.call(this);
-        };
-    })();
+    /* Preserve comment section: set data-preserve="comment" so js can check without patching native APIs */
+    document.addEventListener('DOMContentLoaded', () => {
+        const commentSection = document.getElementById('comment');
+        if (commentSection) {
+            commentSection.dataset.preserve = 'true';
+        }
+    }, { once: true });
     </script>
 </head>
 
@@ -97,10 +97,10 @@
 
 <!-- <html lang="id" data-bs-theme="auto"> ['auto', 'dark', 'light'] -->
 
-<body class="islamic-modern" data-url="" data-audio="./assets/music/pure-love-304010.mp3" data-confetti="true" data-time="2027-01-17 09:00:00">
+<body class="islamic-modern invitation-locked" data-url="" data-audio="./assets/music/pure-love-304010.mp3" data-confetti="true" data-time="2027-01-17 09:00:00">
 
     <!-- Root Invitation -->
-    <div class="row m-0 p-0 opacity-0" id="root">
+    <div class="row m-0 p-0 opacity-0" id="root" inert aria-hidden="true">
 
         <!-- Desktop mode -->
         <div class="sticky-top vh-100 d-none d-sm-block col-sm-5 col-md-6 col-lg-7 col-xl-8 col-xxl-9 overflow-y-hidden m-0 p-0">
@@ -120,8 +120,8 @@
                 </div>
 
                 <div class="text-center p-4 bg-overlay-auto rounded-5 hero-panel">
-                    <h2 class="font-esthetic mb-4" style="font-size: 2rem;" data-cms="couple-names">Daniyal Raziq Hanif &amp; Balqis Salsabila Faiha</h2>
-                    <p class="m-0" style="font-size: 1rem;" data-cms="wedding-date">17 Januari 2027</p>
+                    <h2 class="font-esthetic mb-4" data-cms="couple-names">Daniyal Raziq Hanif &amp; Balqis Salsabila Faiha</h2>
+                    <p class="m-0 hero-date" data-cms="wedding-date">17 Januari 2027</p>
                 </div>
             </div>
         </div>
@@ -136,14 +136,14 @@
                     <img src="./assets/images/placeholder.webp" data-src="./assets/images/bg.webp" data-cms="cover-image" alt="bg" class="position-absolute opacity-25 top-50 start-50 translate-middle bg-cover-home">
 
                     <div class="text-center bg-overlay-auto" style="background-color: unset;">
-                        <h1 class="font-esthetic pt-5 pb-4 fw-medium" style="font-size: 2.25rem;">Undangan Pernikahan</h1>
+                        <h1 class="font-esthetic pt-5 pb-4 fw-medium">Undangan Pernikahan</h1>
 
                         <img src="./assets/images/placeholder.webp" data-src="https://directus.benifin.my.id/assets/91c3e6a2-8730-4490-ba3c-307438502e9a?width=1200&amp;quality=82&amp;format=webp&amp;v=ChatGPT%20Image%20Sep%2020%2C%202026%2C%2002_10_41%20PM.png" data-cms="profile-image" alt="bg" onclick="undangan.guest.modal(this)" class="img-center-crop rounded-circle border border-3 border-light shadow my-4 mx-auto cursor-pointer">
 
-                        <h2 class="font-esthetic my-4" style="font-size: 2.25rem;" data-cms="couple-names">Daniyal Raziq Hanif &amp; Balqis Salsabila Faiha</h2>
-                        <p class="my-2" style="font-size: 1.25rem;" data-cms="wedding-date">17 Januari 2027</p>
+                        <h2 class="font-esthetic my-4" data-cms="couple-names">Daniyal Raziq Hanif &amp; Balqis Salsabila Faiha</h2>
+                        <p class="my-2 hero-date" data-cms="wedding-date">17 Januari 2027</p>
 
-                        <button class="btn btn-outline-auto btn-sm shadow rounded-pill px-3 py-1" style="font-size: 0.825rem;" type="button" data-calendar-button>
+                        <button class="btn btn-outline-auto btn-sm shadow rounded-pill px-3 py-1" type="button" data-calendar-button>
                             <i class="fa-solid fa-calendar-check me-2"></i>Save Google Calendar
                         </button>
 
@@ -209,7 +209,7 @@
                 <section class="bg-light-dark pt-2 pb-4 editorial-section editorial-story" id="story">
                     <div class="container">
                         <div class="bg-theme-auto rounded-5 shadow p-3 story-panel">
-                            <h2 class="font-esthetic text-center py-2 mb-2" style="font-size: 2.125rem;">Kisah Cinta</h2>
+                            <h2 class="font-esthetic text-center py-2 mb-2">Kisah Cinta</h2>
 
                             <!-- Jika tidak ingin menggunakan video, hapus seluruh tag dengan id="video-love-story" di bawah ini. -->
                             <!-- If you don't want to use the video, remove the entire tag with id="video-love-story" below. -->
@@ -274,46 +274,55 @@
 
                 <!-- Event Details -->
                 <section class="bg-white-black editorial-section editorial-events" id="events">
-                    <div class="container text-center">
-                        <h2 class="font-esthetic py-4 m-0" style="font-size: 2.25rem;">Event Details</h2>
-                        <p class="editorial-lead">Dengan memohon rahmat dan ridho Allah Subhanahu Wa Ta'ala, insyaAllah kami akan menyelenggarakan acara:</p>
-
-                        <div class="event-timeline" role="list" aria-label="Rangkaian acara pernikahan">
-                            <article class="event-timeline-item" role="listitem" data-aos="fade-up" data-aos-duration="1200">
-                                <div class="event-timeline-marker" aria-hidden="true"><span>01</span></div>
-                                <div class="event-card">
-                                    <p class="event-order">Pembuka rangkaian</p>
-                                    <h3 class="font-esthetic" data-cms="event-1-name">Akad</h3>
-                                    <p class="event-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-cms="event-1-time">Pukul 10.00 WIB - Selesai</span></p>
-                                    <p class="event-venue"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-cms="event-1-venue">Masjid Suciati Saliman<br>Jl. Gito Gati, Grojogan, Pandowoharjo, Sleman, Daerah Istimewa Yogyakarta 55512.</span></p>
-                                    <a href="https://maps.google.com/?q=Masjid+Suciati+Saliman" target="_blank" rel="noopener noreferrer" class="btn btn-outline-auto btn-sm rounded-pill shadow mt-2 px-3" data-cms="maps-url"><i class="fa-solid fa-map-location-dot me-2"></i>Lihat Google Maps</a>
-                                </div>
-                            </article>
-
-                            <article class="event-timeline-item" role="listitem" data-aos="fade-up" data-aos-duration="1200">
-                                <div class="event-timeline-marker" aria-hidden="true"><span>02</span></div>
-                                <div class="event-card">
-                                    <p class="event-order">Dilanjutkan dengan</p>
-                                    <h3 class="font-esthetic" data-cms="event-2-name">Resepsi</h3>
-                                    <p class="event-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-cms="event-2-time">Pukul 13.00 WIB - Selesai</span></p>
-                                    <p class="event-venue"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-cms="event-2-venue">Lokasi acara akan diinformasikan melalui undangan.</span></p>
-                                </div>
-                            </article>
+                    <!-- Event intro header — full-viewport snap panel -->
+                    <div class="event-intro-panel">
+                        <div class="container text-center">
+                            <p class="section-eyebrow">RANGKAIAN PERNIKAHAN</p>
+                            <h2 class="font-esthetic m-0">Wedding Events</h2>
+                            <p class="editorial-lead">Dengan memohon rahmat dan ridho Allah Subhanahu Wa Ta'ala, insyaAllah kami akan menyelenggarakan dua rangkaian acara:</p>
                         </div>
                     </div>
+
+                    <!-- Akad Nikah — full-viewport snap panel -->
+                    <article class="event-snap-panel" role="article" aria-label="Akad Nikah">
+                        <div class="container text-center">
+                            <div class="event-card premium-reveal">
+                                <div class="event-timeline-marker" aria-hidden="true"><span>01</span></div>
+                                <p class="event-order">Pembuka rangkaian</p>
+                                <h3 class="font-esthetic" data-cms="event-1-name">Akad Nikah</h3>
+                                <p class="event-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-cms="event-1-time">Pukul 10.00 WIB - Selesai</span></p>
+                                <p class="event-venue"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-cms="event-1-venue">Masjid Suciati Saliman<br>Jl. Gito Gati, Grojogan, Pandowoharjo, Sleman, Daerah Istimewa Yogyakarta 55512.</span></p>
+                                <a href="https://maps.google.com/?q=Masjid+Suciati+Saliman" target="_blank" rel="noopener noreferrer" class="btn btn-outline-auto btn-sm rounded-pill shadow mt-2 px-3 event-map-button" data-cms-event-map="1"><i class="fa-solid fa-map-location-dot me-2"></i>Lihat Google Maps</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Resepsi Pernikahan — full-viewport snap panel -->
+                    <article class="event-snap-panel" role="article" aria-label="Resepsi Pernikahan">
+                        <div class="container text-center">
+                            <div class="event-card premium-reveal">
+                                <div class="event-timeline-marker" aria-hidden="true"><span>02</span></div>
+                                <p class="event-order">Dilanjutkan dengan</p>
+                                <h3 class="font-esthetic" data-cms="event-2-name">Resepsi Pernikahan</h3>
+                                <p class="event-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-cms="event-2-time">Pukul 13.00 WIB - Selesai</span></p>
+                                <p class="event-venue"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-cms="event-2-venue">Lokasi acara akan diinformasikan melalui undangan.</span></p>
+                                <a href="https://maps.google.com/" target="_blank" rel="noopener noreferrer" class="btn btn-outline-auto btn-sm rounded-pill shadow mt-2 px-3 event-map-button" data-cms-event-map="2" hidden><i class="fa-solid fa-map-location-dot me-2"></i>Lihat Google Maps</a>
+                            </div>
+                        </div>
+                    </article>
                 </section>
 
                 <!-- Countdown -->
                 <section class="bg-light-dark editorial-section editorial-countdown" id="countdown">
                     <div class="container text-center">
-                        <h2 class="font-esthetic py-4 m-0" style="font-size: 2.25rem;">Countdown</h2>
+                        <h2 class="font-esthetic py-4 m-0">Countdown</h2>
                         <p class="editorial-lead">Menuju hari bahagia kami.</p>
                         <div class="countdown-panel border rounded-pill shadow py-3 px-3 mx-auto">
                             <div class="row justify-content-center">
-                                <div class="col-3 p-1"><p class="d-inline m-0 p-0" style="font-size: 1.35rem;" id="day">0</p><small class="d-block">Hari</small></div>
-                                <div class="col-3 p-1"><p class="d-inline m-0 p-0" style="font-size: 1.35rem;" id="hour">0</p><small class="d-block">Jam</small></div>
-                                <div class="col-3 p-1"><p class="d-inline m-0 p-0" style="font-size: 1.35rem;" id="minute">0</p><small class="d-block">Menit</small></div>
-                                <div class="col-3 p-1"><p class="d-inline m-0 p-0" style="font-size: 1.35rem;" id="second">0</p><small class="d-block">Detik</small></div>
+                                <div class="col-3 p-1"><p class="d-inline m-0 p-0" id="day">0</p><small class="d-block">Hari</small></div>
+                                <div class="col-3 p-1"><p class="d-inline m-0 p-0" id="hour">0</p><small class="d-block">Jam</small></div>
+                                <div class="col-3 p-1"><p class="d-inline m-0 p-0" id="minute">0</p><small class="d-block">Menit</small></div>
+                                <div class="col-3 p-1"><p class="d-inline m-0 p-0" id="second">0</p><small class="d-block">Detik</small></div>
                             </div>
                         </div>
                         <button class="btn btn-primary rounded-pill shadow-sm mt-4 save-calendar-button" type="button" data-calendar-button>
@@ -325,7 +334,7 @@
                 <!-- Dresscode -->
                 <section class="bg-white-black editorial-section editorial-dresscode" id="dresscode">
                     <div class="container text-center">
-                        <h2 class="font-esthetic py-4 m-0" style="font-size: 2.25rem;">Dresscode</h2>
+                        <h2 class="font-esthetic py-4 m-0">Dresscode</h2>
                         <p class="editorial-lead">Demi kehangatan bersama, kami memohon kesediaan Anda untuk mengenakan dress code berikut:</p>
                         <div class="py-3" data-aos="fade-down" data-aos-duration="1500">
                             <div class="d-flex justify-content-center align-items-center mb-3">
@@ -333,7 +342,7 @@
                                 <div class="dress-swatch" style="background-color: aquamarine;"></div>
                                 <div class="dress-swatch" style="background-color: limegreen;"></div>
                             </div>
-                            <p style="font-size: 0.95rem;">Busana batik dan bersepatu.</p>
+                            <p class="dress-note">Busana batik dan bersepatu.</p>
                         </div>
                     </div>
                 </section>
@@ -343,7 +352,7 @@
                     <div class="container">
                         <div class="border rounded-5 shadow p-3 gallery-panel">
 
-                            <h2 class="font-esthetic text-center py-2 m-0" style="font-size: 2.25rem;">Galeri</h2>
+                            <h2 class="font-esthetic text-center py-2 m-0">Galeri</h2>
 
                             <div id="carousel-image-one" data-aos="fade-up" data-aos-duration="1500" class="carousel slide mt-4" data-bs-ride="carousel">
                                 <div class="carousel-indicators">
@@ -459,7 +468,7 @@
                 <section class="bg-light-dark my-0 pb-0 pt-3 editorial-section editorial-rsvp editorial-rsvp-form" id="rsvp">
                     <div class="container">
                         <div class="border rounded-5 shadow p-3 mb-2">
-                            <h2 class="font-esthetic text-center mt-2 mb-4" style="font-size: 2.25rem;">RSVP</h2>
+                            <h2 class="font-esthetic text-center mt-2 mb-4">RSVP</h2>
 
                             <div class="mb-3">
                                 <label for="form-name" class="form-label my-1"><i class="fa-solid fa-person me-2"></i>Nama</label>
@@ -489,7 +498,7 @@
                                 <div id="information" class="alert alert-info alert-dismissible fade show rounded-4" role="alert">
                                     <button type="button" class="btn-close rounded-4 p-3" data-bs-dismiss="alert" aria-label="Close" onclick="undangan.guest.closeInformation()"></button>
 
-                                    <p style="font-size: 1.5rem;">Tinggalkan Ucapan</p>
+                                    <p class="form-section-title">Tinggalkan Ucapan</p>
                                     <p class="m-0">Sampaikan doa dan harapan terbaik untuk Daniyal Raziq Hanif &amp; Balqis Salsabila Faiha.</p>
                                 </div>
 
@@ -515,7 +524,7 @@
                 <section class="bg-light-dark my-0 pb-0 pt-3 editorial-section editorial-wishes" id="comment">
                     <div class="container">
                         <div class="wishes-panel border rounded-5 shadow p-3">
-                            <h2 class="font-esthetic text-center mt-2 mb-4" style="font-size: 2.25rem;">Ucapan &amp; Doa</h2>
+                            <h2 class="font-esthetic text-center mt-2 mb-4">Ucapan &amp; Doa</h2>
 
                         <!-- Comments -->
                         <div class="py-3" id="comments" data-loading="false"></div>
@@ -529,10 +538,10 @@
                 <!-- End Of Invitation -->
                 <section class="bg-white-black editorial-section editorial-footer no-gap-bottom" id="footer">
                     <div class="container text-center">
-                        <p class="pb-2 pt-4" style="font-size: 0.95rem;">Terima kasih atas perhatian dan doa restu Anda, yang menjadi kebahagiaan serta kehormatan besar bagi kami.</p>
+                        <p class="pb-2 pt-4 footer-thanks">Terima kasih atas perhatian dan doa restu Anda, yang menjadi kebahagiaan serta kehormatan besar bagi kami.</p>
 
-                        <h2 class="font-esthetic" style="font-size: 2rem;">Wassalamualaikum Warahmatullahi Wabarakatuh</h2>
-                        <h2 class="font-arabic pt-4" style="font-size: 2rem;">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَۙ</h2>
+                        <h2 class="font-esthetic">Wassalamualaikum Warahmatullahi Wabarakatuh</h2>
+                        <h2 class="font-arabic pt-4">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَۙ</h2>
 
                         <hr class="my-3">
 
