@@ -1704,14 +1704,13 @@ body.islamic-modern {
     box-shadow: 0 1.5rem 4rem rgba(14, 45, 38, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
 }
 
-/* Dark mode event card base */
-html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card {
+[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card {
     background: rgba(16, 45, 38, 0.9) !important;
     border-color: rgba(184, 138, 68, 0.35) !important;
 }
 
 /* Dark mode hover for event cards */
-html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card:hover {
+[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(184, 138, 68, 0.2) inset;
 }
@@ -1783,12 +1782,12 @@ html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card:hover {
 }
 
 /* Dark mode map button */
-html[data-bs-theme="dark"] .islamic-modern .event-map-button {
+[data-bs-theme="dark"] .islamic-modern .event-map-button {
     border-color: var(--islamic-gold-400);
     color: var(--islamic-gold-200);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .event-map-button:hover {
+[data-bs-theme="dark"] .islamic-modern .event-map-button:hover {
     background: var(--islamic-gold-500);
     border-color: var(--islamic-gold-500);
     color: var(--islamic-emerald-950);
@@ -1830,56 +1829,56 @@ html[data-bs-theme="dark"] .islamic-modern .event-map-button:hover {
     transform: translate(-50%, 0);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .editorial-section:not(.editorial-person) {
+[data-bs-theme="dark"] .islamic-modern .editorial-section:not(.editorial-person) {
     color: rgba(255, 255, 255, 0.82);
     background-color: #10251f !important;
     background-image: radial-gradient(circle at 15% 15%, rgba(199, 164, 106, 0.12), transparent 28%) !important;
 }
 
-html[data-bs-theme="dark"] .islamic-modern .editorial-section h2.font-esthetic,
-html[data-bs-theme="dark"] .islamic-modern .countdown-panel p {
+[data-bs-theme="dark"] .islamic-modern .editorial-section h2.font-esthetic,
+[data-bs-theme="dark"] .islamic-modern .countdown-panel p {
     color: var(--islamic-gold-200);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .verse-intro,
-html[data-bs-theme="dark"] .islamic-modern .countdown-panel small {
+[data-bs-theme="dark"] .islamic-modern .verse-intro,
+[data-bs-theme="dark"] .islamic-modern .countdown-panel small {
     color: rgba(255, 255, 255, 0.72);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .form-control,
-html[data-bs-theme="dark"] .islamic-modern .form-select {
+[data-bs-theme="dark"] .islamic-modern .form-control,
+[data-bs-theme="dark"] .islamic-modern .form-select {
     border-color: rgba(234, 216, 183, 0.26);
     background-color: rgba(255, 255, 255, 0.08);
     color: rgba(255, 255, 255, 0.9);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .form-control::placeholder {
+[data-bs-theme="dark"] .islamic-modern .form-control::placeholder {
     color: rgba(255, 255, 255, 0.56);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .story-panel,
-html[data-bs-theme="dark"] .islamic-modern .gallery-panel,
-html[data-bs-theme="dark"] .islamic-modern .editorial-rsvp-form > .container > .border,
-html[data-bs-theme="dark"] .islamic-modern .wishes-panel,
-html[data-bs-theme="dark"] .islamic-modern .gift-panel,
-html[data-bs-theme="dark"] .islamic-modern .verse-card,
-html[data-bs-theme="dark"] .islamic-modern .countdown-panel {
+[data-bs-theme="dark"] .islamic-modern .story-panel,
+[data-bs-theme="dark"] .islamic-modern .gallery-panel,
+[data-bs-theme="dark"] .islamic-modern .editorial-rsvp-form > .container > .border,
+[data-bs-theme="dark"] .islamic-modern .wishes-panel,
+[data-bs-theme="dark"] .islamic-modern .gift-panel,
+[data-bs-theme="dark"] .islamic-modern .verse-card,
+[data-bs-theme="dark"] .islamic-modern .countdown-panel {
     background: rgba(16, 45, 38, 0.9) !important;
     border-color: rgba(184, 138, 68, 0.35) !important;
 }
 
-html[data-bs-theme="dark"] .islamic-modern .event-time,
-html[data-bs-theme="dark"] .islamic-modern .event-venue {
+[data-bs-theme="dark"] .islamic-modern .event-time,
+[data-bs-theme="dark"] .islamic-modern .event-venue {
     color: rgba(255, 255, 255, 0.8);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .event-timeline-marker {
+[data-bs-theme="dark"] .islamic-modern .event-timeline-marker {
     background: rgba(20, 45, 38, 0.95);
     border-color: var(--islamic-gold-400);
     box-shadow: 0 0 0 0.5rem rgba(20, 45, 38, 0.95), 0 0.5rem 1.5rem rgba(184, 138, 68, 0.2);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card h3 {
+[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card h3 {
     color: var(--islamic-gold-200);
 }
 
