@@ -1775,18 +1775,18 @@ html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card:hover {
     box-shadow: 0 0.5rem 1.5rem rgba(14, 45, 38, 0.2);
 }
 
-/* Dark mode map button */
-html[data-bs-theme="dark"] .islamic-modern .event-map-button {
-    border-color: var(--islamic-gold-400);
-    color: var(--islamic-gold-200);
+/* Dark mode map button - higher specificity to override Bootstrap btn-outline-auto */
+html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-map-button {
+    border-color: var(--islamic-gold-400) !important;
+    color: var(--islamic-gold-200) !important;
 }
 
-html[data-bs-theme="dark"] .islamic-modern .event-map-button:hover {
-    background: var(--islamic-gold-500);
-    border-color: var(--islamic-gold-500);
-    color: var(--islamic-emerald-950);
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1.5rem rgba(184, 138, 68, 0.3);
+html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-map-button:hover {
+    background: var(--islamic-gold-500) !important;
+    border-color: var(--islamic-gold-500) !important;
+    color: var(--islamic-emerald-950) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 0.5rem 1.5rem rgba(184, 138, 68, 0.3) !important;
 }
 
 .islamic-modern .event-map-button[hidden] {
