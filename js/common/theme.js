@@ -125,6 +125,7 @@ export const theme = (() => {
                 isAuto = true;
         }
 
+        // Always sync resolved theme to body, even in auto mode
         if (isDarkMode()) {
             onDark();
         } else {
