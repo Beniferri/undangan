@@ -295,6 +295,10 @@ html[data-bs-theme="dark"] .bg-white-black {
     --bstoria-green: #2f6f5e;
     --bstoria-gold: #b88a44;
     --bstoria-cream: #f7f1e7;
+    /* Islamic-modern gold palette (also available on :root for dark mode selectors) */
+    --islamic-gold-500: #c7a46a;
+    --islamic-gold-400: #d4b884;
+    --islamic-gold-200: #ead8b7;
 }
 
 .hero-panel {
