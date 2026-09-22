@@ -1204,6 +1204,7 @@ body.islamic-modern {
     --type-lead: clamp(1rem, 2.5vw, 1.12rem);
     --type-section: clamp(2.35rem, 7vw, 4.25rem);
     --islamic-emerald-950: #0e2d26;
+    --islamic-emerald-900: #143d33;
     --islamic-emerald-800: #1d5447;
     --islamic-emerald-600: #3f7b68;
     --islamic-gold-500: #c7a46a;
