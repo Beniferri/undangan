@@ -1783,7 +1783,9 @@ body.islamic-modern {
 
 /* Dark mode map button */
 [data-bs-theme="dark"] .islamic-modern .event-map-button {
-    border: 1.5px solid var(--islamic-gold-400) !important;
+    border-width: 1.5px !important;
+    border-style: solid !important;
+    border-color: var(--islamic-gold-400) !important;
     color: var(--islamic-gold-200) !important;
 }
 
