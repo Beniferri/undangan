@@ -48,6 +48,7 @@ export const theme = (() => {
     const onLight = () => {
         setLight();
         document.documentElement.setAttribute('data-bs-theme', 'light');
+        document.body.setAttribute('data-bs-theme', 'light');
         setMetaTheme(themeDark);
     };
 
@@ -57,6 +58,7 @@ export const theme = (() => {
     const onDark = () => {
         setDark();
         document.documentElement.setAttribute('data-bs-theme', 'dark');
+        document.body.setAttribute('data-bs-theme', 'dark');
         setMetaTheme(themeLight);
     };
 
