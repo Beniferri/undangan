@@ -371,6 +371,11 @@ html[data-bs-theme="dark"] .bg-white-black {
     letter-spacing: 0.04em;
 }
 
+.islamic-modern .event-timeline-marker i {
+    font-size: 0.55rem;
+    color: var(--islamic-gold-500);
+}
+
 #navbar-menu {
     border-color: rgba(184, 138, 68, 0.3) !important;
     box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.12);
@@ -1566,6 +1571,7 @@ body.islamic-modern {
 
 /* Intro header panel */
 .islamic-modern .event-intro-panel {
+    position: relative;
     display: flex;
     min-height: 82svh;
     min-height: 82dvh;
@@ -1574,10 +1580,21 @@ body.islamic-modern {
     justify-content: center;
     padding-block: var(--section-space);
     scroll-snap-align: start;
+    overflow: hidden;
+}
+
+/* Decorative pattern for intro panel */
+.islamic-modern .event-intro-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B88A44' fill-opacity='0.04'%3E%3Cpath d='M30 30c0-11.046 8.954-20 20-20s20 8.954 20 20-8.954 20-20 20-20-8.954-20-20zm0 2c0 9.941-8.059 18-18 18s-18-8.059-18-18 8.059-18 18-18 18 8.059 18 18z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 /* Each event gets its own full-viewport snap panel */
 .islamic-modern .event-snap-panel {
+    position: relative;
     display: flex;
     min-height: 100svh;
     min-height: 100dvh;
@@ -1588,6 +1605,16 @@ body.islamic-modern {
     border-top: 1px solid rgba(126, 92, 42, 0.12);
     scroll-snap-align: start;
     scroll-margin-top: var(--nav-height, 4rem);
+    overflow: hidden;
+}
+
+/* Decorative background pattern for event panels */
+.islamic-modern .event-bg-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B88A44' fill-opacity='0.03'%3E%3Cpath d='M40 40c0-14.728 11.94-26.667 26.667-26.667S80 25.272 80 40s-11.94 26.667-26.667 26.667S40 54.728 40 40zm0 4c0 11.369 9.217 20.667 20.667 20.667S80 51.369 80 40s-9.217-20.667-20.667-20.667S40 28.631 40 40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 .islamic-modern .section-eyebrow {
@@ -1628,67 +1655,124 @@ body.islamic-modern {
 
 .islamic-modern .event-timeline-marker {
     z-index: 1;
-    display: grid;
-    width: 3rem;
-    height: 3rem;
-    place-items: center;
-    border: 1px solid var(--islamic-gold-500);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin: 0 auto 1.25rem;
+    border: 2px solid var(--islamic-gold-500);
     border-radius: 50%;
     background: var(--islamic-ivory);
     color: var(--islamic-gold-text);
-    box-shadow: 0 0 0 0.4rem rgba(251, 247, 239, 0.92);
+    box-shadow: 0 0 0 0.5rem rgba(251, 247, 239, 0.92), 0 0.5rem 1.5rem rgba(184, 138, 68, 0.15);
     font-size: var(--type-xs);
     font-weight: 800;
     letter-spacing: 0.06em;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.islamic-modern .event-timeline-marker span {
+    font-size: 0.85rem;
+    line-height: 1;
 }
 
 .islamic-modern .event-snap-panel .event-card {
-    width: min(100%, 32rem);
-    padding: clamp(2rem, 6vw, 3.25rem) !important;
+    position: relative;
+    z-index: 1;
+    width: min(100%, 34rem);
+    padding: clamp(2.5rem, 6vw, 4rem) !important;
+    border: 1px solid rgba(184, 138, 68, 0.25);
+    border-radius: 2rem;
+    background: rgba(251, 247, 239, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 1rem 3rem rgba(14, 45, 38, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.islamic-modern .event-snap-panel .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 1.5rem 4rem rgba(14, 45, 38, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+/* Dark mode event card base */
+html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card {
+    background: rgba(16, 45, 38, 0.9) !important;
+    border-color: rgba(184, 138, 68, 0.35) !important;
+}
+
+/* Dark mode hover for event cards */
+html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(184, 138, 68, 0.2) inset;
 }
 
 .islamic-modern .event-snap-panel .event-card h3 {
-    margin: 0.35rem 0 1.5rem;
+    margin: 0.5rem 0 1.75rem;
     color: var(--islamic-emerald-950);
-    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-size: clamp(2.5rem, 8vw, 3.75rem);
     font-weight: 600;
-    line-height: 0.95;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
 }
 
 .islamic-modern .event-order {
     margin: 0;
     color: var(--islamic-gold-text);
-    font-size: var(--type-xs);
+    font-size: 0.75rem;
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
 }
 
 .islamic-modern .event-time,
 .islamic-modern .event-venue {
     display: grid;
-    max-width: 25rem;
-    grid-template-columns: 1rem minmax(0, 1fr);
-    gap: 0.7rem;
-    margin: 0 auto 0.9rem;
-    color: #3b6155;
-    font-size: var(--type-sm);
-    line-height: 1.7;
+    max-width: 26rem;
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+    gap: 0.85rem;
+    margin: 0 auto 1.1rem;
+    color: #2c4a40;
+    font-size: 0.95rem;
+    font-style: normal;
+    line-height: 1.65;
     text-align: left;
     white-space: pre-line;
 }
 
 .islamic-modern .event-time > :where(i),
 .islamic-modern .event-venue > :where(i) {
-    margin-top: 0.35rem;
-    color: var(--islamic-gold-text);
+    margin-top: 0.25rem;
+    color: var(--islamic-gold-500);
+    font-size: 1rem;
 }
 
 .islamic-modern .event-map-button {
-    min-height: 2.75rem;
-    margin-top: 0.75rem !important;
-    padding-inline: 1.15rem !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    margin-top: 1.25rem !important;
+    padding: 0.6rem 1.75rem !important;
+    border: 1.5px solid var(--islamic-emerald-800);
+    background: transparent;
+    color: var(--islamic-emerald-950);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: all 0.25s ease;
+}
+
+.islamic-modern .event-map-button:hover {
+    background: var(--islamic-emerald-900);
+    border-color: var(--islamic-emerald-900);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.5rem rgba(14, 45, 38, 0.2);
 }
 
 .islamic-modern .event-map-button[hidden] {
@@ -1758,17 +1842,34 @@ html[data-bs-theme="dark"] .islamic-modern .editorial-rsvp-form > .container > .
 html[data-bs-theme="dark"] .islamic-modern .wishes-panel,
 html[data-bs-theme="dark"] .islamic-modern .gift-panel,
 html[data-bs-theme="dark"] .islamic-modern .verse-card,
-html[data-bs-theme="dark"] .islamic-modern .event-card,
 html[data-bs-theme="dark"] .islamic-modern .countdown-panel {
-    background: rgba(16, 45, 38, 0.82) !important;
+    background: rgba(16, 45, 38, 0.9) !important;
+    border-color: rgba(184, 138, 68, 0.35) !important;
 }
 
 html[data-bs-theme="dark"] .islamic-modern .event-time,
 html[data-bs-theme="dark"] .islamic-modern .event-venue {
-    color: rgba(255, 255, 255, 0.76);
+    color: rgba(255, 255, 255, 0.8);
 }
 
-html[data-bs-theme="dark"] .islamic-modern .event-timeline .event-card h3 {
+html[data-bs-theme="dark"] .islamic-modern .event-timeline-marker {
+    background: rgba(20, 45, 38, 0.95);
+    border-color: var(--islamic-gold-400);
+    box-shadow: 0 0 0 0.5rem rgba(20, 45, 38, 0.95), 0 0.5rem 1.5rem rgba(184, 138, 68, 0.2);
+}
+
+html[data-bs-theme="dark"] .islamic-modern .event-map-button {
+    border-color: var(--islamic-gold-400);
+    color: var(--islamic-gold-200);
+}
+
+html[data-bs-theme="dark"] .islamic-modern .event-map-button:hover {
+    background: var(--islamic-gold-500);
+    border-color: var(--islamic-gold-500);
+    color: var(--islamic-emerald-950);
+}
+
+html[data-bs-theme="dark"] .islamic-modern .event-snap-panel .event-card h3 {
     color: var(--islamic-gold-200);
 }
 
