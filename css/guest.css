@@ -1763,7 +1763,9 @@ body.islamic-modern {
     min-height: 3rem;
     margin-top: 1.25rem !important;
     padding: 0.6rem 1.75rem !important;
-    border: 1.5px solid var(--islamic-emerald-800);
+    border-width: 1.5px;
+    border-style: solid;
+    border-color: var(--islamic-emerald-800);
     border-radius: 999px;
     background: transparent;
     color: var(--islamic-emerald-950);
@@ -1784,7 +1786,9 @@ body.islamic-modern {
 
 /* Dark mode map button - using body.islamic-modern[data-bs-theme] since body IS .islamic-modern */
 body.islamic-modern[data-bs-theme="dark"] .event-map-button {
-    border: 1.5px solid #d4b884 !important;
+    border-width: 1.5px !important;
+    border-style: solid !important;
+    border-color: #d4b884 !important;
     color: #ead8b7 !important;
 }
 
