@@ -1785,14 +1785,14 @@ body.islamic-modern {
 [data-bs-theme="dark"] .islamic-modern .event-map-button {
     border-width: 1.5px !important;
     border-style: solid !important;
-    border-color: var(--islamic-gold-400) !important;
-    color: var(--islamic-gold-200) !important;
+    border-color: #d4b884 !important;
+    color: #ead8b7 !important;
 }
 
 [data-bs-theme="dark"] .islamic-modern .event-map-button:hover {
-    background: var(--islamic-gold-500);
-    border-color: var(--islamic-gold-500) !important;
-    color: var(--islamic-emerald-950) !important;
+    background: #c7a46a;
+    border-color: #c7a46a !important;
+    color: #0e2d26 !important;
     transform: translateY(-2px);
     box-shadow: 0 0.5rem 1.5rem rgba(184, 138, 68, 0.3);
 }
