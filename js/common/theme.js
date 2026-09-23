@@ -145,6 +145,8 @@ export const theme = (() => {
         if (btn) {
             btn.style.setProperty('border', '1.5px solid #d4b884', 'important');
             btn.style.setProperty('color', '#ead8b7', 'important');
+            // Add class for hover handling
+            btn.classList.add('dark-mode-map-button');
         }
     };
 
@@ -156,6 +158,7 @@ export const theme = (() => {
         if (btn) {
             btn.style.removeProperty('border');
             btn.style.removeProperty('color');
+            btn.classList.remove('dark-mode-map-button');
         }
     };
 

@@ -1790,7 +1790,8 @@ body.islamic-modern[data-bs-theme="dark"] .event-map-button {
     color: #ead8b7 !important;
 }
 
-body.islamic-modern[data-bs-theme="dark"] .event-map-button:hover {
+body.islamic-modern[data-bs-theme="dark"] .event-map-button:hover,
+body.islamic-modern .event-map-button.dark-mode-map-button:hover {
     background: #c7a46a !important;
     border-color: #c7a46a !important;
     color: #0e2d26 !important;
@@ -1798,7 +1799,7 @@ body.islamic-modern[data-bs-theme="dark"] .event-map-button:hover {
     box-shadow: 0 0.5rem 1.5rem rgba(184, 138, 68, 0.3) !important;
 }
 
-/* Cache bust marker: premium-ui-22 */
+/* Cache bust marker: premium-ui-23 */
 
 .islamic-modern .event-map-button[hidden] {
     display: none !important;
