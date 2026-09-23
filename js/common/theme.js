@@ -45,21 +45,25 @@ export const theme = (() => {
     /**
      * @returns {void}
      */
-    const onLight = () => {
-        setLight();
-        document.documentElement.setAttribute('data-bs-theme', 'light');
-        document.body.setAttribute('data-bs-theme', 'light');
-        setMetaTheme(themeDark);
-    };
-
-    /**
-     * @returns {void}
-     */
     const onDark = () => {
         setDark();
         document.documentElement.setAttribute('data-bs-theme', 'dark');
         document.body.setAttribute('data-bs-theme', 'dark');
         setMetaTheme(themeLight);
+        // Workaround: Force apply dark mode map button styles via JS
+        applyDarkModeMapButtonStyles();
+    };
+
+    /**
+     * @returns {void}
+     */
+    const onLight = () => {
+        setLight();
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+        document.body.setAttribute('data-bs-theme', 'light');
+        setMetaTheme(themeDark);
+        // Workaround: Remove forced dark mode map button styles
+        removeDarkModeMapButtonStyles();
     };
 
     /**
@@ -130,6 +134,28 @@ export const theme = (() => {
             onDark();
         } else {
             onLight();
+        }
+    };
+
+    /**
+     * @returns {void}
+     */
+    const applyDarkModeMapButtonStyles = () => {
+        const btn = document.querySelector('.event-map-button');
+        if (btn) {
+            btn.style.setProperty('border', '1.5px solid #d4b884', 'important');
+            btn.style.setProperty('color', '#ead8b7', 'important');
+        }
+    };
+
+    /**
+     * @returns {void}
+     */
+    const removeDarkModeMapButtonStyles = () => {
+        const btn = document.querySelector('.event-map-button');
+        if (btn) {
+            btn.style.removeProperty('border');
+            btn.style.removeProperty('color');
         }
     };
 
