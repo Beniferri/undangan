@@ -1800,6 +1800,8 @@ body.islamic-modern[data-bs-theme="dark"] .event-map-button:hover {
     box-shadow: 0 0.5rem 1.5rem rgba(184, 138, 68, 0.3);
 }
 
+/* Cache bust marker: premium-ui-21 */
+
 .islamic-modern .event-map-button[hidden] {
     display: none !important;
 }
