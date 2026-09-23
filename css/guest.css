@@ -1786,21 +1786,19 @@ body.islamic-modern {
 
 /* Dark mode map button - using body.islamic-modern[data-bs-theme] since body IS .islamic-modern */
 body.islamic-modern[data-bs-theme="dark"] .event-map-button {
-    border-width: 1.5px !important;
-    border-style: solid !important;
-    border-color: #d4b884 !important;
+    border: 1.5px solid #d4b884 !important;
     color: #ead8b7 !important;
 }
 
 body.islamic-modern[data-bs-theme="dark"] .event-map-button:hover {
-    background: #c7a46a;
+    background: #c7a46a !important;
     border-color: #c7a46a !important;
     color: #0e2d26 !important;
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1.5rem rgba(184, 138, 68, 0.3);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 0.5rem 1.5rem rgba(184, 138, 68, 0.3) !important;
 }
 
-/* Cache bust marker: premium-ui-21 */
+/* Cache bust marker: premium-ui-22 */
 
 .islamic-modern .event-map-button[hidden] {
     display: none !important;
