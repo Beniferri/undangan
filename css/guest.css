@@ -1909,6 +1909,27 @@ body.islamic-modern .event-map-button.dark-mode-map-button:hover {
         padding: 1.75rem 1.25rem !important;
     }
 
+    .islamic-modern .event-snap-panel {
+        flex-direction: column;
+        padding-block: clamp(3rem, 8vh, 5rem);
+    }
+
+    .islamic-modern .event-snap-panel .container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .islamic-modern .event-snap-panel .event-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .islamic-modern .event-timeline-marker {
+        margin-bottom: 1rem;
+    }
 
     .islamic-modern .editorial-section.editorial-rsvp-form {
         padding-top: 3rem !important;
