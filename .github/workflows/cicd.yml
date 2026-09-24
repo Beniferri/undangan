@@ -50,31 +50,43 @@ jobs:
       contents: write
 
     steps:
+      - name: Check Netlify credentials
+        id: netlify-auth
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Netlify credentials are not configured; deployment steps will be skipped."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout Code
+        if: steps.netlify-auth.outputs.configured == 'true'
         uses: actions/checkout@v4
 
       - name: Set up Node.js
+        if: steps.netlify-auth.outputs.configured == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
       - name: Install npm
+        if: steps.netlify-auth.outputs.configured == 'true'
         run: npm install -g npm
 
-      - name: Check if NETLIFY_AUTH_TOKEN is set
-        run: |
-          if [ -z "${{ secrets.NETLIFY_AUTH_TOKEN }}" ]; then
-            echo "NETLIFY_AUTH_TOKEN is not set. Skipping deployment."
-            exit 0
-          fi
-
       - name: Install Netlify CLI
+        if: steps.netlify-auth.outputs.configured == 'true'
         run: npm install && npm install -g netlify-cli
 
       - name: Run Build
+        if: steps.netlify-auth.outputs.configured == 'true'
         run: npm run build
 
       - name: Add netlify.toml File for Headers
+        if: steps.netlify-auth.outputs.configured == 'true'
         run: |
           echo "[[headers]]" > netlify.toml
           echo "  for = \"/*\"" >> netlify.toml
@@ -85,6 +97,7 @@ jobs:
           echo "    Access-Control-Expose-Headers = \"*\"" >> netlify.toml
 
       - name: Deploy to Netlify
+        if: steps.netlify-auth.outputs.configured == 'true'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
