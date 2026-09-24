@@ -1,0 +1,563 @@
+/* Sora-informed editorial refresh — scoped to the existing Islamic-modern flow. */
+.islamic-modern {
+    --editorial-ink: #183d35;
+    --editorial-muted: #596c64;
+    --editorial-paper: #fffdf8;
+    --editorial-gold: #8c652d;
+    --editorial-line: rgba(164, 122, 59, 0.3);
+    --editorial-card-radius: 1.15rem;
+}
+
+.islamic-modern .opening-cover {
+    background: #102d26;
+    color: #fffdf8;
+}
+
+.islamic-modern .opening-cover-backdrop {
+    background:
+        linear-gradient(180deg, rgba(12, 35, 30, 0.3), rgba(12, 35, 30, 0.78)),
+        radial-gradient(ellipse at 50% 0, rgba(211, 181, 129, 0.2), transparent 52%),
+        repeating-linear-gradient(45deg, rgba(234, 216, 183, 0.035) 0 1px, transparent 1px 26px);
+}
+
+.islamic-modern .opening-cover-content {
+    width: min(100% - 2.5rem, 34rem);
+    min-height: 100dvh;
+    gap: clamp(1.35rem, 4vh, 2.4rem);
+}
+
+.islamic-modern .opening-cover-heading {
+    gap: 1rem;
+}
+
+.islamic-modern .opening-cover-kicker {
+    color: #ead8b7;
+    font-size: 0.68rem;
+    letter-spacing: 0.34em;
+}
+
+.islamic-modern .opening-cover-rule {
+    width: 4rem;
+    background: linear-gradient(90deg, transparent, #d4b884, transparent);
+}
+
+.islamic-modern .opening-cover-names {
+    color: #fffdf8;
+    font-size: clamp(3.5rem, 14vw, 6.1rem);
+    font-weight: 500;
+    line-height: 0.84;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+}
+
+.islamic-modern .opening-cover-date {
+    color: #ead8b7;
+    font-size: 0.74rem;
+    letter-spacing: 0.2em;
+}
+
+.islamic-modern .opening-guest-card {
+    border-color: rgba(234, 216, 183, 0.42);
+    border-radius: 0.8rem;
+    background: rgba(255, 253, 248, 0.09);
+    box-shadow: 0 1.5rem 3.5rem rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(1rem);
+}
+
+.islamic-modern .opening-guest-icon {
+    border-color: rgba(234, 216, 183, 0.55);
+    color: #ead8b7;
+}
+
+.islamic-modern .opening-guest-label,
+.islamic-modern .opening-guest-note {
+    color: #fffdf8;
+}
+
+.islamic-modern .opening-guest-name {
+    color: #fffdf8;
+    font-size: 2rem;
+}
+
+.islamic-modern .opening-cover-cta {
+    min-height: 3.5rem;
+    padding-inline: 1.7rem;
+    border-color: #d4b884;
+    background: #d4b884;
+    color: #102d26;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.22);
+}
+
+.islamic-modern .opening-cover-cta:hover,
+.islamic-modern .opening-cover-cta:focus-visible {
+    border-color: #ead8b7;
+    background: #ead8b7;
+    color: #102d26;
+}
+
+.islamic-modern .editorial-section:not(.editorial-person) {
+    background-color: #fbf7ef !important;
+    background-image:
+        radial-gradient(ellipse at 50% 0, rgba(199, 164, 106, 0.1), transparent 48%),
+        linear-gradient(180deg, rgba(255, 253, 248, 0.55), transparent 35%, rgba(63, 123, 104, 0.035)) !important;
+}
+
+.islamic-modern .editorial-section.editorial-verse,
+.islamic-modern .editorial-section.editorial-dresscode {
+    background-color: #f0eadf !important;
+}
+
+.islamic-modern .editorial-section h2.font-esthetic {
+    color: var(--editorial-ink);
+    font-size: clamp(2.65rem, 8vw, 4.75rem) !important;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 0.94;
+    text-wrap: balance;
+}
+
+.islamic-modern .editorial-section h2.font-esthetic::after {
+    width: 3.7rem;
+    margin-top: 1.1rem;
+    background: linear-gradient(90deg, transparent, var(--editorial-gold), transparent);
+}
+
+.islamic-modern .editorial-section.editorial-hero {
+    background-color: #173d34 !important;
+}
+
+.islamic-modern .editorial-hero::before {
+    z-index: 0;
+    background-image:
+        linear-gradient(180deg, rgba(13, 34, 29, 0.16), rgba(13, 34, 29, 0.82)),
+        radial-gradient(ellipse at 50% 24%, rgba(234, 216, 183, 0.12), transparent 46%);
+    content: '';
+}
+
+.islamic-modern .editorial-hero > .bg-cover-home {
+    opacity: 0.52 !important;
+    filter: saturate(0.76) contrast(1.04);
+}
+
+.islamic-modern .editorial-hero > .bg-overlay-auto {
+    z-index: 1;
+    padding-block: clamp(4rem, 12vh, 8rem) clamp(5.5rem, 14vh, 8rem);
+    color: #fffdf8;
+}
+
+.islamic-modern .editorial-hero > .bg-overlay-auto > h1 {
+    color: #ead8b7;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+}
+
+.islamic-modern .editorial-hero [data-cms="profile-image"] {
+    width: clamp(11rem, 30vw, 15rem);
+    height: clamp(11rem, 30vw, 15rem);
+    margin-block: 1.5rem !important;
+    border: 1px solid rgba(234, 216, 183, 0.8) !important;
+    outline: 1px solid rgba(234, 216, 183, 0.36);
+    outline-offset: 0.55rem;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.28) !important;
+}
+
+.islamic-modern .editorial-section.editorial-hero [data-cms="couple-names"] {
+    max-width: 38rem;
+    color: #fffdf8;
+    font-size: clamp(2.55rem, 8vw, 5.4rem) !important;
+    font-weight: 500;
+    line-height: 0.9;
+    text-wrap: balance;
+}
+
+.islamic-modern .editorial-hero [data-cms="wedding-date"] {
+    color: #ead8b7;
+    font-size: 0.78rem !important;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.islamic-modern .editorial-hero .save-calendar-button {
+    border: 1px solid rgba(234, 216, 183, 0.72) !important;
+    border-radius: 999px;
+    background: rgba(16, 45, 38, 0.38) !important;
+    color: #fffdf8 !important;
+    backdrop-filter: blur(0.5rem);
+}
+
+.islamic-modern .cover-scroll-cue {
+    bottom: max(1.1rem, env(safe-area-inset-bottom));
+    color: #ead8b7;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+}
+
+.islamic-modern .section-eyebrow {
+    color: var(--editorial-gold);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+}
+
+.islamic-modern .editorial-lead {
+    max-width: 35rem;
+    margin-inline: auto;
+    color: var(--editorial-muted);
+    font-size: clamp(0.95rem, 2vw, 1.08rem);
+    line-height: 1.8;
+}
+
+.islamic-modern .editorial-verse .verse-card {
+    max-width: 38rem;
+    padding: clamp(1.4rem, 4vw, 2rem);
+    border-color: rgba(164, 122, 59, 0.28) !important;
+    border-radius: 0.8rem;
+    background: rgba(255, 253, 248, 0.76) !important;
+    box-shadow: 0 1rem 2.7rem rgba(28, 57, 48, 0.06);
+}
+
+.islamic-modern .verse-arabic {
+    color: #806034;
+    font-size: clamp(1.8rem, 5vw, 2.45rem);
+}
+
+.islamic-modern .verse-intro {
+    color: #4e6159;
+    line-height: 1.8;
+}
+
+.islamic-modern .verse-card p:not(.verse-source) {
+    color: #273e36;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.28rem, 3.4vw, 1.55rem);
+    line-height: 1.5;
+}
+
+.islamic-modern .story-panel,
+.islamic-modern .gallery-panel,
+.islamic-modern .editorial-rsvp-form > .container > .border,
+.islamic-modern .wishes-panel,
+.islamic-modern .gift-panel {
+    border: 1px solid var(--editorial-line) !important;
+    border-radius: var(--editorial-card-radius) !important;
+    background: rgba(255, 253, 248, 0.78) !important;
+    box-shadow: 0 1.1rem 3rem rgba(23, 61, 52, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.72) inset !important;
+    backdrop-filter: blur(0.7rem);
+}
+
+.islamic-modern .story-panel,
+.islamic-modern .gallery-panel,
+.islamic-modern .editorial-rsvp-form > .container > .border,
+.islamic-modern .wishes-panel {
+    padding: clamp(1.25rem, 4vw, 2.25rem) !important;
+}
+
+.islamic-modern .story-panel {
+    max-width: 48rem;
+    margin-inline: auto;
+}
+
+.islamic-modern .story-panel #video-love-stroy,
+.islamic-modern .story-panel video,
+.islamic-modern .story-panel iframe {
+    overflow: hidden;
+    border-radius: 0.7rem !important;
+}
+
+.islamic-modern .story-panel [data-aos] {
+    border-color: rgba(164, 122, 59, 0.38) !important;
+}
+
+.islamic-modern .story-panel .fw-bold {
+    color: var(--editorial-ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 600 !important;
+}
+
+.islamic-modern .story-panel .small {
+    color: var(--editorial-muted);
+    font-size: 0.9rem;
+    line-height: 1.75;
+}
+
+.islamic-modern .event-intro-panel .container {
+    max-width: 46rem;
+}
+
+.islamic-modern .event-card {
+    border-color: var(--editorial-line) !important;
+    border-radius: var(--editorial-card-radius) !important;
+    background: rgba(255, 253, 248, 0.91) !important;
+    box-shadow: 0 1.15rem 3rem rgba(23, 61, 52, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.72) inset !important;
+}
+
+.islamic-modern .event-snap-panel:nth-of-type(odd) .event-card {
+    background: rgba(245, 239, 228, 0.92) !important;
+}
+
+.islamic-modern .event-snap-panel .event-card h3 {
+    font-size: clamp(2.8rem, 9vw, 4.2rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+}
+
+.islamic-modern .event-time,
+.islamic-modern .event-venue {
+    color: #344e44;
+    font-size: 0.92rem;
+    line-height: 1.75;
+}
+
+.islamic-modern .event-map-button {
+    border-radius: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.islamic-modern .countdown-panel {
+    max-width: 34rem;
+    border-color: rgba(164, 122, 59, 0.26) !important;
+    border-radius: 0.75rem !important;
+    background: rgba(255, 253, 248, 0.78) !important;
+}
+
+.islamic-modern .countdown-panel .row > div {
+    border-right: 1px solid rgba(164, 122, 59, 0.22);
+}
+
+.islamic-modern .countdown-panel .row > div:last-child {
+    border-right: 0;
+}
+
+.islamic-modern .editorial-dresscode .dress-swatch {
+    width: 3.25rem;
+    height: 3.25rem;
+    border: 0.25rem solid #fffdf8;
+    border-radius: 50%;
+    box-shadow: 0 0.35rem 1rem rgba(23, 61, 52, 0.16);
+}
+
+.islamic-modern .gallery-panel {
+    max-width: 56rem;
+    margin-inline: auto;
+}
+
+.islamic-modern .gallery-panel .carousel-inner {
+    border-radius: 0.7rem !important;
+    background: #e7dfd2;
+}
+
+.islamic-modern .gallery-panel .carousel-item img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.islamic-modern .editorial-rsvp-form > .container > .border {
+    max-width: 43rem;
+    margin-inline: auto;
+}
+
+.islamic-modern .editorial-rsvp-form .form-control,
+.islamic-modern .editorial-rsvp-form .form-select {
+    min-height: 3rem;
+    border-radius: 0.55rem !important;
+    background-color: rgba(255, 255, 255, 0.68);
+}
+
+.islamic-modern .editorial-rsvp-form #form-comment {
+    min-height: 7.5rem;
+}
+
+.islamic-modern .wishes-panel {
+    max-width: 48rem;
+    margin-inline: auto;
+}
+
+.islamic-modern .wishes-panel #comments > div {
+    border: 1px solid rgba(164, 122, 59, 0.16);
+    border-radius: 0.65rem !important;
+    background: rgba(240, 234, 223, 0.58) !important;
+}
+
+.islamic-modern .gift-panel {
+    max-width: 48rem;
+    margin-inline: auto;
+}
+
+.islamic-modern .gift-eyebrow {
+    color: var(--editorial-gold);
+    font-size: 0.67rem;
+    letter-spacing: 0.24em;
+}
+
+.islamic-modern .gift-title {
+    font-size: clamp(2.65rem, 8vw, 4.4rem) !important;
+}
+
+.islamic-modern .gift-intro {
+    max-width: 34rem;
+    margin-inline: auto;
+    color: var(--editorial-muted);
+    line-height: 1.8;
+}
+
+.islamic-modern #navbar-menu {
+    border-color: rgba(164, 122, 59, 0.3) !important;
+    background: rgba(255, 253, 248, 0.96) !important;
+    box-shadow: 0 -0.65rem 2.5rem rgba(23, 61, 52, 0.11);
+    backdrop-filter: blur(1rem);
+}
+
+.islamic-modern #navbar-menu .nav-link {
+    color: #596c64;
+    font-size: 0.66rem;
+    transition: color 180ms ease, transform 180ms ease;
+}
+
+.islamic-modern #navbar-menu .nav-link.active,
+.islamic-modern #navbar-menu .nav-link:hover,
+.islamic-modern #navbar-menu .nav-link:focus-visible {
+    color: var(--editorial-ink) !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section:not(.editorial-person) {
+    background-color: #10251f !important;
+    background-image:
+        radial-gradient(ellipse at 50% 0, rgba(199, 164, 106, 0.11), transparent 46%),
+        linear-gradient(180deg, rgba(16, 45, 38, 0.94), rgba(12, 33, 28, 0.98)) !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section.editorial-verse,
+[data-bs-theme="dark"] body.islamic-modern .editorial-section.editorial-dresscode {
+    background-color: #192e27 !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section h2.font-esthetic,
+[data-bs-theme="dark"] body.islamic-modern .event-snap-panel .event-card h3,
+[data-bs-theme="dark"] body.islamic-modern .editorial-section .gift-title {
+    color: #ead8b7 !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .section-eyebrow,
+[data-bs-theme="dark"] body.islamic-modern .gift-eyebrow,
+[data-bs-theme="dark"] body.islamic-modern .verse-arabic,
+[data-bs-theme="dark"] body.islamic-modern .event-order {
+    color: #ead8b7 !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section .editorial-lead,
+[data-bs-theme="dark"] body.islamic-modern .story-panel .small,
+[data-bs-theme="dark"] body.islamic-modern .gift-intro,
+[data-bs-theme="dark"] body.islamic-modern .verse-intro,
+[data-bs-theme="dark"] body.islamic-modern .event-time,
+[data-bs-theme="dark"] body.islamic-modern .event-venue {
+    color: rgba(255, 253, 248, 0.82) !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .story-panel,
+[data-bs-theme="dark"] body.islamic-modern .gallery-panel,
+[data-bs-theme="dark"] body.islamic-modern .editorial-rsvp-form > .container > .border,
+[data-bs-theme="dark"] body.islamic-modern .wishes-panel,
+[data-bs-theme="dark"] body.islamic-modern .gift-panel,
+[data-bs-theme="dark"] body.islamic-modern .verse-card,
+[data-bs-theme="dark"] body.islamic-modern .countdown-panel {
+    background: rgba(16, 37, 31, 0.94) !important;
+    border: 1px solid rgba(234, 216, 183, 0.32) !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .event-snap-panel .event-card {
+    border: 1px solid rgba(234, 216, 183, 0.32) !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section .verse-card p:not(.verse-source) {
+    color: rgba(255, 253, 248, 0.94);
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section .story-panel .fw-bold {
+    color: #ead8b7;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section .gallery-panel .carousel-inner {
+    background: #10251f;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section .editorial-rsvp-form .form-control,
+[data-bs-theme="dark"] body.islamic-modern .editorial-section .editorial-rsvp-form .form-select {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-bs-theme="dark"] body.islamic-modern .editorial-section .wishes-panel #comments > div {
+    border-color: rgba(234, 216, 183, 0.2);
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern #navbar-menu {
+    border-color: rgba(234, 216, 183, 0.22) !important;
+    background: rgba(16, 37, 31, 0.96) !important;
+}
+
+[data-bs-theme="dark"] body.islamic-modern #navbar-menu .nav-link {
+    color: rgba(255, 253, 248, 0.82);
+}
+
+[data-bs-theme="dark"] body.islamic-modern #navbar-menu .nav-link.active,
+[data-bs-theme="dark"] body.islamic-modern #navbar-menu .nav-link:hover,
+[data-bs-theme="dark"] body.islamic-modern #navbar-menu .nav-link:focus-visible {
+    color: #ead8b7 !important;
+}
+
+@media screen and (max-width: 576px) {
+    .islamic-modern .opening-cover-content {
+        width: min(100% - 2rem, 32rem);
+    }
+
+    .islamic-modern .opening-cover-names {
+        font-size: clamp(3.25rem, 15vw, 4.45rem);
+    }
+
+    .islamic-modern .editorial-hero [data-cms="profile-image"] {
+        width: 10.5rem;
+        height: 10.5rem;
+        outline-offset: 0.4rem;
+    }
+
+    .islamic-modern .editorial-section h2.font-esthetic {
+        font-size: clamp(2.45rem, 10vw, 3.25rem) !important;
+    }
+
+    .islamic-modern .editorial-section .container {
+        padding-inline: 1.25rem;
+    }
+
+    .islamic-modern .editorial-hero .container {
+        padding-inline: 1.1rem;
+    }
+
+    .islamic-modern .editorial-section .verse-card p:not(.verse-source) {
+        font-size: 1.22rem;
+    }
+
+    .islamic-modern .countdown-panel .row > div {
+        padding-inline: 0.25rem !important;
+    }
+
+    .islamic-modern .editorial-rsvp-form > .container > .border {
+        padding: 1.15rem !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .islamic-modern .opening-cover-cta,
+    .islamic-modern #navbar-menu .nav-link {
+        transition: none;
+    }
+}
