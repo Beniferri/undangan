@@ -1604,8 +1604,8 @@ body.islamic-modern {
 .islamic-modern .event-intro-panel {
     position: relative;
     display: flex;
-    min-height: 82svh;
-    min-height: 82dvh;
+    min-height: 100svh;
+    min-height: 100dvh;
     flex-direction: column;
     align-items: center;
     justify-content: center;
