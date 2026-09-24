@@ -45,6 +45,31 @@ export const theme = (() => {
     /**
      * @returns {void}
      */
+    const applyDarkModeMapButtonStyles = () => {
+        const btn = document.querySelector('.event-map-button');
+        if (btn) {
+            btn.style.setProperty('border', '1.5px solid #d4b884', 'important');
+            // Add class for hover handling
+            btn.style.setProperty('color', '#ead8b7', 'important');
+            btn.classList.add('dark-mode-map-button');
+        }
+    };
+
+    /**
+     * @returns {void}
+     */
+    const removeDarkModeMapButtonStyles = () => {
+        const btn = document.querySelector('.event-map-button');
+        if (btn) {
+            btn.style.removeProperty('border');
+            btn.style.removeProperty('color');
+            btn.classList.remove('dark-mode-map-button');
+        }
+    };
+
+    /**
+     * @returns {void}
+     */
     const onDark = () => {
         setDark();
         document.documentElement.setAttribute('data-bs-theme', 'dark');
@@ -137,30 +162,6 @@ export const theme = (() => {
         }
     };
 
-    /**
-     * @returns {void}
-     */
-    const applyDarkModeMapButtonStyles = () => {
-        const btn = document.querySelector('.event-map-button');
-        if (btn) {
-            btn.style.setProperty('border', '1.5px solid #d4b884', 'important');
-            btn.style.setProperty('color', '#ead8b7', 'important');
-            // Add class for hover handling
-            btn.classList.add('dark-mode-map-button');
-        }
-    };
-
-    /**
-     * @returns {void}
-     */
-    const removeDarkModeMapButtonStyles = () => {
-        const btn = document.querySelector('.event-map-button');
-        if (btn) {
-            btn.style.removeProperty('border');
-            btn.style.removeProperty('color');
-            btn.classList.remove('dark-mode-map-button');
-        }
-    };
 
     return {
         init,
