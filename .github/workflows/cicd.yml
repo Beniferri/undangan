@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - "4.x"
+  workflow_dispatch:
 
 jobs:
-  analyze-code:
+  quality-check:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -38,8 +39,12 @@ jobs:
       - name: Run check circular dependency
         run: npx madge --circular js
 
+      - name: Run build
+        run: npm run build
+
   deploy:
-    needs: analyze-code
+    needs: quality-check
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: write
