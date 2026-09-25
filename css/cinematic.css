@@ -1,0 +1,317 @@
+/* Cinematic cover and compact navigation; existing editorial sections stay intact. */
+body.islamic-modern {
+    --cinema-night: #041a1c;
+    --cinema-paper: #fffdf8;
+    --cinema-gold: #e2ca9d;
+}
+
+body.islamic-modern .opening-cover {
+    background: var(--cinema-night);
+    color: var(--cinema-paper);
+    place-items: start center;
+    touch-action: pan-y;
+}
+
+body.islamic-modern .opening-image,
+body.islamic-modern .opening-film {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+    filter: saturate(0.35);
+}
+
+body.islamic-modern .opening-cover-backdrop {
+    background: linear-gradient(180deg, #041a1c 0%, rgba(4, 26, 28, 0.65) 42%, #123e38 100%);
+    opacity: 0.88;
+    animation: opening-dawn 4s ease-out both;
+}
+
+body.islamic-modern .opening-cover-content {
+    position: relative;
+    width: min(100% - 2.5rem, 30rem);
+    min-height: 100dvh;
+    gap: clamp(1rem, 2.4vh, 1.6rem);
+    padding-block: max(1.8rem, env(safe-area-inset-top)) max(1.8rem, env(safe-area-inset-bottom));
+}
+
+body.islamic-modern .opening-cover-content::before,
+body.islamic-modern .opening-cover-content::after {
+    position: absolute;
+    inset: 1rem -0.45rem;
+    z-index: -1;
+    border: 1px solid rgba(226, 202, 157, 0.23);
+    border-radius: 48% 48% 0.6rem 0.6rem / 15rem 15rem 0.6rem 0.6rem;
+    pointer-events: none;
+    content: '';
+}
+
+body.islamic-modern .opening-cover-content::after {
+    inset: 1.45rem -0.05rem;
+    border-color: rgba(226, 202, 157, 0.1);
+}
+
+body.islamic-modern .opening-monogram {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    width: 4.3rem;
+    min-height: 4.3rem;
+    margin-block: 0.6rem;
+    color: var(--cinema-gold);
+    font: 500 1.85rem / 1 'Cormorant Garamond', Georgia, serif;
+}
+
+body.islamic-modern .opening-monogram::before,
+body.islamic-modern .opening-monogram::after {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(226, 202, 157, 0.5);
+    content: '';
+}
+
+body.islamic-modern .opening-monogram::after {
+    transform: rotate(45deg);
+}
+
+body.islamic-modern .monogram-amp {
+    font-size: 1rem;
+    font-style: italic;
+}
+
+body.islamic-modern .opening-verse {
+    max-width: 24rem;
+    margin: 0;
+    color: var(--cinema-paper);
+    animation: opening-reveal 3.4s ease-out both;
+}
+
+body.islamic-modern .opening-verse p {
+    margin: 0 0 0.6rem;
+    font-size: 0.78rem;
+    line-height: 1.7;
+}
+
+body.islamic-modern .opening-verse [lang="ar"] {
+    color: var(--cinema-gold);
+    font-family: 'Noto Naskh Arabic', serif;
+    font-size: clamp(1.45rem, 5vw, 1.8rem);
+    line-height: 1.8;
+}
+
+body.islamic-modern .opening-verse cite {
+    color: var(--cinema-gold);
+    font-size: 0.65rem;
+    font-style: normal;
+    letter-spacing: 0.1em;
+}
+
+body.islamic-modern .opening-cover-heading {
+    gap: 0.8rem;
+    animation: opening-reveal 2.8s 0.3s ease-out both;
+}
+
+body.islamic-modern .opening-cover-kicker {
+    color: var(--cinema-gold);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+}
+
+body.islamic-modern .opening-cover-rule {
+    width: 3rem;
+    background: linear-gradient(90deg, transparent, var(--cinema-gold), transparent);
+}
+
+body.islamic-modern .opening-cover-names {
+    color: var(--cinema-gold);
+    font-size: clamp(3rem, 12vw, 4.8rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    text-shadow: 0 1px 0 #5d482e, 0 0 28px rgba(226, 202, 157, 0.15);
+    text-wrap: balance;
+}
+
+body.islamic-modern .opening-cover-date {
+    color: var(--cinema-gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+}
+
+body.islamic-modern .opening-guest-card {
+    padding: 1.1rem 1.3rem;
+    border: 1px solid rgba(226, 202, 157, 0.4);
+    border-radius: 1.25rem;
+    background: rgba(4, 26, 28, 0.82);
+    box-shadow: 0 1.5rem 3.5rem rgba(0, 0, 0, 0.32), 0 1px 0 rgba(255, 253, 248, 0.08) inset;
+    backdrop-filter: blur(1rem);
+}
+
+body.islamic-modern .opening-guest-label,
+body.islamic-modern .opening-guest-note {
+    color: var(--cinema-paper);
+}
+
+body.islamic-modern .opening-guest-name {
+    color: var(--cinema-gold);
+    font-size: 1.9rem;
+    overflow-wrap: anywhere;
+}
+
+body.islamic-modern .opening-cover-cta {
+    min-height: 3.3rem;
+    padding-inline: 1.7rem;
+    border: 1px solid var(--cinema-gold);
+    background: var(--cinema-night);
+    color: var(--cinema-paper);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    box-shadow: 0 0 0 4px rgba(226, 202, 157, 0.04);
+}
+
+body.islamic-modern .opening-cover-cta:hover,
+body.islamic-modern .opening-cover-cta:focus-visible {
+    border-color: var(--cinema-paper);
+    background: #174a43;
+    color: var(--cinema-paper);
+    box-shadow: 0 0 18px rgba(226, 202, 157, 0.3);
+}
+
+body.islamic-modern #navbar-menu {
+    flex-direction: column;
+}
+
+body.islamic-modern #navbar-menu .navbar-nav {
+    width: 100% !important;
+}
+
+body.islamic-modern #navbar-menu .nav-item {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+body.islamic-modern #navbar-menu .nav-link svg {
+    display: block;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin: 0 auto 0.25rem;
+}
+
+body.islamic-modern .invitation-tools {
+    width: 100%;
+    color: var(--editorial-ink);
+    background: var(--editorial-paper);
+    border-bottom: 1px solid var(--editorial-line);
+    text-align: center;
+}
+
+body.islamic-modern .invitation-tools summary {
+    min-height: 2.75rem;
+    padding: 0.85rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+}
+
+body.islamic-modern .invitation-tools-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    padding-bottom: 0.8rem;
+}
+
+body.islamic-modern .invitation-tools .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    min-width: 5rem;
+    color: var(--editorial-ink);
+    border: 1px solid var(--editorial-line);
+    font-size: 0.8rem;
+}
+
+body.islamic-modern .invitation-tools :focus-visible {
+    outline: 2px solid var(--editorial-gold);
+    outline-offset: -3px;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .invitation-tools {
+    background: #10251f;
+    color: #fffdf8;
+}
+
+[data-bs-theme="dark"] body.islamic-modern .invitation-tools .btn {
+    color: #fffdf8;
+    border-color: #e2ca9d;
+}
+
+@keyframes opening-dawn {
+    from { opacity: 1; filter: brightness(0.2); }
+    to { opacity: 0.88; filter: brightness(1); }
+}
+
+@keyframes opening-reveal {
+    from { opacity: 0.15; transform: translateY(0.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media screen and (max-height: 700px) and (max-width: 576px) {
+    body.islamic-modern .opening-cover-content {
+        gap: 0.55rem;
+        min-height: 100svh;
+        padding-block: max(0.65rem, env(safe-area-inset-top)) max(0.65rem, env(safe-area-inset-bottom));
+    }
+
+    body.islamic-modern .opening-monogram {
+        width: 3.2rem;
+        min-height: 3.2rem;
+        margin-block: 0;
+        font-size: 1.45rem;
+    }
+
+    body.islamic-modern .opening-verse p {
+        margin-bottom: 0.25rem;
+        font-size: 0.68rem;
+        line-height: 1.35;
+    }
+
+    body.islamic-modern .opening-verse [lang="ar"] {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+
+    body.islamic-modern .opening-cover-heading {
+        gap: 0.45rem;
+    }
+
+    body.islamic-modern .opening-cover-names {
+        font-size: clamp(2.5rem, 11vw, 3.4rem);
+    }
+
+    body.islamic-modern .opening-guest-card {
+        padding: 0.65rem 0.9rem;
+    }
+
+    body.islamic-modern .opening-guest-name {
+        font-size: 1.55rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.islamic-modern .opening-film {
+        display: none;
+    }
+
+    body.islamic-modern .opening-cover-backdrop,
+    body.islamic-modern .opening-verse,
+    body.islamic-modern .opening-cover-heading {
+        animation: none;
+    }
+}

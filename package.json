@@ -10,6 +10,7 @@
         "stylelint-config-recommended": "^17.0.0"
     },
     "scripts": {
+        "test": "node --test tests/*.test.mjs",
         "lint:js": "eslint js",
         "lint:css": "stylelint css",
         "lint:html": "htmlhint **/*.html",

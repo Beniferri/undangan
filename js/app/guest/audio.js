@@ -4,8 +4,8 @@ import { cache } from '../../connection/cache.js';
 
 export const audio = (() => {
 
-    const statePlay = '<i class="fa-solid fa-circle-pause spin-button"></i>';
-    const statePause = '<i class="fa-solid fa-circle-play"></i>';
+    const statePlay = '<i class="fa-solid fa-circle-pause" aria-hidden="true"></i><span>Musik</span>';
+    const statePause = '<i class="fa-solid fa-circle-play" aria-hidden="true"></i><span>Musik</span>';
 
     /**
      * @param {boolean} [playOnOpen=true]
@@ -46,7 +46,9 @@ export const audio = (() => {
             progress.complete('audio');
         } catch {
             progress.invalid('audio');
-            return;
+            // Keep a direct-source player so a failed cache never strands the control.
+            audioEl = new Audio(url);
+            audioEl.loop = true;
         }
 
         const music = document.getElementById('button-music');
@@ -70,10 +72,12 @@ export const audio = (() => {
                 isPlay = true;
                 music.disabled = false;
                 music.innerHTML = statePlay;
+                music.setAttribute('aria-label', 'Jeda musik');
             } catch (err) {
                 isPlay = false;
                 music.disabled = false;
                 music.innerHTML = statePause;
+                music.setAttribute('aria-label', 'Putar musik');
                 // NotAllowedError = autoplay blocked; surface music button so user can tap manually.
                 // Any other error: show a non-blocking warning.
                 if (err?.name !== 'NotAllowedError') {
@@ -89,6 +93,7 @@ export const audio = (() => {
             isPlay = false;
             audioEl.pause();
             music.innerHTML = statePause;
+            music.setAttribute('aria-label', 'Putar musik');
         };
 
         // Show button first, then try to play.

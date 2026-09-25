@@ -1,0 +1,34 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+
+test('failed audio cache still provides manual playback and recovers after rejection', async () => {
+    const button = new EventTarget();
+    button.classList = { remove: () => {} };
+    button.setAttribute = (key, value) => { button[key] = value; };
+    const doc = new EventTarget();
+    doc.body = { getAttribute: () => '/music.mp3' };
+    doc.getElementById = () => button;
+    const audio = { loop: false, play: async () => { throw new Error('offline'); }, pause: () => {} };
+    globalThis.audioFixture = { doc, audio, win: new EventTarget() };
+    let source = readFileSync(new URL('../js/app/guest/audio.js', import.meta.url), 'utf8').replace(/^import .*;$/gm, '');
+    source = `const document = globalThis.audioFixture.doc;
+const window = globalThis.audioFixture.win;
+const navigator = { onLine: true };
+const Audio = function () { return globalThis.audioFixture.audio; };
+const progress = { add(){}, complete(){}, invalid(){}, getAbort(){} };
+const util = { notify: () => ({ warning(){} }) };
+const cache = () => ({ withForceCache: () => ({ get: async () => { throw new Error('cache failed'); } }) });\n` + source;
+    const mod = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+    await mod.audio.init().load();
+    doc.dispatchEvent(new Event('undangan.open'));
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.equal(button.disabled, false);
+    assert.equal(button['aria-label'], 'Putar musik');
+    audio.play = async () => {};
+    button.dispatchEvent(new Event('click'));
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.equal(button['aria-label'], 'Jeda musik');
+    assert.equal(button.disabled, false);
+    delete globalThis.audioFixture;
+});
