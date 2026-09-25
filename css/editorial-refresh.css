@@ -322,25 +322,6 @@
     line-height: 1.8;
 }
 
-.islamic-modern #navbar-menu {
-    border-color: rgba(164, 122, 59, 0.3) !important;
-    background: rgba(255, 253, 248, 0.96) !important;
-    box-shadow: 0 -0.65rem 2.5rem rgba(23, 61, 52, 0.11);
-    backdrop-filter: blur(1rem);
-}
-
-.islamic-modern #navbar-menu .nav-link {
-    color: #596c64;
-    font-size: 0.66rem;
-    transition: color 180ms ease, transform 180ms ease;
-}
-
-.islamic-modern #navbar-menu .nav-link.active,
-.islamic-modern #navbar-menu .nav-link:hover,
-.islamic-modern #navbar-menu .nav-link:focus-visible {
-    color: var(--editorial-ink) !important;
-}
-
 [data-bs-theme="dark"] body.islamic-modern .editorial-section:not(.editorial-person) {
     background-color: #10251f !important;
     background-image:
@@ -412,21 +393,6 @@
     background: rgba(255, 255, 255, 0.05) !important;
 }
 
-[data-bs-theme="dark"] body.islamic-modern #navbar-menu {
-    border-color: rgba(234, 216, 183, 0.22) !important;
-    background: rgba(16, 37, 31, 0.96) !important;
-}
-
-[data-bs-theme="dark"] body.islamic-modern #navbar-menu .nav-link {
-    color: rgba(255, 253, 248, 0.82);
-}
-
-[data-bs-theme="dark"] body.islamic-modern #navbar-menu .nav-link.active,
-[data-bs-theme="dark"] body.islamic-modern #navbar-menu .nav-link:hover,
-[data-bs-theme="dark"] body.islamic-modern #navbar-menu .nav-link:focus-visible {
-    color: #ead8b7 !important;
-}
-
 @media screen and (max-width: 576px) {
     .islamic-modern .editorial-hero [data-cms="profile-image"] {
         width: 10.5rem;
@@ -460,8 +426,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .islamic-modern .opening-cover-cta,
-    .islamic-modern #navbar-menu .nav-link {
+    .islamic-modern .opening-cover-cta {
         transition: none;
     }
 }
