@@ -37,7 +37,8 @@ test('menu module supports open, close, escape, focus restoration, and link navi
     assert.match(source, /aria-hidden/);
     assert.match(source, /Escape/);
     assert.match(source, /focus\(/);
-    assert.match(source, /scrollIntoView/);
+    assert.match(source, /setTimeout\(animate, 16\)/);
+    assert.match(source, /scrollTo/);
     assert.match(source, /invitation-menu-open/);
 });
 test('cinematic cover preserves hydration and matches requested guest-facing copy', () => {
@@ -74,5 +75,5 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
-    assert.ok(html.includes('cinematic.css?v=hidden-menu-2'));
+    assert.ok(html.includes('cinematic.css?v=hidden-menu-3'));
 });
