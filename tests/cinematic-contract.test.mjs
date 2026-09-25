@@ -14,7 +14,7 @@ test('static navbar is replaced by an accessible seven-link menu overlay', () =>
     assert.match(menu, /aria-modal="true"/);
     assert.match(menu, /id="invitation-menu-close"/);
     assert.deepEqual([...menu.matchAll(/href="#([^"]+)"/g)].map((match) => match[1]), ['home', 'groom', 'story', 'events', 'rsvp', 'gallery', 'gift']);
-    for (const label of ['Home', 'Groom &amp; Bride', 'Love Story', 'Event Details', 'RSVP &amp; Wishes', 'Gallery', 'Wedding Gift']) {
+    for (const label of ['Beranda', 'Mempelai', 'Kisah Cinta', 'Acara', 'RSVP &amp; Ucapan', 'Galeri', 'Wedding Gift']) {
         assert.match(menu, new RegExp(`>${label}<`));
     }
     assert.match(menu, /id="button-theme"/);
@@ -45,10 +45,10 @@ test('cinematic cover preserves hydration and matches requested guest-facing cop
     const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Loading Page -->'));
     assert.match(cover, /data-cms="couple-short-names"/);
     assert.match(cover, /data-cms="wedding-date"/);
-    assert.match(cover, />Dear,<\/p>/);
+    assert.match(cover, />Kepada Yth\.<\/p>/);
     assert.match(cover, /Mohon maaf apabila terdapat kesalahan penulisan nama atau gelar\./);
     assert.match(cover, /fa-envelope/);
-    assert.match(cover, />OPEN INVITATION</);
+    assert.match(cover, />Buka Undangan</);
     assert.match(cover, /onclick="undangan\.guest\.open\(this\)"/);
 });
 
@@ -75,7 +75,7 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
-    assert.ok(html.includes('cinematic.css?v=content-ux-1'));
+    assert.ok(html.includes('cinematic.css?v=islamic-modern-1'));
 });
 
 test('calendar includes both event venues, addresses, timezone, and local wall-clock times', () => {
