@@ -6,6 +6,40 @@ export const initInvitationMenu = (doc = document, win = window) => {
     const links = menu?.querySelectorAll('a[href^="#"]') || [];
     const reducedMotion = win.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const scrollToTarget = (target) => {
+        const start = win.scrollY;
+        const destination = target.getBoundingClientRect().top + start;
+        const root = doc.documentElement;
+        const previousScrollBehavior = root.style.scrollBehavior;
+        const previousScrollSnapType = root.style.scrollSnapType;
+        root.style.setProperty('scroll-behavior', 'auto', 'important');
+        root.style.setProperty('scroll-snap-type', 'none', 'important');
+
+        if (reducedMotion) {
+            win.scrollTo(0, destination);
+            root.style.scrollBehavior = previousScrollBehavior;
+            root.style.scrollSnapType = previousScrollSnapType;
+            target.focus({ preventScroll: true });
+            return;
+        }
+
+        const duration = 650;
+        const startedAt = win.performance.now();
+        const animate = () => {
+            const progress = Math.min((win.performance.now() - startedAt) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            win.scrollTo(0, start + ((destination - start) * eased));
+            if (progress < 1) {
+                win.setTimeout(animate, 16);
+                return;
+            }
+            root.style.scrollBehavior = previousScrollBehavior;
+            root.style.scrollSnapType = previousScrollSnapType;
+            target.focus({ preventScroll: true });
+        };
+        animate();
+    };
+
     if (!menu || !trigger || !closeButton) {
         return;
     }
@@ -53,10 +87,7 @@ export const initInvitationMenu = (doc = document, win = window) => {
             event.preventDefault();
             close(false);
             target.setAttribute('tabindex', '-1');
-            win.setTimeout(() => {
-                target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
-                win.setTimeout(() => target.focus({ preventScroll: true }), reducedMotion ? 0 : 450);
-            }, 0);
+            win.setTimeout(() => scrollToTarget(target), 0);
         });
     });
 };
