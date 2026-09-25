@@ -69,5 +69,5 @@ test('cover fallback and monogram are not mislabeled as CMS assets or couple pho
     const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
     assert.match(html, /class="opening-image"[^>]*data-src="\.\/assets\/images\/opening-mosque\.webp"[^>]*alt="" aria-hidden="true"/);
     assert.doesNotMatch(html, /class="opening-image"[^>]*data-cms=/);
-    assert.match(html, /alt="Monogram ilustratif E dan B"/);
+    assert.match(html, /class="opening-monogram"[^>]*aria-hidden="true"><span>D<\/span><span class="monogram-amp">&amp;<\/span><span>B<\/span>/);
 });

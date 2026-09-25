@@ -24,3 +24,12 @@ test('cinematic cover preserves hydration and offers an immediate open action', 
     assert.match(html, /class="invitation-tools"/);
     assert.doesNotMatch(html, /bottom: 10vh; right: 2vh/);
 });
+
+test('wedding events keep intro, akad, and reception within one section', () => {
+    const events = html.match(/<section[^>]*id="events"[^>]*>[\s\S]*?<\/section>/)[0];
+    assert.match(events, /aria-labelledby="events-title"/);
+    assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
+    assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
+    assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
+    assert.ok(html.includes('cinematic.css?v=events-single-page-1'));
+});
