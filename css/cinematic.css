@@ -5,6 +5,10 @@ body.islamic-modern {
     --cinema-gold: #e2ca9d;
 }
 
+body.islamic-modern main {
+    overflow-x: clip;
+}
+
 body.islamic-modern .opening-cover {
     background: var(--cinema-night);
     color: var(--cinema-paper);
@@ -539,10 +543,11 @@ body.islamic-modern .editorial-events .event-snap-panel .event-venue {
 }
 
 body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
-    min-height: 2.75rem;
     display: inline-flex;
+    min-height: 2.75rem;
     align-items: center;
     justify-content: center;
+    font-size: 0.875rem;
 }
 
 @media screen and (min-width: 577px) {
@@ -596,10 +601,10 @@ body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
 
     body.islamic-modern .editorial-events .event-map-button {
         width: 100%;
-        min-height: 2.2rem;
+        min-height: 2.75rem;
         margin-top: 0.25rem;
         padding: 0.3rem 0.45rem;
-        font-size: 0.6rem;
+        font-size: 0.875rem;
     }
 }
 
@@ -648,9 +653,9 @@ body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
     }
 
     body.islamic-modern .editorial-events .event-map-button {
-        min-height: 2.3rem;
+        min-height: 2.75rem;
         padding: 0.35rem 0.55rem;
-        font-size: 0.65rem;
+        font-size: 0.875rem;
     }
 }
 
