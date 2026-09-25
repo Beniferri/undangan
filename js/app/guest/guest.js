@@ -1,4 +1,5 @@
 import { video } from './video.js';
+import { initOpening } from './opening.js';
 import { image } from './image.js';
 import { audio } from './audio.js';
 import { progress } from './progress.js';
@@ -231,8 +232,6 @@ export const guest = (() => {
         slide();
         theme.spyTop();
 
-        confetti.basicAnimation();
-        util.timeOut(confetti.openAnimation, 1500);
 
         document.dispatchEvent(new Event('undangan.open'));
         const welcome = document.getElementById('welcome');
@@ -408,8 +407,11 @@ export const guest = (() => {
             document.getElementById('information')?.remove();
         }
 
-        // wait until welcome screen is show.
-        await util.changeOpacity(document.getElementById('welcome'), true);
+        // An early open may already have dismissed the cover while assets load.
+        const welcome = document.getElementById('welcome');
+        if (welcome && !document.body.classList.contains('invitation-opened')) {
+            await util.changeOpacity(welcome, true);
+        }
 
         // remove loading screen and show welcome screen.
         const loading = document.getElementById('loading');
@@ -638,7 +640,7 @@ export const guest = (() => {
 
         const revealWelcome = async () => {
             const welcome = document.getElementById('welcome');
-            if (welcome) {
+            if (welcome && !document.body.classList.contains('invitation-opened')) {
                 await util.changeOpacity(welcome, true);
             }
             document.getElementById('loading')?.remove();
@@ -646,6 +648,7 @@ export const guest = (() => {
         window.addEventListener('DOMContentLoaded', () => window.setTimeout(revealWelcome, 1000), { once: true });
 
         window.addEventListener('DOMContentLoaded', () => {
+            initOpening();
             initGift();
             arrangeEditorialFlow();
             initSmoothNavigation();

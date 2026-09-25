@@ -208,33 +208,6 @@ html.invitation-locked {
     box-shadow: 0 1rem 2rem rgba(47, 111, 94, 0.28);
 }
 
-html[data-bs-theme="dark"] .opening-cover {
-    background: #102d26;
-    color: #fffdf8;
-}
-
-html[data-bs-theme="dark"] .opening-cover-backdrop {
-    background:
-        radial-gradient(circle at 15% 20%, rgba(184, 138, 68, 0.2), transparent 28%),
-        radial-gradient(circle at 88% 82%, rgba(77, 145, 119, 0.18), transparent 32%),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 48%),
-        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 22px);
-}
-
-html[data-bs-theme="dark"] .opening-cover-names,
-html[data-bs-theme="dark"] .opening-guest-name {
-    color: #fffdf8;
-}
-
-html[data-bs-theme="dark"] .opening-cover-date,
-html[data-bs-theme="dark"] .opening-guest-label {
-    color: #c5ddd2;
-}
-
-html[data-bs-theme="dark"] .opening-guest-card {
-    background: rgba(16, 45, 38, 0.76);
-    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.2);
-}
 
 html[data-bs-theme="light"] .color-theme-svg {
     color: rgb(255, 255, 255);
