@@ -54,10 +54,9 @@ export const initInvitationMenu = (doc = document, win = window) => {
             close(false);
             target.setAttribute('tabindex', '-1');
             win.setTimeout(() => {
-                const top = target.getBoundingClientRect().top + win.scrollY;
-                win.scrollTo({ top, behavior: reducedMotion ? 'auto' : 'smooth' });
+                target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
                 win.setTimeout(() => target.focus({ preventScroll: true }), reducedMotion ? 0 : 450);
-            });
+            }, 0);
         });
     });
 };

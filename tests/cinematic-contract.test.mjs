@@ -37,7 +37,7 @@ test('menu module supports open, close, escape, focus restoration, and link navi
     assert.match(source, /aria-hidden/);
     assert.match(source, /Escape/);
     assert.match(source, /focus\(/);
-    assert.match(source, /scrollTo/);
+    assert.match(source, /scrollIntoView/);
     assert.match(source, /invitation-menu-open/);
 });
 test('cinematic cover preserves hydration and matches requested guest-facing copy', () => {
