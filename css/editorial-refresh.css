@@ -61,7 +61,7 @@
 
 .islamic-modern .editorial-hero > .bg-overlay-auto > h1 {
     color: #ead8b7;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Jost', sans-serif;
     font-size: 0.72rem !important;
     font-weight: 600 !important;
     letter-spacing: 0.26em;
@@ -146,7 +146,7 @@
 
 .islamic-modern .verse-card p:not(.verse-source) {
     color: #273e36;
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Marcellus', Georgia, serif;
     font-size: clamp(1.28rem, 3.4vw, 1.55rem);
     line-height: 1.5;
 }
@@ -188,7 +188,7 @@
 
 .islamic-modern .story-panel .fw-bold {
     color: var(--editorial-ink);
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Marcellus', Georgia, serif;
     font-size: 1.35rem;
     font-weight: 600 !important;
 }
