@@ -239,7 +239,7 @@ export const guest = (() => {
             const removeWelcome = () => welcome.remove();
             welcome.classList.add('is-closing');
             welcome.addEventListener('transitionend', removeWelcome, { once: true });
-            window.setTimeout(removeWelcome, 800);
+            window.setTimeout(removeWelcome, 1300);
         }
     };
 

@@ -9,7 +9,22 @@ body.islamic-modern .opening-cover {
     background: var(--cinema-night);
     color: var(--cinema-paper);
     place-items: start center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     touch-action: pan-y;
+    transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.2s ease;
+    will-change: transform, opacity;
+}
+
+body.islamic-modern .opening-cover.is-closing {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+}
+
+body.islamic-modern.invitation-opened .editorial-hero {
+    animation: cinematic-hero-enter 1.2s ease both;
 }
 
 body.islamic-modern .opening-image,
@@ -32,7 +47,7 @@ body.islamic-modern .opening-cover-backdrop {
 
 body.islamic-modern .opening-cover-content {
     position: relative;
-    width: min(100% - 2.5rem, 30rem);
+    width: min(calc(100% - 2.5rem), 30rem);
     min-height: 100dvh;
     gap: clamp(1rem, 2.4vh, 1.6rem);
     padding-block: max(1.8rem, env(safe-area-inset-top)) max(1.8rem, env(safe-area-inset-bottom));
@@ -182,6 +197,35 @@ body.islamic-modern .opening-cover-cta:focus-visible {
     box-shadow: 0 0 18px rgba(226, 202, 157, 0.3);
 }
 
+body.islamic-modern .cinematic-music-control {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(5.75rem, calc(4.75rem + env(safe-area-inset-bottom)));
+    z-index: 1030;
+}
+
+body.islamic-modern .cinematic-music-control .btn {
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    place-items: center;
+    border: 1px solid var(--cinema-gold);
+    border-radius: 50%;
+    background: rgba(4, 26, 28, 0.92);
+    color: var(--cinema-paper);
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(0.65rem);
+}
+
+body.islamic-modern .cinematic-music-control .btn.d-none {
+    display: none;
+}
+
+body.islamic-modern .cinematic-music-control .btn.is-playing i {
+    animation: cinematic-music-spin 3s linear infinite;
+}
+
 body.islamic-modern #navbar-menu {
     flex-direction: column;
 }
@@ -242,6 +286,11 @@ body.islamic-modern .invitation-tools :focus-visible {
     outline-offset: -3px;
 }
 
+body.islamic-modern .cinematic-music-control .btn:focus-visible {
+    outline: 2px solid var(--cinema-paper);
+    outline-offset: 3px;
+}
+
 [data-bs-theme="dark"] body.islamic-modern .invitation-tools {
     background: #10251f;
     color: #fffdf8;
@@ -260,6 +309,15 @@ body.islamic-modern .invitation-tools :focus-visible {
 @keyframes opening-reveal {
     from { opacity: 0.15; transform: translateY(0.5rem); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cinematic-hero-enter {
+    from { opacity: 0; transform: translateY(1.5rem) scale(1.01); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes cinematic-music-spin {
+    to { transform: rotate(1turn); }
 }
 
 @media screen and (max-height: 700px) and (max-width: 576px) {
@@ -494,9 +552,13 @@ body.islamic-modern .editorial-events .event-venue {
         display: none;
     }
 
+    body.islamic-modern .opening-cover,
     body.islamic-modern .opening-cover-backdrop,
     body.islamic-modern .opening-verse,
-    body.islamic-modern .opening-cover-heading {
+    body.islamic-modern .opening-cover-heading,
+    body.islamic-modern.invitation-opened .editorial-hero,
+    body.islamic-modern .cinematic-music-control .btn.is-playing i {
         animation: none;
+        transition: none;
     }
 }
