@@ -1,5 +1,6 @@
 import { video } from './video.js';
 import { initOpening } from './opening.js';
+import { initInvitationMenu } from './menu.js';
 import { image } from './image.js';
 import { audio } from './audio.js';
 import { progress } from './progress.js';
@@ -610,19 +611,6 @@ export const guest = (() => {
         elements.forEach((element) => observer.observe(element));
     };
 
-    const initSmoothNavigation = () => {
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        document.querySelectorAll('#navbar-menu a[href^="#"]')?.forEach((link) => {
-            link.addEventListener('click', () => {
-                const menu = link.closest('.navbar-nav');
-                menu?.scrollTo({
-                    left: Math.max(0, link.offsetLeft - (menu.clientWidth - link.offsetWidth) / 2),
-                    behavior: reducedMotion ? 'auto' : 'smooth',
-                });
-            });
-        });
-    };
-
     /**
      * @returns {object}
      */
@@ -649,9 +637,9 @@ export const guest = (() => {
 
         window.addEventListener('DOMContentLoaded', () => {
             initOpening();
+            initInvitationMenu();
             initGift();
             arrangeEditorialFlow();
-            initSmoothNavigation();
             document.addEventListener('undangan.open', initRevealMotion, { once: true });
             pool.init(pageLoaded, [
                 'image',

@@ -226,79 +226,164 @@ body.islamic-modern .cinematic-music-control .btn.is-playing i {
     animation: cinematic-music-spin 3s linear infinite;
 }
 
-body.islamic-modern #navbar-menu {
-    flex-direction: column;
+html.invitation-menu-open,
+body.invitation-menu-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
 }
 
-body.islamic-modern #navbar-menu .navbar-nav {
-    width: 100% !important;
+body.islamic-modern .invitation-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: grid;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+    place-items: center;
+    overflow-y: auto;
+    visibility: hidden;
+    background: rgba(4, 26, 28, 0.74);
+    opacity: 0;
+    pointer-events: none;
+    backdrop-filter: blur(1rem);
+    transition: opacity 320ms ease;
 }
 
-body.islamic-modern #navbar-menu .nav-item {
-    flex: 1 1 0;
-    min-width: 0;
+body.islamic-modern .invitation-menu-overlay.is-open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
 }
 
-body.islamic-modern #navbar-menu .nav-link svg {
-    display: block;
-    width: 1.2rem;
-    height: 1.2rem;
-    margin: 0 auto 0.25rem;
+body.islamic-modern .invitation-menu-surface {
+    width: min(100%, 30rem);
+    min-height: min(42rem, calc(100dvh - 2rem));
+    padding: clamp(1.25rem, 4vw, 2rem);
+    border: 1px solid rgba(226, 202, 157, 0.44);
+    border-radius: 1.5rem;
+    background: linear-gradient(145deg, rgba(6, 35, 34, 0.98), rgba(17, 65, 57, 0.94));
+    color: var(--cinema-paper);
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.42);
+    transform: translateY(1rem) scale(0.98);
+    transition: transform 320ms ease;
 }
 
-body.islamic-modern .invitation-tools {
-    width: 100%;
-    color: var(--editorial-ink);
-    background: var(--editorial-paper);
-    border-bottom: 1px solid var(--editorial-line);
-    text-align: center;
+body.islamic-modern .invitation-menu-overlay.is-open .invitation-menu-surface {
+    transform: translateY(0) scale(1);
 }
 
-body.islamic-modern .invitation-tools summary {
-    min-height: 2.75rem;
-    padding: 0.85rem;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-}
-
-body.islamic-modern .invitation-tools-actions {
+body.islamic-modern .invitation-menu-header {
     display: flex;
-    justify-content: center;
-    gap: 0.8rem;
-    padding-bottom: 0.8rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(226, 202, 157, 0.24);
 }
 
-body.islamic-modern .invitation-tools .btn {
+body.islamic-modern .invitation-menu-eyebrow {
+    margin: 0 0 0.25rem;
+    color: var(--cinema-gold);
+    font-size: 0.62rem;
+    letter-spacing: 0.24em;
+}
+
+body.islamic-modern .invitation-menu-header h2 {
+    margin: 0;
+    color: var(--cinema-paper);
+    font: 600 clamp(1.8rem, 8vw, 2.8rem) / 1 'Cormorant Garamond', Georgia, serif;
+}
+
+body.islamic-modern .invitation-menu-close,
+body.islamic-modern .invitation-menu-theme,
+body.islamic-modern .invitation-menu-trigger {
+    border: 1px solid rgba(226, 202, 157, 0.62);
+    background: rgba(4, 26, 28, 0.9);
+    color: var(--cinema-paper);
+}
+
+body.islamic-modern .invitation-menu-close {
+    display: grid;
+    flex: 0 0 2.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    place-items: center;
+    border-radius: 50%;
+}
+
+body.islamic-modern .invitation-menu-nav {
+    display: grid;
+    padding-block: clamp(1rem, 4vh, 2rem);
+}
+
+body.islamic-modern .invitation-menu-nav a {
+    padding: 0.62rem 0;
+    color: var(--cinema-paper);
+    font: 500 clamp(1.55rem, 6vw, 2.25rem) / 1.1 'Cormorant Garamond', Georgia, serif;
+    text-decoration: none;
+    transition: color 180ms ease, transform 180ms ease;
+}
+
+body.islamic-modern .invitation-menu-nav a:hover,
+body.islamic-modern .invitation-menu-nav a:focus-visible {
+    color: var(--cinema-gold);
+    transform: translateX(0.4rem);
+}
+
+body.islamic-modern .invitation-menu-theme {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
     min-height: 2.75rem;
-    min-width: 5rem;
-    color: var(--editorial-ink);
-    border: 1px solid var(--editorial-line);
-    font-size: 0.8rem;
+    padding-inline: 1rem;
+    border-radius: 999px;
+    font-size: 0.76rem;
 }
 
-body.islamic-modern .invitation-tools :focus-visible {
-    outline: 2px solid var(--editorial-gold);
-    outline-offset: -3px;
+body.islamic-modern .invitation-menu-theme.d-none {
+    display: none;
 }
 
+body.islamic-modern .invitation-menu-trigger {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 9997;
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 0.7rem;
+    place-items: center;
+    border-radius: 50%;
+    box-shadow: 0 0.9rem 2.2rem rgba(0, 0, 0, 0.3);
+    transition: transform 180ms ease, background 180ms ease;
+}
+
+body.islamic-modern .invitation-menu-trigger:hover,
+body.islamic-modern .invitation-menu-trigger:focus-visible {
+    background: #174a43;
+    transform: translateY(-0.15rem) rotate(8deg);
+}
+
+body.islamic-modern .invitation-menu-trigger svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--cinema-gold);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+}
+
+body.islamic-modern .invitation-menu-close:focus-visible,
+body.islamic-modern .invitation-menu-theme:focus-visible,
+body.islamic-modern .invitation-menu-trigger:focus-visible,
 body.islamic-modern .cinematic-music-control .btn:focus-visible {
     outline: 2px solid var(--cinema-paper);
     outline-offset: 3px;
-}
-
-[data-bs-theme="dark"] body.islamic-modern .invitation-tools {
-    background: #10251f;
-    color: #fffdf8;
-}
-
-[data-bs-theme="dark"] body.islamic-modern .invitation-tools .btn {
-    color: #fffdf8;
-    border-color: #e2ca9d;
 }
 
 @keyframes opening-dawn {
@@ -559,6 +644,13 @@ body.islamic-modern .editorial-events .event-venue {
     body.islamic-modern.invitation-opened .editorial-hero,
     body.islamic-modern .cinematic-music-control .btn.is-playing i {
         animation: none;
+        transition: none;
+    }
+
+    body.islamic-modern .invitation-menu-overlay,
+    body.islamic-modern .invitation-menu-surface,
+    body.islamic-modern .invitation-menu-nav a,
+    body.islamic-modern .invitation-menu-trigger {
         transition: none;
     }
 }

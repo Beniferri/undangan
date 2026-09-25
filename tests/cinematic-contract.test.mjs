@@ -7,10 +7,38 @@ test('cover locks both scroll roots until opened', () => {
     assert.match(html.match(/<html[^>]*>/)[0], /class="invitation-locked"/);
 });
 
-test('bottom navigation has exactly the six requested destinations and line icons', () => {
-    const nav = html.match(/<nav\b[^>]*id="navbar-menu"[\s\S]*?<\/nav>/)[0];
-    assert.deepEqual([...nav.matchAll(/href="#([^"]+)"/g)].map((match) => match[1]), ['home', 'groom', 'story', 'events', 'rsvp', 'gift']);
-    assert.equal((nav.match(/<svg /g) || []).length, 6);
+test('static navbar is replaced by an accessible seven-link menu overlay', () => {
+    assert.doesNotMatch(html, /id="navbar-menu"/);
+    const menu = html.match(/<div\b[^>]*id="invitation-menu"[\s\S]*?<\/div>\s*<button[^>]*id="invitation-menu-trigger"/)[0];
+    assert.match(menu, /role="dialog"/);
+    assert.match(menu, /aria-modal="true"/);
+    assert.match(menu, /id="invitation-menu-close"/);
+    assert.deepEqual([...menu.matchAll(/href="#([^"]+)"/g)].map((match) => match[1]), ['home', 'groom', 'story', 'events', 'rsvp', 'gallery', 'gift']);
+    for (const label of ['Home', 'Groom &amp; Bride', 'Love Story', 'Event Details', 'RSVP &amp; Wishes', 'Gallery', 'Wedding Gift']) {
+        assert.match(menu, new RegExp(`>${label}<`));
+    }
+    assert.match(menu, /id="button-theme"/);
+    assert.match(menu, /id="invitation-menu-trigger"/);
+});
+
+test('menu overlay styling is isolated, fullscreen, hidden by default, and motion-aware', () => {
+    const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
+    assert.match(css, /\.invitation-menu-overlay[\s\S]*position:\s*fixed/);
+    assert.match(css, /\.invitation-menu-overlay[\s\S]*inset:\s*0/);
+    assert.match(css, /\.invitation-menu-overlay[\s\S]*visibility:\s*hidden/);
+    assert.match(css, /\.invitation-menu-overlay\.is-open[\s\S]*visibility:\s*visible/);
+    assert.match(css, /\.invitation-menu-trigger[\s\S]*position:\s*fixed/);
+    assert.match(css, /prefers-reduced-motion:\s*reduce/);
+});
+
+test('menu module supports open, close, escape, focus restoration, and link navigation', () => {
+    const source = readFileSync(new URL('../js/app/guest/menu.js', import.meta.url), 'utf8');
+    assert.match(source, /export const initInvitationMenu/);
+    assert.match(source, /aria-hidden/);
+    assert.match(source, /Escape/);
+    assert.match(source, /focus\(/);
+    assert.match(source, /scrollTo/);
+    assert.match(source, /invitation-menu-open/);
 });
 test('cinematic cover preserves hydration and matches requested guest-facing copy', () => {
     const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Loading Page -->'));
@@ -46,5 +74,5 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
-    assert.ok(html.includes('cinematic.css?v=cinematic-cover-audio-1'));
+    assert.ok(html.includes('cinematic.css?v=hidden-menu-2'));
 });
