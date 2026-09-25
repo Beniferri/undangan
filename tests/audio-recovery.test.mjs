@@ -4,7 +4,12 @@ import { readFileSync } from 'node:fs';
 
 test('failed audio cache still provides manual playback and recovers after rejection', async () => {
     const button = new EventTarget();
-    button.classList = { remove: () => {} };
+    const classes = new Set();
+    button.classList = {
+        add: (name) => classes.add(name),
+        remove: (name) => classes.delete(name),
+        contains: (name) => classes.has(name),
+    };
     button.setAttribute = (key, value) => { button[key] = value; };
     const doc = new EventTarget();
     doc.body = { getAttribute: () => '/music.mp3' };

@@ -4,8 +4,8 @@ import { cache } from '../../connection/cache.js';
 
 export const audio = (() => {
 
-    const statePlay = '<i class="fa-solid fa-circle-pause" aria-hidden="true"></i><span>Musik</span>';
-    const statePause = '<i class="fa-solid fa-circle-play" aria-hidden="true"></i><span>Musik</span>';
+    const statePlay = '<i class="fa-solid fa-compact-disc" aria-hidden="true"></i>';
+    const statePause = '<i class="fa-solid fa-music" aria-hidden="true"></i>';
 
     /**
      * @param {boolean} [playOnOpen=true]
@@ -72,11 +72,15 @@ export const audio = (() => {
                 isPlay = true;
                 music.disabled = false;
                 music.innerHTML = statePlay;
+                music.classList.add('is-playing');
+                music.setAttribute('aria-pressed', 'true');
                 music.setAttribute('aria-label', 'Jeda musik');
             } catch (err) {
                 isPlay = false;
                 music.disabled = false;
                 music.innerHTML = statePause;
+                music.classList.remove('is-playing');
+                music.setAttribute('aria-pressed', 'false');
                 music.setAttribute('aria-label', 'Putar musik');
                 // NotAllowedError = autoplay blocked; surface music button so user can tap manually.
                 // Any other error: show a non-blocking warning.
@@ -93,6 +97,8 @@ export const audio = (() => {
             isPlay = false;
             audioEl.pause();
             music.innerHTML = statePause;
+            music.classList.remove('is-playing');
+            music.setAttribute('aria-pressed', 'false');
             music.setAttribute('aria-label', 'Putar musik');
         };
 
