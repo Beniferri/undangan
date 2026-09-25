@@ -531,10 +531,18 @@ body.islamic-modern .editorial-events .event-card h3 {
     font-size: clamp(1.8rem, 4vw, 2.7rem);
 }
 
-body.islamic-modern .editorial-events .event-time,
-body.islamic-modern .editorial-events .event-venue {
+body.islamic-modern .editorial-events .event-snap-panel .event-time,
+body.islamic-modern .editorial-events .event-snap-panel .event-venue {
     margin-bottom: 0.7rem;
+    font-size: max(0.875rem, 1em);
     line-height: 1.5;
+}
+
+body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media screen and (min-width: 577px) {
