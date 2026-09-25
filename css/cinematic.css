@@ -172,6 +172,15 @@ body.islamic-modern .opening-guest-note {
     color: var(--cinema-paper);
 }
 
+body.islamic-modern .opening-guest-note {
+    max-width: 26rem;
+    margin: 0.45rem auto 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-wrap: balance;
+}
+
 body.islamic-modern .opening-guest-name {
     color: var(--cinema-gold);
     font-size: 1.9rem;
@@ -184,8 +193,9 @@ body.islamic-modern .opening-cover-cta {
     border: 1px solid var(--cinema-gold);
     background: var(--cinema-night);
     color: var(--cinema-paper);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     box-shadow: 0 0 0 4px rgba(226, 202, 157, 0.04);
 }
 

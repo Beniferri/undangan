@@ -326,10 +326,9 @@ export const guest = (() => {
             const match = String(value || '').match(/(\d{1,2})[.:](\d{2})/);
             return match ? [Number(match[1]), Number(match[2])] : null;
         };
-        const formatCalendarDate = (timestamp) => {
-            const date = new Date(timestamp);
+        const formatCalendarLocal = (year, month, day, hour, minute) => {
             const pad = (value) => String(value).padStart(2, '0');
-            return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}00`;
+            return `${year}${pad(month)}${pad(day)}T${pad(hour)}${pad(minute)}00`;
         };
         const createUrl = () => {
             const couple = document.querySelector('[data-cms="couple-names"]')?.textContent.trim() || 'Mempelai';
@@ -337,27 +336,33 @@ export const guest = (() => {
             const secondName = document.querySelector('[data-cms="event-2-name"]')?.textContent.trim() || 'Resepsi';
             const firstTime = document.querySelector('[data-cms="event-1-time"]')?.textContent.trim() || '';
             const secondTime = document.querySelector('[data-cms="event-2-time"]')?.textContent.trim() || '';
-            const location = document.querySelector('[data-cms="event-1-venue"]')?.innerText.replace(/\s+/g, ' ').trim() || '';
+            const firstVenue = document.querySelector('[data-cms="event-1-venue"]')?.innerText.replace(/\s+/g, ' ').trim() || '';
+            const secondVenue = document.querySelector('[data-cms="event-2-venue"]')?.innerText.replace(/\s+/g, ' ').trim() || '';
             const rawDate = document.body.dataset.time?.trim() || '';
             const timezone = document.body.dataset.timezone?.trim() || 'Asia/Jakarta';
             const [year, month, day] = parseDate(rawDate);
             const sourceTime = parseTime(rawDate) || [9, 0];
             const [startHour, startMinute] = parseTime(firstTime) || sourceTime;
             const secondClock = parseTime(secondTime);
-            const calendarStart = Date.UTC(year, month - 1, day, startHour, startMinute);
-            let calendarEnd = secondClock
-                ? Date.UTC(year, month - 1, day, secondClock[0] + 3, secondClock[1])
-                : calendarStart + (4 * 60 * 60 * 1000);
-            if (calendarEnd <= calendarStart) {
-                calendarEnd += 24 * 60 * 60 * 1000;
-            }
+            const [endHour, endMinute] = secondClock
+                ? [secondClock[0] + 3, secondClock[1]]
+                : [startHour + 4, startMinute];
+            const calendarEndDay = endHour >= 24 ? day + 1 : day;
             const url = new URL('https://calendar.google.com/calendar/render');
             url.search = new URLSearchParams({
                 action: 'TEMPLATE',
                 text: `Pernikahan ${couple}`,
-                dates: `${formatCalendarDate(calendarStart)}/${formatCalendarDate(calendarEnd)}`,
-                details: `${firstName}: ${firstTime}\n${secondName}: ${secondTime}\n\nKami menantikan kehadiran dan doa restu Anda.`,
-                location,
+                dates: `${formatCalendarLocal(year, month, day, startHour, startMinute)}/${formatCalendarLocal(year, month, calendarEndDay, endHour % 24, endMinute)}`,
+                details: [
+                    `${firstName}: ${firstTime}`,
+                    firstVenue,
+                    '',
+                    `${secondName}: ${secondTime}`,
+                    secondVenue,
+                    '',
+                    'Kami menantikan kehadiran dan doa restu Anda.',
+                ].filter((line, index, lines) => line || (index > 0 && lines[index - 1])).join('\n'),
+                location: firstVenue,
                 ctz: timezone,
             }).toString();
             return url;

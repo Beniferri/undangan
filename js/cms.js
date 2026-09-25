@@ -242,8 +242,14 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     ].forEach(([selector, value]) => {
         const link = document.querySelector(`[data-cms-social="${selector}"]`);
         const url = normalizeInstagramUrl(value);
-        if (link && url) {
+        if (!link) {
+            return;
+        }
+        link.hidden = !url;
+        if (url) {
             link.href = url;
+        } else {
+            link.removeAttribute('href');
         }
     });
     const staleNames = /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_title || '') || /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_description || '');

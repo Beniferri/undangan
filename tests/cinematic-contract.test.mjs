@@ -46,7 +46,7 @@ test('cinematic cover preserves hydration and matches requested guest-facing cop
     assert.match(cover, /data-cms="couple-short-names"/);
     assert.match(cover, /data-cms="wedding-date"/);
     assert.match(cover, />Dear,<\/p>/);
-    assert.match(cover, /We apologize if there is any misspelling of name or title\./);
+    assert.match(cover, /Mohon maaf apabila terdapat kesalahan penulisan nama atau gelar\./);
     assert.match(cover, /fa-envelope/);
     assert.match(cover, />OPEN INVITATION</);
     assert.match(cover, /onclick="undangan\.guest\.open\(this\)"/);
@@ -75,5 +75,34 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
-    assert.ok(html.includes('cinematic.css?v=hidden-menu-3'));
+    assert.ok(html.includes('cinematic.css?v=content-ux-1'));
+});
+
+test('calendar includes both event venues, addresses, timezone, and local wall-clock times', () => {
+    const source = readFileSync(new URL('../js/app/guest/guest.js', import.meta.url), 'utf8');
+    assert.match(source, /event-2-venue/);
+    assert.match(source, /ctz:\s*timezone/);
+    assert.match(source, /formatCalendarLocal/);
+    assert.match(source, /location:\s*firstVenue/);
+    assert.match(source, /secondVenue/);
+});
+
+test('unconfigured social links and placeholder gallery URLs are not public fallbacks', () => {
+    assert.doesNotMatch(html, /href="https:\/\/www\.instagram\.com\/"/);
+    assert.doesNotMatch(html, /https:\/\/picsum\.photos/);
+    const cmsSource = readFileSync(new URL('../js/cms.js', import.meta.url), 'utf8');
+    assert.match(cmsSource, /link\.hidden\s*=\s*!url/);
+});
+
+test('source does not seed fake public wishes', () => {
+    const invitation = html.slice(0, html.indexOf('<script>'));
+    assert.doesNotMatch(invitation, />\s*(Test|test|coba|tataaaaa)\s*</);
+});
+
+test('cover CTA and supporting copy use readable production copy', () => {
+    const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Loading Page -->'));
+    assert.match(cover, /Mohon maaf apabila terdapat kesalahan penulisan nama atau gelar\./);
+    const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
+    assert.match(css, /opening-guest-note[\s\S]*font-size:\s*0\.8rem/);
+    assert.match(css, /opening-cover-cta[\s\S]*font-size:\s*0\.78rem/);
 });
