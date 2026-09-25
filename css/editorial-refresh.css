@@ -48,6 +48,10 @@
     content: '';
 }
 
+.islamic-modern .editorial-hero {
+    overflow-x: clip;
+}
+
 .islamic-modern .editorial-hero > .bg-cover-home {
     opacity: 0.52 !important;
     filter: saturate(0.76) contrast(1.04);
@@ -232,6 +236,11 @@
     font-size: 0.7rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+}
+
+.islamic-modern [data-calendar-button] {
+    min-height: 2.75rem;
+    padding-block: 0.5rem !important;
 }
 
 .islamic-modern .countdown-panel {

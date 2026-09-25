@@ -1,6 +1,11 @@
 html {
     scroll-behavior: smooth !important;
-    width: 100vw !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
 }
 
 body {
