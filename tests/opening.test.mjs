@@ -65,9 +65,28 @@ test('visibility changes cannot restart decorative video after it stops', async 
     assert.equal(f.film.plays, 0);
 });
 
-test('cover fallback and monogram are not mislabeled as CMS assets or couple photography', () => {
+test('cover fallback is decorative and not mislabeled as a CMS asset', () => {
     const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
     assert.match(html, /class="opening-image"[^>]*data-src="\.\/assets\/images\/opening-mosque\.webp"[^>]*alt="" aria-hidden="true"/);
     assert.doesNotMatch(html, /class="opening-image"[^>]*data-cms=/);
-    assert.match(html, /class="opening-monogram"[^>]*aria-hidden="true"><span>D<\/span><span class="monogram-amp">&amp;<\/span><span>B<\/span>/);
+});
+
+test('opening cover has no monogram or closing greeting and keeps separated CMS-ready names', () => {
+    const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+    const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Hidden Menu Overlay -->'));
+    assert.doesNotMatch(cover, /opening-monogram|Wassalamualaikum Warahmatullahi Wabarakatuh/);
+    assert.match(cover, /id="opening-title"[^>]*>[\s\S]*?data-cms="opening-groom-name">Daniyal<\/span>[\s\S]*?class="opening-cover-amp">&amp;<\/span>[\s\S]*?data-cms="opening-bride-name">Balqis<\/span>[\s\S]*?<\/h1>/);
+    assert.match(cover, /<h1[^>]*id="opening-title"[\s\S]*?<\/h1>\s*<div class="opening-cover-rule"[^>]*><\/div>\s*<p class="opening-cover-date" data-cms="wedding-date">17 Januari 2027<\/p>/);
+    const cms = readFileSync(new URL('../js/cms.js', import.meta.url), 'utf8');
+    assert.match(cms, /setCmsText\('opening-groom-name',/);
+    assert.match(cms, /setCmsText\('opening-bride-name',/);
+});
+
+test('cover kicker and date share typography and guest card has a deliberate gap', () => {
+    const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
+    assert.match(css, /\.opening-cover-kicker,\s*body\.islamic-modern \.opening-cover-date\s*\{[^}]*font-size:\s*0\.7rem/s);
+    assert.match(css, /\.opening-cover-heading\s*\{[^}]*margin-bottom:\s*clamp\(/s);
+    assert.match(css, /\.opening-cover-name,\s*body\.islamic-modern \.opening-cover-amp\s*\{[^}]*display:\s*block/s);
+    assert.match(css, /\.opening-cover-names\s*\{[^}]*max-width:\s*100%[^}]*overflow-wrap:\s*anywhere/s);
+    assert.doesNotMatch(css, /\.opening-monogram|\.monogram-amp/);
 });

@@ -145,6 +145,8 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     const dateLabel = formatDate(wedding.wedding_date, wedding.timezone);
     setCmsText('couple-names', couple);
     setCmsText('couple-short-names', shortCouple);
+    setCmsText('opening-groom-name', shortName(wedding.groom_name, wedding.groom_nickname || wedding.groom_short_name, 'Daniyal'));
+    setCmsText('opening-bride-name', shortName(wedding.bride_name, wedding.bride_nickname || wedding.bride_short_name, 'Balqis'));
     setCmsText('wedding-date', dateLabel);
     setCmsText('groom-name', wedding.groom_name);
     setCmsText('bride-name', wedding.bride_name);
