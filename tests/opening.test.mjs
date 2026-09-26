@@ -76,16 +76,18 @@ test('opening cover has no monogram or closing greeting and keeps separated CMS-
     const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Hidden Menu Overlay -->'));
     assert.doesNotMatch(cover, /opening-monogram|Wassalamualaikum Warahmatullahi Wabarakatuh/);
     assert.match(cover, /id="opening-title"[^>]*>[\s\S]*?data-cms="opening-groom-name">Daniyal<\/span>[\s\S]*?class="opening-cover-amp">&amp;<\/span>[\s\S]*?data-cms="opening-bride-name">Balqis<\/span>[\s\S]*?<\/h1>/);
-    assert.match(cover, /<h1[^>]*id="opening-title"[\s\S]*?<\/h1>\s*<div class="opening-cover-rule"[^>]*><\/div>\s*<p class="opening-cover-date" data-cms="wedding-date">17 Januari 2027<\/p>/);
+    assert.match(cover, /<p class="opening-cover-kicker">THE WEDDING OF<\/p>\s*<div class="opening-cover-rule"[^>]*><\/div>\s*<h1[^>]*id="opening-title"[\s\S]*?<\/h1>\s*<div class="opening-cover-rule"[^>]*><\/div>\s*<p class="opening-cover-date" data-cms="wedding-date">17 Januari 2027<\/p>/);
     const cms = readFileSync(new URL('../js/cms.js', import.meta.url), 'utf8');
     assert.match(cms, /setCmsText\('opening-groom-name',/);
     assert.match(cms, /setCmsText\('opening-bride-name',/);
 });
 
-test('cover kicker and date share typography and guest card has a deliberate gap', () => {
+test('cover keeps names above a bottom-aligned guest card and CTA', () => {
     const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
     assert.match(css, /\.opening-cover-kicker,\s*body\.islamic-modern \.opening-cover-date\s*\{[^}]*font-size:\s*0\.7rem/s);
-    assert.match(css, /\.opening-cover-heading\s*\{[^}]*margin-bottom:\s*clamp\(/s);
+    assert.match(css, /\.opening-cover-content\s*\{[^}]*min-height:\s*100dvh;[^}]*justify-content:\s*flex-start/s);
+    assert.match(css, /\.opening-guest-card\s*\{[^}]*margin-top:\s*auto/s);
+    assert.match(css, /@media screen and \(max-width: 576px\)\s*\{\s*body\.islamic-modern \.opening-cover-names\s*\{[^}]*font-size:\s*clamp\(3\.5rem, 17vw, 4\.4rem\)/s);
     assert.match(css, /\.opening-cover-name,\s*body\.islamic-modern \.opening-cover-amp\s*\{[^}]*display:\s*block/s);
     assert.match(css, /\.opening-cover-names\s*\{[^}]*max-width:\s*100%[^}]*overflow-wrap:\s*anywhere/s);
     assert.doesNotMatch(css, /\.opening-monogram|\.monogram-amp/);
