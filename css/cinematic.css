@@ -372,6 +372,13 @@ body.islamic-modern .invitation-theme-control {
 body.islamic-modern .invitation-menu-trigger {
     top: max(1rem, env(safe-area-inset-top));
     right: max(1rem, env(safe-area-inset-right));
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
 }
 
 body.islamic-modern .invitation-theme-control {
@@ -384,7 +391,12 @@ body.islamic-modern .invitation-theme-control.d-none {
 }
 
 body.islamic-modern .invitation-menu-trigger:hover,
-body.islamic-modern .invitation-menu-trigger:focus-visible,
+body.islamic-modern .invitation-menu-trigger:focus-visible {
+    background: transparent;
+    color: var(--cinema-gold);
+    transform: translateY(-0.1rem);
+}
+
 body.islamic-modern .invitation-theme-control:hover,
 body.islamic-modern .invitation-theme-control:focus-visible {
     background: #174a43;
@@ -392,12 +404,13 @@ body.islamic-modern .invitation-theme-control:focus-visible {
 }
 
 body.islamic-modern .invitation-menu-trigger svg {
-    width: 1rem;
-    height: 1rem;
+    width: 1.4rem;
+    height: 1.4rem;
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
-    stroke-width: 2.5;
+    stroke-width: 2;
+    filter: drop-shadow(0 1px 2px rgba(4, 26, 28, 0.8));
 }
 
 body.islamic-modern .invitation-menu-close:focus-visible,
