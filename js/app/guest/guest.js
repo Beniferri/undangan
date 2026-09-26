@@ -331,7 +331,10 @@ export const guest = (() => {
             return `${year}${pad(month)}${pad(day)}T${pad(hour)}${pad(minute)}00`;
         };
         const createUrl = () => {
-            const couple = document.querySelector('[data-cms="couple-names"]')?.textContent.trim() || 'Mempelai';
+            const couple = [
+                document.querySelector('[data-cms="couple-groom-name"]')?.textContent.trim(),
+                document.querySelector('[data-cms="couple-bride-name"]')?.textContent.trim(),
+            ].filter(Boolean).join(' & ') || 'Mempelai';
             const firstName = document.querySelector('[data-cms="event-1-name"]')?.textContent.trim() || 'Akad';
             const secondName = document.querySelector('[data-cms="event-2-name"]')?.textContent.trim() || 'Resepsi';
             const firstTime = document.querySelector('[data-cms="event-1-time"]')?.textContent.trim() || '';

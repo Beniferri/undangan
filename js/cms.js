@@ -143,7 +143,8 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     const shortName = (value, nickname, fallback) => String(nickname || value || fallback).trim().split(/\s+/)[0] || fallback;
     const shortCouple = `${shortName(wedding.groom_name, wedding.groom_nickname || wedding.groom_short_name, 'Daniyal')} & ${shortName(wedding.bride_name, wedding.bride_nickname || wedding.bride_short_name, 'Balqis')}`;
     const dateLabel = formatDate(wedding.wedding_date, wedding.timezone);
-    setCmsText('couple-names', couple);
+    setCmsText('couple-groom-name', wedding.groom_name);
+    setCmsText('couple-bride-name', wedding.bride_name);
     setCmsText('couple-short-names', shortCouple);
     setCmsText('opening-groom-name', shortName(wedding.groom_name, wedding.groom_nickname || wedding.groom_short_name, 'Daniyal'));
     setCmsText('opening-bride-name', shortName(wedding.bride_name, wedding.bride_nickname || wedding.bride_short_name, 'Balqis'));
@@ -319,7 +320,7 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         if (!item) {
             return;
         }
-        setCmsText(nameSelector, item.account_name || item.name || item.label);
+        setCmsText(nameSelector, addressSelector ? item.name : item.account_name);
         setCmsText(numberSelector, item.account_number || item.address);
         if (addressSelector) {
             setCmsText(addressSelector, item.address || item.account_number);
@@ -327,7 +328,6 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     };
     const gift = gifts[0];
     if (gift) {
-        setCmsText('gift-label', gift.label);
         setCmsText('gift-account-name', gift.account_name);
         setCmsText('gift-account-number', gift.account_number);
         document.querySelectorAll('[data-cms="gift-account-number"]').forEach((element) => { element.dataset.copy = gift.account_number; });

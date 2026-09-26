@@ -62,6 +62,6 @@ test('Arabic sign-off and updated credit sit at the bottom of the footer', () =>
     assert.match(footer, /font-arabic/);
     assert.match(footer, /Beta Storia Wedding Invitation/);
     assert.ok(footer.indexOf('Beta Storia Wedding Invitation') > footer.indexOf('footer-thanks'));
-    assert.ok(footer.indexOf('font-arabic') > footer.indexOf('Beta Storia Wedding Invitation'));
+    assert.ok(footer.indexOf('Beta Storia Wedding Invitation') > footer.indexOf('font-arabic'));
     assert.doesNotMatch(html, /Beta Storia Wedding Planner/);
 });

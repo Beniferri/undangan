@@ -79,8 +79,8 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
-    assert.ok(html.includes('cinematic.css?v=opening-bottom-names-1'));
-    assert.ok(html.includes('dist/cms.js?v=wedding-copy-1'));
+    assert.ok(html.includes('cinematic.css?v=ui-balance-1'));
+    assert.ok(html.includes('dist/cms.js?v=ui-balance-1'));
 });
 
 test('calendar includes both event venues, addresses, timezone, and local wall-clock times', () => {

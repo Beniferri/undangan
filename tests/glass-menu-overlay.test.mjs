@@ -54,5 +54,5 @@ test('menu items are clean text without side icons, while retaining hover and ac
     assert.match(menu, /backgroundControls\.forEach\(\(control\) => control\.setAttribute\('inert'/);
     assert.match(menu, /backgroundControls\.forEach\(\(control\) => control\.removeAttribute\('inert'/);
     assert.match(menu, /event\.key === 'Tab'/);
-    assert.match(html, /dist\/guest\.js\?v=theme-readability-1/);
+    assert.match(html, /dist\/guest\.js\?v=ui-balance-1/);
 });
