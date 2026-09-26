@@ -54,9 +54,9 @@
     <!-- Dependencies CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/guest.css?v=mobile-ux-2">
-    <link rel="stylesheet" href="./css/editorial-refresh.css?v=mobile-ux-2">
-    <link rel="stylesheet" href="./css/cinematic.css?v=opening-cover-bottom-2">
+    <link rel="stylesheet" href="./css/guest.css?v=cover-event-rhythm-1">
+    <link rel="stylesheet" href="./css/editorial-refresh.css?v=cover-event-rhythm-1">
+    <link rel="stylesheet" href="./css/cinematic.css?v=cover-event-rhythm-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
@@ -271,7 +271,6 @@
                         <article class="event-snap-panel" role="article" aria-label="Akad Nikah">
                             <div class="event-bg-pattern" aria-hidden="true"></div>
                             <div class="event-card premium-reveal">
-                                <div class="event-timeline-marker" aria-hidden="true"><span>01</span><i class="fa-solid fa-gem"></i></div>
                                 <p class="event-order">Pembuka rangkaian</p>
                                 <h3 class="font-esthetic" data-cms="event-1-name">Akad Nikah</h3>
                                 <p class="event-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-cms="event-1-time">Pukul 10.00 WIB - Selesai</span></p>
@@ -282,7 +281,6 @@
                         <article class="event-snap-panel" role="article" aria-label="Resepsi Pernikahan">
                             <div class="event-bg-pattern" aria-hidden="true"></div>
                             <div class="event-card premium-reveal">
-                                <div class="event-timeline-marker" aria-hidden="true"><span>02</span><i class="fa-solid fa-gem"></i></div>
                                 <p class="event-order">Dilanjutkan dengan</p>
                                 <h3 class="font-esthetic" data-cms="event-2-name">Resepsi Pernikahan</h3>
                                 <p class="event-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-cms="event-2-time">Pukul 13.00 WIB - Selesai</span></p>
@@ -554,17 +552,19 @@
                 <p class="opening-cover-date" data-cms="wedding-date">17 Januari 2027</p>
             </div>
 
-            <div class="opening-guest-card">
-                <p class="opening-guest-label" id="guest-name-label">Kepada Yth.</p>
-                <div id="guest-name" class="opening-guest-name" aria-live="polite">
-                    <span class="opening-guest-value">Tamu Undangan</span>
+            <div class="opening-cover-actions">
+                <div class="opening-guest-card">
+                    <p class="opening-guest-label" id="guest-name-label">Kepada Yth.</p>
+                    <div id="guest-name" class="opening-guest-name" aria-live="polite">
+                        <span class="opening-guest-value">Tamu Undangan</span>
+                    </div>
+                    <p class="opening-guest-note">Mohon maaf apabila terdapat kesalahan penulisan nama atau gelar.</p>
                 </div>
-                <p class="opening-guest-note">Mohon maaf apabila terdapat kesalahan penulisan nama atau gelar.</p>
-            </div>
 
-            <button type="button" class="btn opening-cover-cta" onclick="undangan.guest.open(this)">
-                <i class="fa-regular fa-envelope" aria-hidden="true"></i><span>Buka Undangan</span>
-            </button>
+                <button type="button" class="btn opening-cover-cta" onclick="undangan.guest.open(this)">
+                    <i class="fa-regular fa-envelope" aria-hidden="true"></i><span>Buka Undangan</span>
+                </button>
+            </div>
         </div>
     </div>
 

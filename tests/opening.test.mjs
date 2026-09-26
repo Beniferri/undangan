@@ -82,11 +82,12 @@ test('opening cover has no monogram or closing greeting and keeps separated CMS-
     assert.match(cms, /setCmsText\('opening-bride-name',/);
 });
 
-test('cover keeps names above a bottom-aligned guest card and CTA', () => {
+test('cover keeps names above centered guest actions and CTA', () => {
     const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
     assert.match(css, /\.opening-cover-kicker,\s*body\.islamic-modern \.opening-cover-date\s*\{[^}]*font-size:\s*0\.7rem/s);
     assert.match(css, /\.opening-cover-content\s*\{[^}]*min-height:\s*100dvh;[^}]*justify-content:\s*flex-start/s);
-    assert.match(css, /\.opening-guest-card\s*\{[^}]*margin-top:\s*auto/s);
+    assert.match(css, /\.opening-cover-actions\s*\{[^}]*margin-top:\s*clamp\(1rem, 3vh, 2rem\);[^}]*margin-bottom:\s*auto/s);
+    assert.match(css, /\.opening-guest-card\s*\{[^}]*width:\s*min\(100%, 21rem\)/s);
     assert.match(css, /@media screen and \(max-width: 576px\)\s*\{\s*body\.islamic-modern \.opening-cover-names\s*\{[^}]*font-size:\s*clamp\(3\.5rem, 17vw, 4\.4rem\)/s);
     assert.match(css, /\.opening-cover-name,\s*body\.islamic-modern \.opening-cover-amp\s*\{[^}]*display:\s*block/s);
     assert.match(css, /\.opening-cover-names\s*\{[^}]*max-width:\s*100%[^}]*overflow-wrap:\s*anywhere/s);
