@@ -20,6 +20,18 @@ test('menu overlay is a floating dark glass side panel with a soft border', () =
     assert.match(css, /\.invitation-menu-surface\s*\{[^}]*background:\s*rgba\(24, 25, 29, 0\.68\)/s);
 });
 
+test('menu is a compact card with breathing room and bounded height', () => {
+    const overlayRule = css.match(/body\.islamic-modern \.invitation-menu-overlay\s*\{([^}]*)\}/)?.[1] || '';
+    const cardRule = css.match(/body\.islamic-modern \.invitation-menu-surface\s*\{([^}]*)\}/)?.[1] || '';
+    assert.match(overlayRule, /align-items:\s*center/);
+    assert.match(cardRule, /width:\s*min\(100%, 23rem\)/);
+    assert.match(cardRule, /max-height:\s*calc\(100dvh - 2rem\)/);
+    assert.match(cardRule, /overflow-y:\s*auto/);
+    assert.doesNotMatch(cardRule, /min-height:/);
+    const linkRule = css.match(/body\.islamic-modern \.invitation-menu-nav a\s*\{([^}]*)\}/)?.[1] || '';
+    assert.match(linkRule, /font:\s*500 clamp\(1\.35rem, 3\.5vw, 1\.85rem\)/);
+});
+
 test('menu panel slides and fades in from the right with reduced-motion support', () => {
     assert.match(css, /\.invitation-menu-overlay\s*\{[^}]*opacity:\s*0[^}]*transition:[^;]*opacity[^;]*0\.35s/s);
     assert.match(css, /\.invitation-menu-surface\s*\{[^}]*transform:\s*translateX\(1\.5rem\)[^}]*transition:[^;]*0\.35s cubic-bezier\(0\.4, 0, 0\.2, 1\)/s);
@@ -28,9 +40,12 @@ test('menu panel slides and fades in from the right with reduced-motion support'
     assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.invitation-menu-overlay\.is-open,[\s\S]*?transition:\s*none/);
 });
 
-test('menu items shift and highlight on hover; active menu item has decorative ornament', () => {
+test('menu items are clean text without side icons, while retaining hover and active color', () => {
     assert.match(css, /\.invitation-menu-nav a:hover[\s\S]*?transform:\s*translateX\(4px\)/);
-    assert.match(css, /\.invitation-menu-nav a\.is-active::before[\s\S]*?content:/);
+    assert.match(css, /\.invitation-menu-nav a\.is-active\s*\{[^}]*color:/);
+    assert.doesNotMatch(css, /\.invitation-menu-nav a(?:\.is-active)?::(?:before|after)\s*\{/);
+    const nav = html.match(/<nav class="invitation-menu-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1] || '';
+    assert.doesNotMatch(nav, /<(?:i|svg|img)\b/);
     assert.match(menu, /classList\.toggle\('is-active'/);
     assert.match(menu, /getBoundingClientRect\(\)\.top <= threshold/);
     assert.match(menu, /addEventListener\('scroll', updateActive, \{ passive: true \}\)/);
