@@ -221,48 +221,55 @@ html.invitation-menu-open,
 body.invitation-menu-open {
     overflow: hidden;
     overscroll-behavior: none;
-    touch-action: none;
 }
 
 body.islamic-modern .invitation-menu-overlay {
     position: fixed;
     inset: 0;
     z-index: 9998;
-    display: grid;
+    display: flex;
+    justify-content: flex-end;
     min-height: 100vh;
     min-height: 100dvh;
     padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
-    place-items: center;
     overflow-y: auto;
     visibility: hidden;
-    background: rgba(4, 26, 28, 0.74);
+    background: rgba(8, 9, 12, 0.24);
     opacity: 0;
     pointer-events: none;
-    backdrop-filter: blur(1rem);
-    transition: opacity 320ms ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
 }
 
 body.islamic-modern .invitation-menu-overlay.is-open {
     visibility: visible;
     opacity: 1;
     pointer-events: auto;
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
 }
 
 body.islamic-modern .invitation-menu-surface {
-    width: min(100%, 30rem);
+    box-sizing: border-box;
+    display: flex;
+    width: min(100%, 27rem);
     min-height: min(42rem, calc(100dvh - 2rem));
+    flex-direction: column;
+    margin-left: auto;
     padding: clamp(1.25rem, 4vw, 2rem);
-    border: 1px solid rgba(226, 202, 157, 0.44);
+    border: 1px solid rgba(255, 253, 248, 0.2);
     border-radius: 1.5rem;
-    background: linear-gradient(145deg, rgba(6, 35, 34, 0.98), rgba(17, 65, 57, 0.94));
+    background: rgba(24, 25, 29, 0.68);
     color: var(--cinema-paper);
-    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.42);
-    transform: translateY(1rem) scale(0.98);
-    transition: transform 320ms ease;
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.36), 0 0 1px rgba(255, 253, 248, 0.3) inset;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transform: translateX(1.5rem);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.islamic-modern .invitation-menu-overlay.is-open .invitation-menu-surface {
-    transform: translateY(0) scale(1);
+    transform: translateX(0);
 }
 
 body.islamic-modern .invitation-menu-header {
@@ -284,40 +291,79 @@ body.islamic-modern .invitation-menu-eyebrow {
 body.islamic-modern .invitation-menu-header h2 {
     margin: 0;
     color: var(--cinema-paper);
-    font: 600 clamp(1.8rem, 8vw, 2.8rem) / 1 'Marcellus', Georgia, serif;
+    font: 600 clamp(1.8rem, 8vw, 2.8rem) / 1 Marcellus, Georgia, serif;
 }
 
 body.islamic-modern .invitation-menu-close {
     display: grid;
     flex: 0 0 2.75rem;
-    border: 1px solid rgba(226, 202, 157, 0.62);
-    background: rgba(4, 26, 28, 0.9);
-    color: var(--cinema-paper);
     width: 2.75rem;
     height: 2.75rem;
     padding: 0;
     place-items: center;
+    border: 1px solid rgba(255, 253, 248, 0.28);
     border-radius: 50%;
+    background: rgba(255, 253, 248, 0.08);
+    color: var(--cinema-paper);
 }
 
 body.islamic-modern .invitation-menu-nav {
     display: grid;
+    flex: 1;
+    align-content: center;
     padding-block: clamp(1rem, 4vh, 2rem);
 }
 
 body.islamic-modern .invitation-menu-nav a {
+    position: relative;
     padding: 0.62rem 0;
     color: var(--cinema-paper);
-    font: 500 clamp(1.55rem, 6vw, 2.25rem) / 1.1 'Marcellus', Georgia, serif;
+    font: 500 clamp(1.55rem, 6vw, 2.25rem) / 1.1 Marcellus, Georgia, serif;
     text-decoration: none;
-    transition: color 180ms ease, transform 180ms ease;
+    transition: color 180ms ease, transform 180ms ease, opacity 180ms ease;
 }
 
 body.islamic-modern .invitation-menu-nav a:hover,
 body.islamic-modern .invitation-menu-nav a:focus-visible {
     color: var(--cinema-gold);
-    transform: translateX(0.4rem);
+    opacity: 0.96;
+    transform: translateX(4px);
 }
+
+body.islamic-modern .invitation-menu-nav a.is-active {
+    color: var(--cinema-gold);
+}
+
+body.islamic-modern .invitation-menu-nav a.is-active::before {
+    position: absolute;
+    left: -1.25rem;
+    color: var(--cinema-gold);
+    content: '✿';
+    font: 0.8rem/1 'Cormorant Garamond', Georgia, serif;
+}
+
+body.islamic-modern .invitation-menu-hint {
+    margin: auto 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(226, 202, 157, 0.2);
+    color: rgba(255, 253, 248, 0.72);
+    font: italic 0.78rem/1.5 'Cormorant Garamond', Georgia, serif;
+    text-align: center;
+}
+
+@media screen and (max-width: 576px) {
+    body.islamic-modern .invitation-menu-overlay {
+        padding: max(0.6rem, env(safe-area-inset-top)) max(0.6rem, env(safe-area-inset-right)) max(0.6rem, env(safe-area-inset-bottom)) max(0.6rem, env(safe-area-inset-left));
+    }
+
+    body.islamic-modern .invitation-menu-surface {
+        width: min(100%, 27rem);
+        min-height: min(42rem, calc(100dvh - 1.2rem));
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+    }
+}
+
 
 body.islamic-modern .invitation-menu-trigger,
 body.islamic-modern .invitation-theme-control {
@@ -635,6 +681,7 @@ body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
     }
 
     body.islamic-modern .invitation-menu-overlay,
+    body.islamic-modern .invitation-menu-overlay.is-open,
     body.islamic-modern .invitation-menu-surface,
     body.islamic-modern .invitation-menu-nav a,
     body.islamic-modern .invitation-menu-trigger {
