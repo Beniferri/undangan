@@ -412,11 +412,6 @@ html[data-bs-theme="dark"] .bg-white-black {
     letter-spacing: 0.04em;
 }
 
-.islamic-modern .event-timeline-marker i {
-    font-size: 0.55rem;
-    color: var(--islamic-gold-500);
-}
-
 #navbar-menu {
     border-color: rgba(184, 138, 68, 0.3) !important;
     box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.12);
@@ -1727,32 +1722,6 @@ body.islamic-modern {
     border-top: 1px solid rgba(126, 92, 42, 0.12);
 }
 
-.islamic-modern .event-timeline-marker {
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-    width: 3.5rem;
-    height: 3.5rem;
-    margin: 0 auto 1.25rem;
-    border: 2px solid var(--islamic-gold-500);
-    border-radius: 50%;
-    background: var(--islamic-ivory);
-    color: var(--islamic-gold-text);
-    box-shadow: 0 0 0 0.5rem rgba(251, 247, 239, 0.92), 0 0.5rem 1.5rem rgba(184, 138, 68, 0.15);
-    font-size: var(--type-xs);
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.islamic-modern .event-timeline-marker span {
-    font-size: 0.85rem;
-    line-height: 1;
-}
-
 .islamic-modern .event-snap-panel .event-card {
     position: relative;
     z-index: 1;
@@ -1946,12 +1915,6 @@ body.islamic-modern .event-map-button.dark-mode-map-button:hover {
     color: rgba(255, 255, 255, 0.8);
 }
 
-[data-bs-theme="dark"] body.islamic-modern .event-timeline-marker {
-    background: rgba(20, 45, 38, 0.95);
-    border-color: var(--islamic-gold-400);
-    box-shadow: 0 0 0 0.5rem rgba(20, 45, 38, 0.95), 0 0.5rem 1.5rem rgba(184, 138, 68, 0.2);
-}
-
 [data-bs-theme="dark"] body.islamic-modern .event-snap-panel .event-card h3 {
     color: var(--islamic-gold-200);
 }
@@ -1993,10 +1956,6 @@ body.islamic-modern .event-map-button.dark-mode-map-button:hover {
         width: 100%;
         max-width: 100%;
         margin: 0;
-    }
-
-    .islamic-modern .event-timeline-marker {
-        margin-bottom: 1rem;
     }
 
     .islamic-modern .editorial-section.editorial-rsvp-form {

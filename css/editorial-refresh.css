@@ -21,6 +21,14 @@
     background-color: #f0eadf !important;
 }
 
+/* Give content-heavy sections a shared, natural-height reading rhythm. */
+body.islamic-modern .editorial-section:is(.editorial-story, .editorial-rsvp-form, .editorial-wishes) {
+    height: auto;
+    min-height: 100svh;
+    padding-block: clamp(4.5rem, 8vh, 6rem) !important;
+    overflow: visible;
+}
+
 .islamic-modern .editorial-section h2.font-esthetic {
     color: var(--editorial-ink);
     font-size: clamp(2.65rem, 8vw, 4.75rem) !important;
@@ -341,6 +349,11 @@
 .islamic-modern .wishes-panel {
     max-width: 48rem;
     margin-inline: auto;
+}
+
+body.islamic-modern .editorial-rsvp-form > .container > .border,
+body.islamic-modern .editorial-wishes .wishes-panel {
+    width: min(100%, 43rem);
 }
 
 .islamic-modern .wishes-panel #comments > div {
