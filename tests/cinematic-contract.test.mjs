@@ -9,7 +9,7 @@ test('cover locks both scroll roots until opened', () => {
 
 test('static navbar is replaced by an accessible seven-link menu overlay', () => {
     assert.doesNotMatch(html, /id="navbar-menu"/);
-    const menu = html.match(/<div\b[^>]*id="invitation-menu"[\s\S]*?<\/div>\s*<button[^>]*id="invitation-menu-trigger"/)[0];
+    const menu = html.match(/<div\b[^>]*id="invitation-menu"[\s\S]*?<\/div>\s*<\/div>/)[0];
     assert.match(menu, /role="dialog"/);
     assert.match(menu, /aria-modal="true"/);
     assert.match(menu, /id="invitation-menu-close"/);
@@ -17,8 +17,9 @@ test('static navbar is replaced by an accessible seven-link menu overlay', () =>
     for (const label of ['Beranda', 'Mempelai', 'Kisah Cinta', 'Acara', 'RSVP &amp; Ucapan', 'Galeri', 'Wedding Gift']) {
         assert.match(menu, new RegExp(`>${label}<`));
     }
-    assert.match(menu, /id="button-theme"/);
-    assert.match(menu, /id="invitation-menu-trigger"/);
+    assert.match(menu, /id="invitation-menu-close"/);
+    assert.match(html, /id="button-theme"/);
+    assert.match(html, /id="invitation-menu-trigger"/);
 });
 
 test('menu overlay styling is isolated, fullscreen, hidden by default, and motion-aware', () => {
@@ -75,7 +76,7 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
-    assert.ok(html.includes('cinematic.css?v=event-ux-1'));
+    assert.ok(html.includes('cinematic.css?v=ui-refresh-1'));
 });
 
 test('calendar includes both event venues, addresses, timezone, and local wall-clock times', () => {
