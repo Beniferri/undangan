@@ -228,6 +228,7 @@ body.islamic-modern .invitation-menu-overlay {
     inset: 0;
     z-index: 9998;
     display: flex;
+    align-items: center;
     justify-content: flex-end;
     min-height: 100vh;
     min-height: 100dvh;
@@ -252,11 +253,12 @@ body.islamic-modern .invitation-menu-overlay.is-open {
 body.islamic-modern .invitation-menu-surface {
     box-sizing: border-box;
     display: flex;
-    width: min(100%, 27rem);
-    min-height: min(42rem, calc(100dvh - 2rem));
+    width: min(100%, 23rem);
+    max-height: calc(100dvh - 2rem);
     flex-direction: column;
     margin-left: auto;
     padding: clamp(1.25rem, 4vw, 2rem);
+    overflow-y: auto;
     border: 1px solid rgba(255, 253, 248, 0.2);
     border-radius: 1.5rem;
     background: rgba(24, 25, 29, 0.68);
@@ -309,16 +311,14 @@ body.islamic-modern .invitation-menu-close {
 
 body.islamic-modern .invitation-menu-nav {
     display: grid;
-    flex: 1;
     align-content: center;
-    padding-block: clamp(1rem, 4vh, 2rem);
+    padding-block: 1.25rem;
 }
 
 body.islamic-modern .invitation-menu-nav a {
-    position: relative;
     padding: 0.62rem 0;
     color: var(--cinema-paper);
-    font: 500 clamp(1.55rem, 6vw, 2.25rem) / 1.1 Marcellus, Georgia, serif;
+    font: 500 clamp(1.35rem, 3.5vw, 1.85rem) / 1.1 Marcellus, Georgia, serif;
     text-decoration: none;
     transition: color 180ms ease, transform 180ms ease, opacity 180ms ease;
 }
@@ -334,16 +334,8 @@ body.islamic-modern .invitation-menu-nav a.is-active {
     color: var(--cinema-gold);
 }
 
-body.islamic-modern .invitation-menu-nav a.is-active::before {
-    position: absolute;
-    left: -1.25rem;
-    color: var(--cinema-gold);
-    content: '✿';
-    font: 0.8rem/1 'Cormorant Garamond', Georgia, serif;
-}
-
 body.islamic-modern .invitation-menu-hint {
-    margin: auto 0 0;
+    margin: 0;
     padding-top: 1rem;
     border-top: 1px solid rgba(226, 202, 157, 0.2);
     color: rgba(255, 253, 248, 0.72);
@@ -352,13 +344,7 @@ body.islamic-modern .invitation-menu-hint {
 }
 
 @media screen and (max-width: 576px) {
-    body.islamic-modern .invitation-menu-overlay {
-        padding: max(0.6rem, env(safe-area-inset-top)) max(0.6rem, env(safe-area-inset-right)) max(0.6rem, env(safe-area-inset-bottom)) max(0.6rem, env(safe-area-inset-left));
-    }
-
     body.islamic-modern .invitation-menu-surface {
-        width: min(100%, 27rem);
-        min-height: min(42rem, calc(100dvh - 1.2rem));
         padding: 1.25rem;
         border-radius: 1.25rem;
     }
