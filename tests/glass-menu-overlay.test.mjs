@@ -49,7 +49,7 @@ test('menu items are clean text without side icons, while retaining hover and ac
     assert.match(menu, /classList\.toggle\('is-active'/);
     assert.match(menu, /getBoundingClientRect\(\)\.top <= threshold/);
     assert.match(menu, /addEventListener\('scroll', updateActive, \{ passive: true \}\)/);
-    assert.match(html, /href="#home" class="is-active" aria-current="page">Home<\/a>/);
+    assert.match(html, /href="#home" class="is-active" aria-current="page">Beranda<\/a>/);
     assert.match(menu, /aria-current/);
     assert.match(menu, /backgroundControls\.forEach\(\(control\) => control\.setAttribute\('inert'/);
     assert.match(menu, /backgroundControls\.forEach\(\(control\) => control\.removeAttribute\('inert'/);

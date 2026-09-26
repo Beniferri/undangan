@@ -22,8 +22,8 @@ test('map label is readable while keeping a 44px touch target', () => {
 });
 
 test('dress-code copy is direct and does not invent additional requirements', () => {
-    assert.match(html, /Untuk acara pernikahan, silakan mengenakan busana batik dan alas kaki yang nyaman\./);
-    assert.equal((html.match(/busana batik dan alas kaki yang nyaman/gi) || []).length, 1);
+    assert.match(html, /Kami mengundang Anda mengenakan batik dan alas kaki yang nyaman\./);
+    assert.equal((html.match(/mengenakan batik dan alas kaki yang nyaman/gi) || []).length, 1);
     assert.doesNotMatch(html, /dress code berikut|beskap wajib|warna tertentu/i);
 });
 

@@ -14,11 +14,11 @@ test('static navbar is replaced by an accessible seven-link menu overlay', () =>
     assert.match(menu, /aria-modal="true"/);
     assert.match(menu, /id="invitation-menu-close"/);
     assert.deepEqual([...menu.matchAll(/href="#([^"]+)"/g)].map((match) => match[1]), ['home', 'groom', 'story', 'events', 'rsvp', 'gallery', 'gift']);
-    for (const label of ['Home', 'Groom &amp; Bride', 'Love Story', 'Event Details', 'RSVP &amp; Wishes', 'Gallery', 'Wedding Gift']) {
+    for (const label of ['Beranda', 'Mempelai', 'Kisah Kami', 'Acara', 'Kehadiran &amp; Doa', 'Galeri', 'Tanda Kasih']) {
         assert.match(menu, new RegExp(`>${label}<`));
     }
     assert.match(menu, /id="invitation-menu-close"/);
-    assert.match(menu, /Select one of the menus above to navigate\./);
+    assert.match(menu, /Pilih bagian yang ingin Anda lihat\./);
     assert.match(html, /id="button-theme"/);
     assert.match(html, /id="invitation-menu-trigger"/);
 });
@@ -50,7 +50,7 @@ test('cinematic cover preserves hydration and matches requested guest-facing cop
     assert.match(html, /id="invitation-menu-title" data-cms="couple-short-names"/);
     assert.match(cover, /data-cms="wedding-date"/);
     assert.match(cover, />Kepada Yth\.<\/p>/);
-    assert.match(cover, /Mohon maaf apabila terdapat kesalahan penulisan nama atau gelar\./);
+    assert.match(cover, /Mohon maaf jika ada kekeliruan penulisan nama atau gelar\./);
     assert.match(cover, /fa-envelope/);
     assert.match(cover, />Buka Undangan</);
     assert.match(cover, /onclick="undangan\.guest\.open\(this\)"/);
@@ -80,7 +80,7 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
     assert.ok(html.includes('cinematic.css?v=opening-bottom-names-1'));
-    assert.ok(html.includes('dist/cms.js?v=opening-cover-1'));
+    assert.ok(html.includes('dist/cms.js?v=wedding-copy-1'));
 });
 
 test('calendar includes both event venues, addresses, timezone, and local wall-clock times', () => {
@@ -106,7 +106,7 @@ test('source does not seed fake public wishes', () => {
 
 test('cover CTA and supporting copy use readable production copy', () => {
     const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Loading Page -->'));
-    assert.match(cover, /Mohon maaf apabila terdapat kesalahan penulisan nama atau gelar\./);
+    assert.match(cover, /Mohon maaf jika ada kekeliruan penulisan nama atau gelar\./);
     const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
     assert.match(css, /opening-guest-note[\s\S]*font-size:\s*0\.8rem/);
     assert.match(css, /opening-cover-cta[\s\S]*font-size:\s*0\.78rem/);

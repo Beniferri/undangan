@@ -113,7 +113,7 @@ const configureVideo = (wedding) => {
         wrap.dataset.videoType = 'file';
     }
 };
-const setStructuredData = (wedding, events) => {
+const setStructuredData = (wedding, events, description) => {
     const element = document.querySelector('#wedding-jsonld');
     if (!element) {
         return;
@@ -122,7 +122,7 @@ const setStructuredData = (wedding, events) => {
         '@context': 'https://schema.org',
         '@type': 'Event',
         name: `Pernikahan ${wedding.groom_name} & ${wedding.bride_name}`,
-        description: wedding.seo_description,
+        description,
         startDate: wedding.wedding_date,
         eventStatus: 'https://schema.org/EventScheduled',
         eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -256,7 +256,7 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     });
     const staleNames = /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_title || '') || /Muhammad Fikri Ramadhan|Aisyah Nur Zahra/i.test(wedding.seo_description || '');
     const seoTitle = !staleNames && wedding.seo_title ? wedding.seo_title : `Undangan Pernikahan ${couple}`;
-    const seoDescription = !staleNames && wedding.seo_description ? wedding.seo_description : `Undangan Pernikahan ${couple}`;
+    const seoDescription = !staleNames && wedding.seo_description ? wedding.seo_description : `Dengan memohon rahmat Allah, ${wedding.groom_name} dan ${wedding.bride_name} mengundang Anda hadir dan mendoakan pernikahan kami.`;
     const ogImage = weddingImageUrl(wedding);
     document.title = seoTitle;
     setMeta('title', seoTitle);
@@ -279,7 +279,7 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
             mapLink.hidden = false;
         }
     });
-    setStructuredData(wedding, events);
+    setStructuredData(wedding, events, seoDescription);
     stories.slice(0, 6).forEach((story, index) => {
         setCmsText(`story-${index + 1}-title`, story.title);
         setCmsText(`story-${index + 1}-body`, story.body);
