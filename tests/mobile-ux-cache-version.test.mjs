@@ -8,5 +8,5 @@ test('mobile UX CSS fixes use a fresh cache key', () => {
     for (const stylesheet of ['guest.css', 'editorial-refresh.css']) {
         assert.match(html, new RegExp(`\\./css/${stylesheet}\\?v=mobile-ux-2`));
     }
-    assert.match(html, /\.\/css\/cinematic\.css\?v=ui-refresh-1/);
+    assert.match(html, /\.\/css\/cinematic\.css\?v=glass-menu-2/);
 });

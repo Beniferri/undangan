@@ -14,15 +14,16 @@ test('static navbar is replaced by an accessible seven-link menu overlay', () =>
     assert.match(menu, /aria-modal="true"/);
     assert.match(menu, /id="invitation-menu-close"/);
     assert.deepEqual([...menu.matchAll(/href="#([^"]+)"/g)].map((match) => match[1]), ['home', 'groom', 'story', 'events', 'rsvp', 'gallery', 'gift']);
-    for (const label of ['Beranda', 'Mempelai', 'Kisah Cinta', 'Acara', 'RSVP &amp; Ucapan', 'Galeri', 'Wedding Gift']) {
+    for (const label of ['Home', 'Groom &amp; Bride', 'Love Story', 'Event Details', 'RSVP &amp; Wishes', 'Gallery', 'Wedding Gift']) {
         assert.match(menu, new RegExp(`>${label}<`));
     }
     assert.match(menu, /id="invitation-menu-close"/);
+    assert.match(menu, /Select one of the menus above to navigate\./);
     assert.match(html, /id="button-theme"/);
     assert.match(html, /id="invitation-menu-trigger"/);
 });
 
-test('menu overlay styling is isolated, fullscreen, hidden by default, and motion-aware', () => {
+test('menu overlay styling is isolated, hidden by default, and motion-aware', () => {
     const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
     assert.match(css, /\.invitation-menu-overlay[\s\S]*position:\s*fixed/);
     assert.match(css, /\.invitation-menu-overlay[\s\S]*inset:\s*0/);
@@ -76,7 +77,7 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
-    assert.ok(html.includes('cinematic.css?v=ui-refresh-1'));
+    assert.ok(html.includes('cinematic.css?v=glass-menu-2'));
 });
 
 test('calendar includes both event venues, addresses, timezone, and local wall-clock times', () => {

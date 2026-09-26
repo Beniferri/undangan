@@ -3,6 +3,7 @@ export const initInvitationMenu = (doc = document, win = window) => {
     const trigger = doc.getElementById('invitation-menu-trigger');
     const closeButton = doc.getElementById('invitation-menu-close');
     const page = doc.getElementById('root');
+    const backgroundControls = [trigger, doc.getElementById('button-theme'), doc.getElementById('button-music')].filter(Boolean);
     const links = menu?.querySelectorAll('a[href^="#"]') || [];
     const reducedMotion = win.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -51,6 +52,7 @@ export const initInvitationMenu = (doc = document, win = window) => {
         doc.documentElement.classList.add('invitation-menu-open');
         doc.body.classList.add('invitation-menu-open');
         page?.setAttribute('inert', '');
+        backgroundControls.forEach((control) => control.setAttribute('inert', ''));
         closeButton.focus({ preventScroll: true });
     };
 
@@ -61,10 +63,40 @@ export const initInvitationMenu = (doc = document, win = window) => {
         doc.documentElement.classList.remove('invitation-menu-open');
         doc.body.classList.remove('invitation-menu-open');
         page?.removeAttribute('inert');
+        backgroundControls.forEach((control) => control.removeAttribute('inert'));
         if (restoreFocus) {
             trigger.focus({ preventScroll: true });
         }
     };
+
+    const setActive = (activeLink) => {
+        links.forEach((item) => {
+            item.classList.toggle('is-active', item === activeLink);
+            if (item === activeLink) {
+                item.setAttribute('aria-current', 'page');
+            } else {
+                item.removeAttribute('aria-current');
+            }
+        });
+    };
+
+    const updateActive = () => {
+        const threshold = win.innerHeight * 0.4;
+        let activeLink = links[0];
+        links.forEach((link) => {
+            const target = doc.querySelector(link.getAttribute('href'));
+            if (target && target.getBoundingClientRect().top <= threshold) {
+                activeLink = link;
+            }
+        });
+        if (activeLink) {
+            setActive(activeLink);
+        }
+    };
+
+    win.addEventListener('scroll', updateActive, { passive: true });
+    win.addEventListener('load', updateActive);
+    updateActive();
 
     trigger.addEventListener('click', open);
     closeButton.addEventListener('click', () => close());
@@ -74,8 +106,21 @@ export const initInvitationMenu = (doc = document, win = window) => {
         }
     });
     doc.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && menu.classList.contains('is-open')) {
+        if (!menu.classList.contains('is-open')) {
+            return;
+        }
+        if (event.key === 'Escape') {
             close();
+        } else if (event.key === 'Tab') {
+            const first = closeButton;
+            const last = links[links.length - 1] || first;
+            if (event.shiftKey && (doc.activeElement === first || !menu.contains(doc.activeElement))) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && (doc.activeElement === last || !menu.contains(doc.activeElement))) {
+                event.preventDefault();
+                first.focus();
+            }
         }
     });
     links.forEach((link) => {
@@ -85,6 +130,7 @@ export const initInvitationMenu = (doc = document, win = window) => {
                 return;
             }
             event.preventDefault();
+            setActive(link);
             close(false);
             target.setAttribute('tabindex', '-1');
             win.setTimeout(() => scrollToTarget(target), 0);
