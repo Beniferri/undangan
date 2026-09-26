@@ -455,6 +455,43 @@ body.islamic-modern .editorial-wishes .wishes-panel {
     background: rgba(255, 255, 255, 0.05) !important;
 }
 
+/* Match the theme on body, where theme.js applies it, and keep text on its own surface. */
+body.islamic-modern[data-bs-theme="light"] .editorial-section.editorial-footer {
+    color: #183d35 !important;
+}
+
+body.islamic-modern[data-bs-theme="light"] .editorial-footer h2.font-esthetic,
+body.islamic-modern[data-bs-theme="light"] .editorial-footer .font-arabic {
+    color: #183d35 !important;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-section.editorial-footer {
+    background-color: #10251f !important;
+    background-image: none !important;
+    color: #fffdf8 !important;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-rsvp-form > .container > .border,
+body.islamic-modern[data-bs-theme="dark"] .gift-panel {
+    background: #10251f !important;
+    color: #fffdf8;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .gift-detail-label {
+    color: #ead8b7;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-events .event-map-button {
+    border-color: #ead8b7 !important;
+    color: #ead8b7 !important;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-events .event-map-button:hover,
+body.islamic-modern[data-bs-theme="dark"] .editorial-events .event-map-button:focus-visible {
+    background: #c7a46a !important;
+    color: #10251f !important;
+}
+
 @media screen and (max-width: 576px) {
     .islamic-modern .editorial-hero [data-cms="profile-image"] {
         width: 10.5rem;
