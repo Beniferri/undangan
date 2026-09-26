@@ -52,8 +52,10 @@ body.islamic-modern .opening-cover-backdrop {
 body.islamic-modern .opening-cover-content {
     position: relative;
     width: min(calc(100% - 2.5rem), 30rem);
+    min-height: 100vh;
     min-height: 100dvh;
-    gap: clamp(1rem, 2.4vh, 1.6rem);
+    justify-content: flex-start;
+    gap: clamp(0.75rem, 2vh, 1.25rem);
     padding-block: max(1.8rem, env(safe-area-inset-top)) max(1.8rem, env(safe-area-inset-bottom));
 }
 
@@ -75,7 +77,6 @@ body.islamic-modern .opening-cover-content::after {
 
 body.islamic-modern .opening-cover-heading {
     gap: 0.8rem;
-    margin-bottom: clamp(0.5rem, 2vh, 1rem);
     animation: opening-reveal 2.8s 0.3s ease-out both;
 }
 
@@ -115,6 +116,8 @@ body.islamic-modern .opening-cover-names {
 }
 
 body.islamic-modern .opening-guest-card {
+    flex-shrink: 0;
+    margin-top: auto;
     padding: 1.1rem 1.3rem;
     border: 1px solid rgba(226, 202, 157, 0.4);
     border-radius: 1.25rem;
@@ -415,20 +418,26 @@ body.islamic-modern .cinematic-music-control .btn:focus-visible {
     to { transform: rotate(1turn); }
 }
 
+@media screen and (max-width: 576px) {
+    body.islamic-modern .opening-cover-names {
+        font-size: clamp(3.5rem, 17vw, 4.4rem);
+        font-weight: 600;
+    }
+}
+
 @media screen and (max-height: 700px) and (max-width: 576px) {
     body.islamic-modern .opening-cover-content {
-        gap: 1rem;
+        gap: 0.75rem;
         min-height: 100svh;
         padding-block: max(0.65rem, env(safe-area-inset-top)) max(0.65rem, env(safe-area-inset-bottom));
     }
 
     body.islamic-modern .opening-cover-heading {
         gap: 0.45rem;
-        margin-bottom: 0.5rem;
     }
 
     body.islamic-modern .opening-cover-names {
-        font-size: clamp(2.5rem, 11vw, 3.4rem);
+        font-size: clamp(3.15rem, 15vw, 3.9rem);
     }
 
     body.islamic-modern .opening-guest-card {
