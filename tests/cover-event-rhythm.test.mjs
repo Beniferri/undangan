@@ -15,7 +15,7 @@ test('cover actions stay grouped and CMS guest hooks survive', () => {
 });
 
 test('event markers are removed while schedule data and hierarchy remain', () => {
-    const events = html.slice(html.indexOf('<!-- Event Details -->'), html.indexOf('<!-- Countdown -->'));
+    const events = html.slice(html.indexOf('<!-- Acara -->'), html.indexOf('<!-- Countdown -->'));
     assert.doesNotMatch(events, /event-timeline-marker/);
     assert.doesNotMatch(guest + cinematic, /event-timeline-marker/);
     for (const n of [1, 2]) {

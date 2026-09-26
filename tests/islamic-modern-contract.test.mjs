@@ -7,7 +7,7 @@ const css = readFileSync(new URL('../css/guest.css', import.meta.url), 'utf8');
 
 test('RSVP presence choices use requested attendance wording', () => {
     const presence = html.match(/<select[^>]*id="form-presence"[^>]*>[\s\S]*?<\/select>/)[0];
-    assert.match(presence, /Hadir/);
+    assert.match(presence, /Insyaallah hadir/);
     assert.doesNotMatch(presence, />[^<]*Datang</);
 });
 

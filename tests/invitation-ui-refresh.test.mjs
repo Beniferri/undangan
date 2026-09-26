@@ -38,14 +38,14 @@ test('theme toggle is a compact fixed bottom-right control', () => {
 });
 
 test('dress section includes accessible color swatches', () => {
-    const dress = html.slice(html.indexOf('id="dresscode"'), html.indexOf('<!-- Gallery -->'));
+    const dress = html.slice(html.indexOf('id="dresscode"'), html.indexOf('<!-- Galeri -->'));
     assert.match(dress, /dress-palette/);
     assert.equal((dress.match(/class="dress-swatch dress-swatch-/g) || []).length, 4);
     assert.match(dress, /role="group" aria-label="Contoh warna batik"/);
     for (const color of ['Zamrud', 'Sage', 'Champagne', 'Ivory']) {
         assert.match(dress, new RegExp(`role="img" aria-label="${color}"`));
     }
-    assert.match(dress, /Contoh palet warna batik \(opsional\)/);
+    assert.match(dress, /Pilihan warna sebagai inspirasi, bukan ketentuan\./);
     assert.match(editorial, /\.editorial-dresscode \.dress-swatch/);
 });
 
