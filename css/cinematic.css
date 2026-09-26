@@ -121,8 +121,8 @@ body.islamic-modern .opening-cover-actions {
     flex-direction: column;
     align-items: center;
     gap: clamp(0.75rem, 2vh, 1.25rem);
-    margin-top: clamp(1rem, 3vh, 2rem);
-    margin-bottom: auto;
+    margin-top: auto;
+    margin-bottom: 0;
 }
 
 body.islamic-modern .opening-guest-card {
@@ -430,7 +430,7 @@ body.islamic-modern .cinematic-music-control .btn:focus-visible {
 
 @media screen and (max-width: 576px) {
     body.islamic-modern .opening-cover-names {
-        font-size: clamp(3.5rem, 17vw, 4.4rem);
+        font-size: clamp(4rem, 22vw, 5.4rem);
         font-weight: 600;
     }
 }
@@ -447,7 +447,7 @@ body.islamic-modern .cinematic-music-control .btn:focus-visible {
     }
 
     body.islamic-modern .opening-cover-names {
-        font-size: clamp(3.15rem, 15vw, 3.9rem);
+        font-size: clamp(3.7rem, 18.5vw, 4.5rem);
     }
 
     body.islamic-modern .opening-guest-card {

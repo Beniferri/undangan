@@ -5,7 +5,8 @@ import test from 'node:test';
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
 test('mobile UX CSS fixes use a fresh cache key', () => {
-    for (const stylesheet of ['guest.css', 'editorial-refresh.css', 'cinematic.css']) {
+    for (const stylesheet of ['guest.css', 'editorial-refresh.css']) {
         assert.match(html, new RegExp(`\\./css/${stylesheet}\\?v=cover-event-rhythm-1`));
     }
+    assert.match(html, /\.\/css\/cinematic\.css\?v=opening-bottom-names-1/);
 });
