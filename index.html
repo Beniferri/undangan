@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/guest.css?v=mobile-ux-2">
     <link rel="stylesheet" href="./css/editorial-refresh.css?v=mobile-ux-2">
-    <link rel="stylesheet" href="./css/cinematic.css?v=event-ux-1">
+    <link rel="stylesheet" href="./css/cinematic.css?v=ui-refresh-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
@@ -314,6 +314,13 @@
                     <div class="container text-center">
                         <h2 class="font-esthetic py-4 m-0">Busana</h2>
                         <p class="editorial-lead">Untuk acara pernikahan, silakan mengenakan busana batik dan alas kaki yang nyaman.</p>
+                        <div class="dress-palette" role="group" aria-label="Contoh warna batik">
+                            <span class="dress-swatch dress-swatch-emerald" role="img" aria-label="Zamrud" title="Zamrud"></span>
+                            <span class="dress-swatch dress-swatch-sage" role="img" aria-label="Sage" title="Sage"></span>
+                            <span class="dress-swatch dress-swatch-champagne" role="img" aria-label="Champagne" title="Champagne"></span>
+                            <span class="dress-swatch dress-swatch-ivory" role="img" aria-label="Ivory" title="Ivory"></span>
+                        </div>
+                        <p class="dress-palette-caption">Contoh palet warna batik (opsional)</p>
                     </div>
                 </section>
 
@@ -510,15 +517,15 @@
                         <p class="pb-2 pt-4 footer-thanks">Terima kasih atas perhatian dan doa restu Anda, yang menjadi kebahagiaan serta kehormatan besar bagi kami.</p>
 
                         <h2 class="font-esthetic">Wassalamualaikum Warahmatullahi Wabarakatuh</h2>
-                        <h2 class="font-arabic pt-4">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَۙ</h2>
 
                         <hr class="my-3">
 
                         <div class="row align-items-center justify-content-center flex-column pb-3">
                             <div class="col-auto">
-                                <small>Beta Storia Wedding Planner <i class="fa-solid fa-heart mx-1"></i> 2027</small>
+                                <small>Beta Storia Wedding Invitation <i class="fa-solid fa-heart mx-1"></i> 2027</small>
                             </div>
                         </div>
+                        <h2 class="font-arabic pt-2">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَۙ</h2>
                     </div>
                 </section>
             </main>
@@ -536,11 +543,6 @@
         <div class="opening-cover-backdrop" aria-hidden="true"></div>
         <div class="opening-cover-content">
             <div class="opening-monogram" aria-hidden="true"><span>D</span><span class="monogram-amp">&amp;</span><span>B</span></div>
-            <blockquote class="opening-verse">
-                <p lang="ar" dir="rtl">وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً</p>
-                <p>“Dan Dia menjadikan di antaramu rasa kasih dan sayang.”</p>
-                <cite>QS. Ar-Rum: 21 · petikan ayat</cite>
-            </blockquote>
             <div class="opening-cover-heading">
                 <p class="opening-cover-kicker">THE WEDDING OF</p>
                 <div class="opening-cover-rule" aria-hidden="true"></div>
@@ -592,19 +594,16 @@
                 <a href="#gift">Wedding Gift</a>
             </nav>
 
-            <button type="button" id="button-theme" class="invitation-menu-theme d-none" aria-label="Ganti tema" onclick="undangan.theme.change()">
-                <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i><span>Ganti Tema</span>
-            </button>
         </div>
     </div>
 
+    <button type="button" id="button-theme" class="invitation-theme-control d-none" aria-label="Ganti tema" title="Ganti tema" onclick="undangan.theme.change()">
+        <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+    </button>
+
     <button type="button" class="invitation-menu-trigger" id="invitation-menu-trigger" aria-label="Buka menu" aria-controls="invitation-menu" aria-expanded="false">
-        <svg viewBox="0 0 64 64" aria-hidden="true">
-            <path d="M32 7c7 8 9 15 0 25-9-10-7-17 0-25Z"/>
-            <path d="M57 32c-8 7-15 9-25 0 10-9 17-7 25 0Z"/>
-            <path d="M32 57c-7-8-9-15 0-25 9 10 7 17 0 25Z"/>
-            <path d="M7 32c8-7 15-9 25 0-10 9-17 7-25 0Z"/>
-            <circle cx="32" cy="32" r="6"/>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
     </button>
 
@@ -625,7 +624,7 @@
         <div class="text-center position-fixed w-100" style="bottom: 8%; left: 0;">
             <div class="d-flex flex-column">
                 <small class="text-secondary">from</small>
-                <small class="text-theme-auto">Beta Storia Wedding Planner</small>
+                <small class="text-theme-auto">Beta Storia Wedding Invitation</small>
             </div>
         </div>
     </div>

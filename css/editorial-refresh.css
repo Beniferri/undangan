@@ -258,12 +258,52 @@
     border-right: 0;
 }
 
+.islamic-modern .editorial-dresscode .dress-palette {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
 .islamic-modern .editorial-dresscode .dress-swatch {
     width: 3.25rem;
     height: 3.25rem;
     border: 0.25rem solid #fffdf8;
     border-radius: 50%;
     box-shadow: 0 0.35rem 1rem rgba(23, 61, 52, 0.16);
+}
+
+.islamic-modern .editorial-dresscode .dress-swatch-emerald {
+    background: #173d34;
+}
+
+.islamic-modern .editorial-dresscode .dress-swatch-sage {
+    background: #9caf88;
+}
+
+.islamic-modern .editorial-dresscode .dress-swatch-champagne {
+    background: #d8c19a;
+}
+
+.islamic-modern .editorial-dresscode .dress-swatch-ivory {
+    background: #f4efe3;
+}
+
+.islamic-modern .editorial-dresscode .dress-palette-caption {
+    margin: 0.75rem 0 0;
+    color: #665d4e;
+    font-size: 0.8rem;
+}
+
+@media screen and (max-width: 360px) {
+    .islamic-modern .editorial-dresscode .dress-palette {
+        gap: 0.45rem;
+    }
+
+    .islamic-modern .editorial-dresscode .dress-swatch {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
 }
 
 .islamic-modern .gallery-panel {
