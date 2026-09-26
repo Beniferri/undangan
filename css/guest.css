@@ -1885,11 +1885,6 @@ body.islamic-modern .event-map-button.dark-mode-map-button:hover {
     display: none !important;
 }
 
-.islamic-modern .save-calendar-button {
-    min-height: 2.75rem;
-    padding-inline: 1.4rem;
-}
-
 .islamic-modern .copy-feedback-toast {
     position: fixed;
     bottom: 5.5rem;

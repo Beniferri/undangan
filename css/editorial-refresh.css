@@ -133,14 +133,6 @@ body.islamic-modern[data-bs-theme="dark"] .editorial-hero .wedding-date {
     color: #10251f;
 }
 
-.islamic-modern .editorial-hero .save-calendar-button {
-    border: 1px solid rgba(234, 216, 183, 0.72) !important;
-    border-radius: 999px;
-    background: rgba(16, 45, 38, 0.38) !important;
-    color: #fffdf8 !important;
-    backdrop-filter: blur(0.5rem);
-}
-
 .islamic-modern .cover-scroll-cue {
     bottom: max(1.1rem, env(safe-area-inset-bottom));
     color: #ead8b7;
@@ -272,9 +264,50 @@ body.islamic-modern[data-bs-theme="dark"] .editorial-hero .wedding-date {
     text-transform: uppercase;
 }
 
-.islamic-modern [data-calendar-button] {
+.islamic-modern .editorial-countdown .countdown-calendar-button {
+    display: inline-flex;
     min-height: 2.75rem;
-    padding-block: 0.5rem !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    max-width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.7rem 1.35rem;
+    border: 1px solid #183d35;
+    border-radius: 999px;
+    background: #183d35;
+    color: #fffdf8;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    box-shadow: 0 0.65rem 1.5rem rgba(24, 61, 53, 0.16);
+    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.islamic-modern .editorial-countdown .countdown-calendar-button:hover {
+    background: #2f6f5e;
+    color: #fffdf8;
+    transform: translateY(-2px);
+}
+
+.islamic-modern .editorial-countdown .countdown-calendar-button:focus-visible {
+    outline: 2px solid #8c652d;
+    outline-offset: 3px;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-countdown .countdown-calendar-button {
+    border-color: #ead8b7;
+    background: #ead8b7;
+    color: #10251f;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-countdown .countdown-calendar-button:hover {
+    background: #fffdf8;
+    color: #10251f;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-countdown .countdown-calendar-button:focus-visible {
+    outline-color: #fffdf8;
 }
 
 .islamic-modern .countdown-panel {
@@ -555,7 +588,12 @@ body.islamic-modern[data-bs-theme="dark"] .editorial-events .event-map-button:fo
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .islamic-modern .opening-cover-cta {
+    .islamic-modern .opening-cover-cta,
+    .islamic-modern .editorial-countdown .countdown-calendar-button {
         transition: none;
+    }
+
+    .islamic-modern .editorial-countdown .countdown-calendar-button:hover {
+        transform: none;
     }
 }
