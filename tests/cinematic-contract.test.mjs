@@ -45,7 +45,9 @@ test('menu module supports open, close, escape, focus restoration, and link navi
 });
 test('cinematic cover preserves hydration and matches requested guest-facing copy', () => {
     const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Loading Page -->'));
-    assert.match(cover, /data-cms="couple-short-names"/);
+    assert.match(cover, /data-cms="opening-groom-name"/);
+    assert.match(cover, /data-cms="opening-bride-name"/);
+    assert.match(html, /id="invitation-menu-title" data-cms="couple-short-names"/);
     assert.match(cover, /data-cms="wedding-date"/);
     assert.match(cover, />Kepada Yth\.<\/p>/);
     assert.match(cover, /Mohon maaf apabila terdapat kesalahan penulisan nama atau gelar\./);
@@ -77,7 +79,8 @@ test('wedding events keep intro, akad, and reception within one section', () => 
     assert.match(events, /<article[^>]*aria-label="Akad Nikah"/);
     assert.match(events, /<article[^>]*aria-label="Resepsi Pernikahan"/);
     assert.equal((events.match(/class="event-snap-panel"/g) || []).length, 2);
-    assert.ok(html.includes('cinematic.css?v=minimal-trigger-1'));
+    assert.ok(html.includes('cinematic.css?v=opening-cover-1'));
+    assert.ok(html.includes('dist/cms.js?v=opening-cover-1'));
 });
 
 test('calendar includes both event venues, addresses, timezone, and local wall-clock times', () => {

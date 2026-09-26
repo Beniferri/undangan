@@ -73,49 +73,17 @@ body.islamic-modern .opening-cover-content::after {
     border-color: rgba(226, 202, 157, 0.1);
 }
 
-body.islamic-modern .opening-monogram {
-    position: relative;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-style: italic;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
-    width: 4.3rem;
-    min-height: 4.3rem;
-    margin-block: 0.6rem;
-    color: var(--cinema-gold);
-    font-size: 1.85rem;
-    font-weight: 500;
-    line-height: 1;
-}
-
-body.islamic-modern .opening-monogram::before,
-body.islamic-modern .opening-monogram::after {
-    position: absolute;
-    inset: 0;
-    border: 1px solid rgba(226, 202, 157, 0.5);
-    content: '';
-}
-
-body.islamic-modern .opening-monogram::after {
-    transform: rotate(45deg);
-}
-
-body.islamic-modern .monogram-amp {
-    font-size: 1rem;
-    font-style: italic;
-}
-
 body.islamic-modern .opening-cover-heading {
     gap: 0.8rem;
+    margin-bottom: clamp(0.5rem, 2vh, 1rem);
     animation: opening-reveal 2.8s 0.3s ease-out both;
 }
 
-body.islamic-modern .opening-cover-kicker {
+body.islamic-modern .opening-cover-kicker,
+body.islamic-modern .opening-cover-date {
     color: var(--cinema-gold);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
 }
 
 body.islamic-modern .opening-cover-rule {
@@ -123,7 +91,20 @@ body.islamic-modern .opening-cover-rule {
     background: linear-gradient(90deg, transparent, var(--cinema-gold), transparent);
 }
 
+body.islamic-modern .opening-cover-name,
+body.islamic-modern .opening-cover-amp {
+    display: block;
+}
+
+body.islamic-modern .opening-cover-amp {
+    margin-block: 0.2rem;
+    font-size: 0.48em;
+    line-height: 1;
+}
+
 body.islamic-modern .opening-cover-names {
+    max-width: 100%;
+    overflow-wrap: anywhere;
     color: var(--cinema-gold);
     font-size: clamp(3rem, 12vw, 4.8rem);
     font-weight: 500;
@@ -131,12 +112,6 @@ body.islamic-modern .opening-cover-names {
     letter-spacing: -0.035em;
     text-shadow: 0 1px 0 #5d482e, 0 0 28px rgba(226, 202, 157, 0.15);
     text-wrap: balance;
-}
-
-body.islamic-modern .opening-cover-date {
-    color: var(--cinema-gold);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
 }
 
 body.islamic-modern .opening-guest-card {
@@ -442,20 +417,14 @@ body.islamic-modern .cinematic-music-control .btn:focus-visible {
 
 @media screen and (max-height: 700px) and (max-width: 576px) {
     body.islamic-modern .opening-cover-content {
-        gap: 0.55rem;
+        gap: 1rem;
         min-height: 100svh;
         padding-block: max(0.65rem, env(safe-area-inset-top)) max(0.65rem, env(safe-area-inset-bottom));
     }
 
-    body.islamic-modern .opening-monogram {
-        width: 3.2rem;
-        min-height: 3.2rem;
-        margin-block: 0;
-        font-size: 1.45rem;
-    }
-
     body.islamic-modern .opening-cover-heading {
         gap: 0.45rem;
+        margin-bottom: 0.5rem;
     }
 
     body.islamic-modern .opening-cover-names {
