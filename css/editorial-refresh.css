@@ -93,18 +93,44 @@ body.islamic-modern .editorial-section:is(.editorial-story, .editorial-rsvp-form
 .islamic-modern .editorial-section.editorial-hero [data-cms="couple-names"] {
     max-width: 38rem;
     color: #fffdf8;
-    font-size: clamp(2.55rem, 8vw, 3.4rem) !important;
+    font-size: clamp(2rem, 4vw, 2.5rem) !important;
     font-weight: 500;
-    line-height: 0.9;
+    line-height: 0.98;
     text-wrap: balance;
 }
 
 .islamic-modern .editorial-hero [data-cms="wedding-date"] {
-    color: #ead8b7;
+    margin-top: 0.85rem !important;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid #ead8b7;
+    border-radius: 999px;
+    background-color: #ead8b7;
+    color: #10251f;
     font-size: 0.78rem !important;
     font-weight: 600;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
+    line-height: 1.5;
     text-transform: uppercase;
+}
+
+body.islamic-modern[data-bs-theme="light"] .editorial-section.editorial-hero .couple-names {
+    color: #fffdf8 !important;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-section.editorial-hero .couple-names {
+    color: #ead8b7 !important;
+}
+
+body.islamic-modern[data-bs-theme="light"] .editorial-hero .wedding-date {
+    border-color: #fffdf8;
+    background-color: #fffdf8;
+    color: #183d35;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .editorial-hero .wedding-date {
+    border-color: #ead8b7;
+    background-color: #ead8b7;
+    color: #10251f;
 }
 
 .islamic-modern .editorial-hero .save-calendar-button {
@@ -493,6 +519,10 @@ body.islamic-modern[data-bs-theme="dark"] .editorial-events .event-map-button:fo
 }
 
 @media screen and (max-width: 576px) {
+    .islamic-modern .editorial-section.editorial-hero [data-cms="couple-names"] {
+        font-size: clamp(1.85rem, 10vw, 2.5rem) !important;
+    }
+
     .islamic-modern .editorial-hero [data-cms="profile-image"] {
         width: 10.5rem;
         height: 10.5rem;

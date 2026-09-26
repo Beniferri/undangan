@@ -10,7 +10,7 @@ const guest = readFileSync(new URL('../css/guest.css', import.meta.url), 'utf8')
 test('cover actions stay grouped and CMS guest hooks survive', () => {
     const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Hidden Menu Overlay -->'));
     assert.match(cover, /class="opening-cover-actions"[\s\S]*?id="guest-name"[\s\S]*?class="btn opening-cover-cta"/);
-    assert.match(cinematic, /\.opening-cover-actions\s*\{[^}]*margin-top:\s*auto;[^}]*margin-bottom:\s*0/s);
+    assert.match(cinematic, /\.opening-cover-actions\s*\{[^}]*margin:\s*0;/s);
     assert.match(cinematic, /--cinema-gold:\s*#f1dfb9/);
 });
 

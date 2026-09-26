@@ -7,8 +7,8 @@ const css = readFileSync(new URL('../css/editorial-refresh.css', import.meta.url
 const theme = readFileSync(new URL('../js/common/theme.js', import.meta.url), 'utf8');
 
 test('theme fixes use selectors on the theme-bearing body and a refreshed CSS URL', () => {
-    assert.match(html, /editorial-refresh\.css\?v=theme-readability-1/);
-    assert.match(html, /dist\/guest\.js\?v=theme-readability-1/);
+    assert.match(html, /editorial-refresh\.css\?v=ui-balance-1/);
+    assert.match(html, /dist\/guest\.js\?v=ui-balance-1/);
     assert.doesNotMatch(theme, /\.style\.setProperty\(['"]color['"], '#ead8b7'/);
     assert.match(css, /body\.islamic-modern\[data-bs-theme="dark"\] \.gift-detail-label\s*\{[^}]*color:\s*#ead8b7/s);
     assert.match(css, /body\.islamic-modern\[data-bs-theme="dark"\] \.editorial-section\.editorial-footer\s*\{[^}]*background-image:\s*none\s*!important/s);

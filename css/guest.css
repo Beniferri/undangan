@@ -350,6 +350,43 @@ html[data-bs-theme="dark"] .bg-white-black {
     line-height: 1.05;
 }
 
+.islamic-modern .couple-names .couple-amp {
+    margin-block: 0.3rem;
+    font-size: 0.6em;
+    line-height: 1;
+}
+
+.islamic-modern .hero-panel .couple-names {
+    color: var(--couple-text, #183d35);
+    font-size: clamp(1rem, 2vw, 1.9rem);
+    line-height: 1.08;
+}
+
+.islamic-modern .hero-panel .wedding-date {
+    display: inline-block;
+    margin-top: 0.5rem !important;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--date-border, #8c652d);
+    border-radius: 999px;
+    background-color: var(--date-bg, #183d35);
+    color: var(--date-text, #fffdf8);
+    line-height: 1.4;
+}
+
+body.islamic-modern[data-bs-theme="dark"] {
+    --couple-text: #ead8b7;
+    --date-border: #ead8b7;
+    --date-bg: #ead8b7;
+    --date-text: #10251f;
+}
+
+body.islamic-modern[data-bs-theme="light"] {
+    --couple-text: #183d35;
+    --date-border: #8c652d;
+    --date-bg: #183d35;
+    --date-text: #fffdf8;
+}
+
 .welcome-card {
     width: min(92vw, 28rem);
     padding: 2.5rem 1.5rem;
@@ -974,6 +1011,17 @@ html[data-bs-theme="dark"] .bg-white-black {
     padding-bottom: max(6rem, 12vh) !important;
 }
 
+.editorial-footer .footer-credit {
+    display: block;
+    margin-top: 1.5rem;
+    color: inherit;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    opacity: 0.65;
+}
+
 .editorial-wishes .wishes-panel {
     width: min(100%, 42rem);
     margin-inline: auto;
@@ -1276,11 +1324,6 @@ body.islamic-modern {
 
 .islamic-modern :where(p, li, address) {
     text-wrap: pretty;
-}
-
-.islamic-modern .hero-panel h2 {
-    font-size: clamp(2.25rem, 5vw, 4rem);
-    line-height: 0.95;
 }
 
 .islamic-modern .hero-date,
@@ -2052,6 +2095,11 @@ body.islamic-modern .event-map-button.dark-mode-map-button:hover {
     .editorial-person:focus-within > img {
         transform: none;
     }
+}
+
+.islamic-modern .couple-names > span {
+    display: block;
+    overflow-wrap: anywhere;
 }
 
 @media (prefers-reduced-motion: reduce) {
