@@ -85,6 +85,9 @@ export const initInvitationMenu = (doc = document, win = window) => {
         let activeLink = links[0];
         links.forEach((link) => {
             const target = doc.querySelector(link.getAttribute('href'));
+            if (link.hidden || target?.hidden) {
+                return;
+            }
             if (target && target.getBoundingClientRect().top <= threshold) {
                 activeLink = link;
             }
@@ -113,7 +116,8 @@ export const initInvitationMenu = (doc = document, win = window) => {
             close();
         } else if (event.key === 'Tab') {
             const first = closeButton;
-            const last = links[links.length - 1] || first;
+            const visibleLinks = Array.from(links).filter((link) => !link.hidden);
+            const last = visibleLinks[visibleLinks.length - 1] || first;
             if (event.shiftKey && (doc.activeElement === first || !menu.contains(doc.activeElement))) {
                 event.preventDefault();
                 last.focus();

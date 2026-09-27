@@ -34,7 +34,8 @@ test('gift heading cannot be replaced by a bank label but account CMS remains av
     assert.doesNotMatch(gift, /Bank Syariah Indonesia|\bBSI\b|data-cms="gift-label"/i);
     assert.match(gift, /data-cms="gift-groom-account-number"/);
     assert.match(gift, /data-copy-from="gift-groom-account-number"/);
-    assert.match(cms, /addressSelector \? item\.name : item\.account_name/);
+    assert.match(cms, /setCmsText\(nameSelector, owner\)/);
+    assert.match(cms, /setGift\(homeGift, 'gift-home-name', 'gift-home-address'\)/);
     assert.doesNotMatch(cms, /setCmsText\('gift-label'/);
 });
 

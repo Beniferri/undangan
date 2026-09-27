@@ -437,7 +437,7 @@ export const comment = (() => {
 
         const presence = document.getElementById('form-presence');
         if (!id && presence && presence.value === '0') {
-            util.notify('Please select your attendance status.').warning();
+            util.notify('Pilih konfirmasi kehadiran terlebih dahulu.').warning();
             return;
         }
 

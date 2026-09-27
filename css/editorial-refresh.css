@@ -250,6 +250,7 @@ body.islamic-modern[data-bs-theme="dark"] .editorial-hero .wedding-date {
     letter-spacing: -0.035em;
 }
 
+.islamic-modern .event-date,
 .islamic-modern .event-time,
 .islamic-modern .event-venue {
     color: #344e44;
@@ -394,8 +395,21 @@ body.islamic-modern[data-bs-theme="dark"] .editorial-countdown .countdown-calend
     margin-inline: auto;
 }
 
+.islamic-modern .editorial-rsvp-form .rsvp-instruction {
+    margin: 0 auto 1.25rem;
+    color: var(--editorial-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.islamic-modern .editorial-rsvp-form .form-label {
+    font-size: 0.9rem;
+}
+
 .islamic-modern .editorial-rsvp-form .form-control,
 .islamic-modern .editorial-rsvp-form .form-select {
+    font-size: 1rem;
     min-height: 3rem;
     border-radius: 0.55rem !important;
     background-color: rgba(255, 255, 255, 0.68);
@@ -472,6 +486,7 @@ body.islamic-modern .editorial-wishes .wishes-panel {
 [data-bs-theme="dark"] body.islamic-modern .story-panel .small,
 [data-bs-theme="dark"] body.islamic-modern .gift-intro,
 [data-bs-theme="dark"] body.islamic-modern .verse-intro,
+[data-bs-theme="dark"] body.islamic-modern .event-date,
 [data-bs-theme="dark"] body.islamic-modern .event-time,
 [data-bs-theme="dark"] body.islamic-modern .event-venue {
     color: rgba(255, 253, 248, 0.82) !important;

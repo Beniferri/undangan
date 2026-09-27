@@ -184,8 +184,8 @@ body.islamic-modern .cinematic-music-control {
 
 body.islamic-modern .cinematic-music-control .btn {
     display: grid;
-    width: 2.5rem;
-    height: 2.5rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
     padding: 0;
     place-items: center;
     border: 1px solid var(--cinema-gold);
@@ -554,8 +554,8 @@ body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
 
     body.islamic-modern .editorial-events .event-overview .editorial-lead {
         margin-top: 0.3rem;
-        font-size: 0.72rem;
-        line-height: 1.25;
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
 
     body.islamic-modern .editorial-events .event-schedule {
@@ -577,11 +577,12 @@ body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
         line-height: 1.4;
     }
 
+    body.islamic-modern .editorial-events .event-date,
     body.islamic-modern .editorial-events .event-time,
     body.islamic-modern .editorial-events .event-venue {
         margin-bottom: 0.35rem;
-        font-size: 0.875rem;
-        line-height: 1.4;
+        font-size: 0.9375rem;
+        line-height: 1.5;
     }
 
     body.islamic-modern .editorial-events .event-map-button {
@@ -605,9 +606,9 @@ body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
     }
 
     body.islamic-modern .editorial-events .event-overview .editorial-lead {
-        margin-top: 0.25rem;
-        font-size: 0.76rem;
-        line-height: 1.25;
+        margin-top: 0.5rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
 
     body.islamic-modern .editorial-events .event-schedule {
@@ -630,11 +631,12 @@ body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
         line-height: 1.4;
     }
 
+    body.islamic-modern .editorial-events .event-date,
     body.islamic-modern .editorial-events .event-time,
     body.islamic-modern .editorial-events .event-venue {
-        margin-bottom: 0.5rem;
-        font-size: 0.875rem;
-        line-height: 1.45;
+        margin-bottom: 0.4rem;
+        font-size: 0.9375rem;
+        line-height: 1.5;
     }
 
     body.islamic-modern .editorial-events .event-map-button {

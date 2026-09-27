@@ -40,6 +40,12 @@ test('menu panel slides and fades in from the right with reduced-motion support'
     assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.invitation-menu-overlay\.is-open,[\s\S]*?transition:\s*none/);
 });
 
+test('menu trap ignores the hidden gift link when choosing its last focus target', () => {
+    assert.match(menu, /const visibleLinks = Array\.from\(links\)\.filter\(\(link\) => !link\.hidden\)/);
+    assert.match(menu, /const last = visibleLinks\[visibleLinks\.length - 1\] \|\| first/);
+    assert.match(menu, /if \(link\.hidden \|\| target\?\.hidden\)/);
+});
+
 test('menu items are clean text without side icons, while retaining hover and active color', () => {
     assert.match(css, /\.invitation-menu-nav a:hover[\s\S]*?transform:\s*translateX\(4px\)/);
     assert.match(css, /\.invitation-menu-nav a\.is-active\s*\{[^}]*color:/);
@@ -54,5 +60,5 @@ test('menu items are clean text without side icons, while retaining hover and ac
     assert.match(menu, /backgroundControls\.forEach\(\(control\) => control\.setAttribute\('inert'/);
     assert.match(menu, /backgroundControls\.forEach\(\(control\) => control\.removeAttribute\('inert'/);
     assert.match(menu, /event\.key === 'Tab'/);
-    assert.match(html, /dist\/guest\.js\?v=ui-balance-1/);
+    assert.match(html, /dist\/guest\.js\?v=guest-ux-audit-1/);
 });

@@ -314,13 +314,18 @@ export const guest = (() => {
      * @returns {void}
      */
     const buildGoogleCalendar = () => {
-        const parseDate = (value) => {
-            const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
-            if (match) {
-                return [Number(match[1]), Number(match[2]), Number(match[3])];
+        const parseDate = (value, timezone) => {
+            const localDate = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:T\d{2}:\d{2}(?::\d{2})?)?$/);
+            if (localDate) {
+                return localDate.slice(1).map(Number);
             }
-            const now = new Date();
-            return [now.getUTCFullYear(), now.getUTCMonth() + 1, now.getUTCDate()];
+            const date = new Date(value || Date.now());
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: timezone,
+                year: 'numeric', month: '2-digit', day: '2-digit',
+            }).formatToParts(Number.isNaN(date.getTime()) ? new Date() : date);
+            const part = (type) => Number(parts.find((item) => item.type === type).value);
+            return [part('year'), part('month'), part('day')];
         };
         const parseTime = (value) => {
             const match = String(value || '').match(/(\d{1,2})[.:](\d{2})/);
@@ -339,28 +344,39 @@ export const guest = (() => {
             const secondName = document.querySelector('[data-cms="event-2-name"]')?.textContent.trim() || 'Resepsi';
             const firstTime = document.querySelector('[data-cms="event-1-time"]')?.textContent.trim() || '';
             const secondTime = document.querySelector('[data-cms="event-2-time"]')?.textContent.trim() || '';
+            const firstDateElement = document.querySelector('[data-cms="event-1-date"]');
+            const secondDateElement = document.querySelector('[data-cms="event-2-date"]');
+            const firstDateLabel = firstDateElement?.parentElement.hidden ? '' : firstDateElement?.textContent.trim() || '';
+            const secondDateLabel = secondDateElement?.parentElement.hidden ? '' : secondDateElement?.textContent.trim() || '';
             const firstVenue = document.querySelector('[data-cms="event-1-venue"]')?.innerText.replace(/\s+/g, ' ').trim() || '';
             const secondVenue = document.querySelector('[data-cms="event-2-venue"]')?.innerText.replace(/\s+/g, ' ').trim() || '';
             const rawDate = document.body.dataset.time?.trim() || '';
+            const firstDate = firstDateElement?.dataset.eventDate || rawDate;
+            const secondDate = secondDateElement?.dataset.eventDate || firstDate;
             const timezone = document.body.dataset.timezone?.trim() || 'Asia/Jakarta';
-            const [year, month, day] = parseDate(rawDate);
-            const sourceTime = parseTime(rawDate) || [9, 0];
+            const [year, month, day] = parseDate(firstDate, timezone);
+            const [endYear, endMonth, endDay] = parseDate(secondDate, timezone);
+            const sourceTime = parseTime(firstDate) || parseTime(rawDate) || [9, 0];
             const [startHour, startMinute] = parseTime(firstTime) || sourceTime;
             const secondClock = parseTime(secondTime);
             const [endHour, endMinute] = secondClock
                 ? [secondClock[0] + 3, secondClock[1]]
                 : [startHour + 4, startMinute];
-            const calendarEndDay = endHour >= 24 ? day + 1 : day;
+            const endInstant = new Date(Date.UTC(endYear, endMonth - 1, endDay, endHour, endMinute));
+            const startInstant = Date.UTC(year, month - 1, day, startHour, startMinute);
+            if (endInstant.getTime() <= startInstant) {
+                endInstant.setTime(startInstant + 4 * 60 * 60 * 1000);
+            }
             const url = new URL('https://calendar.google.com/calendar/render');
             url.search = new URLSearchParams({
                 action: 'TEMPLATE',
                 text: `Pernikahan ${couple}`,
-                dates: `${formatCalendarLocal(year, month, day, startHour, startMinute)}/${formatCalendarLocal(year, month, calendarEndDay, endHour % 24, endMinute)}`,
+                dates: `${formatCalendarLocal(year, month, day, startHour, startMinute)}/${formatCalendarLocal(endInstant.getUTCFullYear(), endInstant.getUTCMonth() + 1, endInstant.getUTCDate(), endInstant.getUTCHours(), endInstant.getUTCMinutes())}`,
                 details: [
-                    `${firstName}: ${firstTime}`,
+                    `${firstName}: ${[firstDateLabel, firstTime].filter(Boolean).join(', ')}`,
                     firstVenue,
                     '',
-                    `${secondName}: ${secondTime}`,
+                    `${secondName}: ${[secondDateLabel, secondTime].filter(Boolean).join(', ')}`,
                     secondVenue,
                     '',
                     'Kami menantikan kehadiran dan doa restu Anda.',
@@ -516,6 +532,51 @@ export const guest = (() => {
         }, 1800);
     };
 
+    const refreshGiftAvailability = () => {
+        const gift = document.getElementById('gift');
+        const toggle = document.getElementById('gift-toggle');
+        const options = document.getElementById('gift-options');
+        if (!gift || !toggle || !options) {
+            return;
+        }
+        let firstAvailable = null;
+        options.querySelectorAll('[data-gift-view]').forEach((button) => {
+            const panel = options.querySelector(`[data-gift-panel="${button.dataset.giftView}"]`);
+            const source = panel?.querySelector('[data-copy-from]');
+            const value = panel?.querySelector(`[data-cms="${source?.dataset.copyFrom}"]`)?.textContent.trim() || '';
+            const ownerName = panel?.querySelector('strong')?.textContent.trim() || '';
+            let recipientName = null;
+            if (button.dataset.giftView === 'groom') {
+                recipientName = document.querySelector('[data-cms="groom-name"]')?.textContent.trim();
+            } else if (button.dataset.giftView === 'bride') {
+                recipientName = document.querySelector('[data-cms="bride-name"]')?.textContent.trim();
+            }
+            const available = Boolean(value && ownerName && !/belum tersedia/i.test(`${value} ${ownerName}`)
+                && (!recipientName || ownerName === recipientName));
+            button.hidden = !available;
+            button.disabled = !available;
+            if (source) {
+                source.hidden = !available;
+                source.disabled = !available;
+            }
+            if (available && !firstAvailable) {
+                firstAvailable = button;
+            }
+        });
+        const hasAvailableGift = Boolean(firstAvailable);
+        gift.hidden = !hasAvailableGift;
+        toggle.hidden = !hasAvailableGift;
+        document.querySelectorAll('.invitation-menu-nav a[href="#gift"]').forEach((link) => {
+            link.hidden = !hasAvailableGift;
+        });
+        if (firstAvailable) {
+            firstAvailable.click();
+        } else {
+            options.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    };
+
     const initGift = () => {
         const toggle = document.getElementById('gift-toggle');
         const options = document.getElementById('gift-options');
@@ -561,6 +622,7 @@ export const guest = (() => {
                 }
             });
         });
+        Promise.resolve(window.cmsReady).then(refreshGiftAvailability);
     };
 
     /**
