@@ -1029,8 +1029,14 @@ body.islamic-modern[data-bs-theme="light"] {
     margin-inline: auto;
 }
 
+/* JavaScript handles one-section wheel/touch travel; native snap can skip sections. */
+html.section-scroll-enabled {
+    scroll-behavior: auto !important;
+    scroll-snap-type: none !important;
+}
+
 @media screen and (max-width: 576px) {
-    html {
+    html:not(.section-scroll-enabled) {
         /* proximity: don't trap users in content-heavy sections */
         scroll-snap-type: y proximity;
     }
