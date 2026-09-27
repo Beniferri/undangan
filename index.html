@@ -54,14 +54,14 @@
     <!-- Dependencies CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/guest.css?v=calendar-countdown-1">
-    <link rel="stylesheet" href="./css/editorial-refresh.css?v=calendar-countdown-1">
-    <link rel="stylesheet" href="./css/cinematic.css?v=ui-balance-1">
+    <link rel="stylesheet" href="./css/guest.css?v=guest-ux-audit-1">
+    <link rel="stylesheet" href="./css/editorial-refresh.css?v=guest-ux-audit-1">
+    <link rel="stylesheet" href="./css/cinematic.css?v=guest-ux-audit-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
-    <script defer src="./dist/guest.js?v=ui-balance-1"></script>
-    <script defer src="./dist/cms.js?v=ui-balance-1"></script>
+    <script defer src="./dist/guest.js?v=guest-ux-audit-1"></script>
+    <script defer src="./dist/cms.js?v=guest-ux-audit-1"></script>
     <script>
     /* Preserve comment section: set data-preserve="comment" so js can check without patching native APIs */
     document.addEventListener('DOMContentLoaded', () => {
@@ -269,9 +269,10 @@
                             <div class="event-card premium-reveal">
                                 <p class="event-order">Ijab dan kabul</p>
                                 <h3 class="font-esthetic" data-cms="event-1-name">Akad Nikah</h3>
+                                <p class="event-date"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span data-cms="event-1-date">Minggu, 17 Januari 2027</span></p>
                                 <p class="event-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-cms="event-1-time">Pukul 10.00 WIB - Selesai</span></p>
                                 <address class="event-venue"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-cms="event-1-venue">Masjid Suciati Saliman<br>Jl. Gito Gati, Grojogan, Pandowoharjo, Sleman, Daerah Istimewa Yogyakarta 55512.</span></address>
-                                <a href="https://www.google.com/maps/search/?api=1&amp;query=Masjid+Suciati+Saliman%2C+Jl.+Gito+Gati%2C+Grojogan%2C+Pandowoharjo%2C+Sleman%2C+Daerah+Istimewa+Yogyakarta+55512" target="_blank" rel="noopener noreferrer" class="event-map-button" data-cms-event-map="1"><i class="fa-solid fa-map-location-dot me-2"></i>Lihat lokasi</a>
+                                <a href="https://www.google.com/maps/search/?api=1&amp;query=Masjid+Suciati+Saliman%2C+Jl.+Gito+Gati%2C+Grojogan%2C+Pandowoharjo%2C+Sleman%2C+Daerah+Istimewa+Yogyakarta+55512" target="_blank" rel="noopener noreferrer" class="event-map-button" data-cms-event-map="1"><i class="fa-solid fa-map-location-dot me-2"></i>Petunjuk Arah ke Masjid</a>
                             </div>
                         </article>
                         <article class="event-snap-panel" role="article" aria-label="Resepsi Pernikahan">
@@ -279,9 +280,10 @@
                             <div class="event-card premium-reveal">
                                 <p class="event-order">Silaturahmi dan syukur</p>
                                 <h3 class="font-esthetic" data-cms="event-2-name">Resepsi Pernikahan</h3>
+                                <p class="event-date"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span data-cms="event-2-date">Minggu, 17 Januari 2027</span></p>
                                 <p class="event-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-cms="event-2-time">Pukul 13.00 WIB - Selesai</span></p>
                                 <address class="event-venue"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-cms="event-2-venue">Masjid Suciati Saliman<br>Jl. Gito Gati, Grojogan, Pandowoharjo, Sleman, Daerah Istimewa Yogyakarta 55512.</span></address>
-                                <a href="https://www.google.com/maps/search/?api=1&amp;query=Masjid+Suciati+Saliman%2C+Jl.+Gito+Gati%2C+Grojogan%2C+Pandowoharjo%2C+Sleman%2C+Daerah+Istimewa+Yogyakarta+55512" target="_blank" rel="noopener noreferrer" class="event-map-button" data-cms-event-map="2"><i class="fa-solid fa-map-location-dot me-2"></i>Lihat lokasi</a>
+                                <a href="https://www.google.com/maps/search/?api=1&amp;query=Masjid+Suciati+Saliman%2C+Jl.+Gito+Gati%2C+Grojogan%2C+Pandowoharjo%2C+Sleman%2C+Daerah+Istimewa+Yogyakarta+55512" target="_blank" rel="noopener noreferrer" class="event-map-button" data-cms-event-map="2"><i class="fa-solid fa-map-location-dot me-2"></i>Petunjuk Arah ke Masjid</a>
                             </div>
                         </article>
                     </div>
@@ -337,13 +339,13 @@
 
                                 <div class="carousel-inner rounded-4">
                                     <div class="carousel-item active">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="1" alt="Foto galeri pernikahan 1" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="1" alt="Foto galeri pernikahan 1" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="eager" decoding="async">
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="2" alt="Foto galeri pernikahan 2" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="2" alt="Foto galeri pernikahan 2" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="3" alt="Foto galeri pernikahan 3" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="3" alt="Foto galeri pernikahan 3" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
                                     </div>
                                 </div>
 
@@ -367,13 +369,13 @@
 
                                 <div class="carousel-inner rounded-4">
                                     <div class="carousel-item active">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="4" alt="Foto galeri pernikahan 4" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="4" alt="Foto galeri pernikahan 4" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="5" alt="Foto galeri pernikahan 5" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="5" alt="Foto galeri pernikahan 5" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="6" alt="Foto galeri pernikahan 6" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)">
+                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="6" alt="Foto galeri pernikahan 6" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
                                     </div>
                                 </div>
 
@@ -392,14 +394,14 @@
                 </section>
 
                 <!-- Gift -->
-                <section class="bg-light-dark pb-3 editorial-section editorial-gift" id="gift">
+                <section class="bg-light-dark pb-3 editorial-section editorial-gift" id="gift" hidden>
                     <div class="container text-center">
                         <div class="gift-panel">
                             <p class="gift-eyebrow">TANDA KASIH</p>
                             <h2 class="font-esthetic gift-title">Tanda Kasih</h2>
                             <p class="gift-intro">Kehadiran dan doa Anda sudah sangat berarti. Jika berkenan mengirimkan tanda kasih, tersedia pilihan berikut.</p>
 
-                            <button class="gift-reveal-button" type="button" id="gift-toggle" aria-expanded="false" aria-controls="gift-options">
+                            <button class="gift-reveal-button" type="button" id="gift-toggle" aria-expanded="false" aria-controls="gift-options" hidden>
                                 <i class="fa-solid fa-gift me-2"></i>Lihat Tanda Kasih
                             </button>
 
@@ -441,7 +443,8 @@
                 <section class="bg-light-dark my-0 pb-0 pt-3 editorial-section editorial-rsvp editorial-rsvp-form" id="rsvp">
                     <div class="container">
                         <div class="border rounded-5 shadow p-3 mb-2">
-                            <h2 class="font-esthetic text-center mt-2 mb-4">RSVP</h2>
+                            <h2 class="font-esthetic text-center mt-2 mb-4">Konfirmasi Kehadiran</h2>
+                            <p class="rsvp-instruction">Pilih kehadiran, lalu tulis doa Anda.</p>
 
                             <div class="mb-3">
                                 <label for="form-name" class="form-label my-1"><i class="fa-solid fa-person me-2"></i>Nama</label>
@@ -469,7 +472,7 @@
 
                             <div class="d-block mb-3" id="comment-form-default">
                                 <div id="information" class="alert alert-info alert-dismissible fade show rounded-4" role="alert">
-                                    <button type="button" class="btn-close rounded-4 p-3" data-bs-dismiss="alert" aria-label="Close" onclick="undangan.guest.closeInformation()"></button>
+                                    <button type="button" class="btn-close rounded-4 p-3" data-bs-dismiss="alert" aria-label="Tutup pemberitahuan" onclick="undangan.guest.closeInformation()"></button>
 
                                     <p class="form-section-title">Tinggalkan Ucapan</p>
                                     <p class="m-0">Tuliskan doa terbaik Anda untuk langkah baru kami.</p>
@@ -486,7 +489,7 @@
 
                             <div class="d-grid">
                                 <button class="btn btn-primary btn-sm rounded-4 shadow m-1" onclick="undangan.comment.send(this)" data-offline-disabled="false">
-                                    <i class="fa-solid fa-paper-plane me-2"></i>Kirim Ucapan
+                                    <i class="fa-solid fa-paper-plane me-2"></i>Kirim Konfirmasi &amp; Ucapan
                                 </button>
                             </div>
                         </div>
@@ -582,7 +585,7 @@
                 </button>
             </div>
 
-            <nav class="invitation-menu-nav" aria-label="Wedding invitation navigation">
+            <nav class="invitation-menu-nav" aria-label="Navigasi undangan">
                 <a href="#home" class="is-active" aria-current="page">Beranda</a>
                 <a href="#groom">Mempelai</a>
                 <a href="#story">Kisah Kami</a>
@@ -698,7 +701,9 @@
                 const presence = document.getElementById('form-presence').value;
                 const guestCount = Number(document.getElementById('form-count')?.value || 1);
                 const message = document.getElementById('form-comment').value.trim();
-                if (name.length < 2 || !message || presence === '0') { alert('Nama, presensi, dan ucapan wajib diisi.'); return; }
+                if (name.length < 2) { alert('Isi nama Anda (minimal 2 karakter).'); return; }
+                if (presence === '0') { alert('Pilih konfirmasi kehadiran terlebih dahulu.'); return; }
+                if (!message) { alert('Tulis ucapan dan doa Anda terlebih dahulu.'); return; }
                 button.disabled = true;
                 try {
                     const response = await fetch(`${API_BASE}/api/rsvp`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name, guest_count:guestCount, attendance:presence === '1' ? 'hadir' : 'tidak_hadir', message})});

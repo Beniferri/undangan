@@ -25,10 +25,10 @@ test('menu trigger is a minimal top-right control and existing menu remains avai
     assert.match(cinematic, /\.invitation-menu-trigger svg\s*\{[^}]*filter:\s*drop-shadow\(/s);
 });
 
-test('music control is smaller and fixed at bottom-left', () => {
+test('music control stays bottom-left with a 44px touch target', () => {
     assert.match(cinematic, /\.cinematic-music-control\s*\{[^}]*left:\s*max\([^;]+[^}]*bottom:\s*max\(/s);
     assert.doesNotMatch(cinematic, /\.cinematic-music-control\s*\{[^}]*right:/s);
-    assert.match(cinematic, /\.cinematic-music-control \.btn\s*\{[^}]*width:\s*2\.5rem[^}]*height:\s*2\.5rem/s);
+    assert.match(cinematic, /\.cinematic-music-control \.btn\s*\{[^}]*min-width:\s*2\.75rem[^}]*min-height:\s*2\.75rem/s);
 });
 
 test('theme toggle is a compact fixed bottom-right control', () => {

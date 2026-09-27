@@ -79,6 +79,22 @@ export const image = (() => {
     };
 
     /**
+     * Track the initially visible gallery slide; defer offscreen slides to native loading.
+     * @param {HTMLImageElement} el
+     * @returns {void}
+     */
+    const getByGallery = (el) => {
+        if (el.loading === 'eager' && !el.closest('.carousel-item')?.hidden) {
+            getByDefault(el);
+        } else {
+            // A lazy slide must not block the opening loader, but a failed image
+            // still needs an error handler when it is requested later.
+            el.onerror = () => console.error('Gallery image failed to load');
+            progress.complete('image', true);
+        }
+    };
+
+    /**
      * @returns {boolean}
      */
     const hasDataSrc = () => Array.from(images).some((i) => i.hasAttribute('data-src'));
@@ -95,7 +111,15 @@ export const image = (() => {
          */
         const runGroup = async (filter) => {
             urlCache.length = 0;
-            imgs.filter(filter).forEach((el) => el.hasAttribute('data-src') ? getByFetch(el) : getByDefault(el));
+            imgs.filter(filter).forEach((el) => {
+                if (el.hasAttribute('data-cms-gallery')) {
+                    getByGallery(el);
+                } else if (el.hasAttribute('data-src')) {
+                    getByFetch(el);
+                } else {
+                    getByDefault(el);
+                }
+            });
             await c.run(urlCache, progress.getAbort());
         };
 

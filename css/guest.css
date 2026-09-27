@@ -929,9 +929,11 @@ body.islamic-modern[data-bs-theme="light"] {
 }
 
 .gift-detail-copy {
+    display: grid;
+    place-items: center;
     flex: 0 0 auto;
-    width: 2rem;
-    height: 2rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
     border: 1px solid var(--bstoria-gold);
     border-radius: 50%;
     background: transparent;
@@ -1080,11 +1082,11 @@ body.islamic-modern[data-bs-theme="light"] {
     }
 
     .editorial-rsvp-form {
-        height: 100svh;
         min-height: 100svh;
+        height: auto;
         padding-top: 3rem !important;
         padding-bottom: 3rem !important;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .editorial-rsvp-form > .container {
@@ -1109,18 +1111,18 @@ body.islamic-modern[data-bs-theme="light"] {
     .editorial-rsvp-form .form-label {
         margin-top: 0 !important;
         margin-bottom: 0.2rem !important;
-        font-size: 0.78rem;
+        font-size: 0.9rem;
     }
 
     .editorial-rsvp-form .form-control,
     .editorial-rsvp-form .form-select {
-        min-height: 2.25rem;
-        padding: 0.35rem 0.75rem;
-        font-size: 0.84rem;
+        min-height: 3rem;
+        padding: 0.55rem 0.75rem;
+        font-size: 1rem;
     }
 
     .editorial-rsvp-form #form-comment {
-        min-height: 4.1rem;
+        min-height: 7.5rem;
         padding-top: 0.55rem;
     }
 
@@ -1135,13 +1137,14 @@ body.islamic-modern[data-bs-theme="light"] {
     }
 
     .editorial-rsvp-form #information p:last-of-type {
-        font-size: 0.78rem;
-        line-height: 1.35;
+        font-size: 0.9rem;
+        line-height: 1.5;
     }
 
     .editorial-rsvp-form .d-grid button {
-        padding-block: 0.4rem;
-        font-size: 0.84rem;
+        min-height: 2.75rem;
+        padding-block: 0.6rem;
+        font-size: 0.95rem;
     }
 }
 

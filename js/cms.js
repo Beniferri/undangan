@@ -135,8 +135,9 @@ const setStructuredData = (wedding, events, description) => {
         image: weddingImageUrl(wedding),
     });
 };
-const formatDate = (value, timezone) => new Intl.DateTimeFormat('id-ID', {
-    dateStyle: 'long', timeZone: timezone || 'Asia/Jakarta',
+const formatDate = (value, timezone, includeWeekday = false) => new Intl.DateTimeFormat('id-ID', {
+    ...(includeWeekday ? { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' } : { dateStyle: 'long' }),
+    timeZone: timezone || 'Asia/Jakarta',
 }).format(new Date(value));
 const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories = [] }) => {
     const couple = `${wedding.groom_name} & ${wedding.bride_name}`;
@@ -270,7 +271,15 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     setCanonical(wedding.canonical_url || window.location.href.split('?')[0]);
     events.slice(0, 2).forEach((event, index) => {
         setCmsText(`event-${index + 1}-name`, event.name);
-        setCmsText(`event-${index + 1}-time`, event.time_label || formatDate(event.event_date, wedding.timezone));
+        const dateElement = document.querySelector(`[data-cms="event-${index + 1}-date"]`);
+        if (dateElement) {
+            dateElement.parentElement.hidden = !event.event_date;
+            if (event.event_date) {
+                setCmsText(`event-${index + 1}-date`, formatDate(event.event_date, wedding.timezone, true));
+                dateElement.dataset.eventDate = event.event_date;
+            }
+        }
+        setCmsText(`event-${index + 1}-time`, event.time_label || (event.event_date ? formatDate(event.event_date, wedding.timezone) : ''));
         const venue = [event.venue, event.address].filter(Boolean).join('\n');
         setCmsText(`event-${index + 1}-venue`, venue);
         const mapLink = document.querySelector(`[data-cms-event-map="${index + 1}"]`);
@@ -303,37 +312,37 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         if (!image) {
             return;
         }
+        image.loading = index === 0 ? 'eager' : 'lazy';
+        image.decoding = 'async';
         image.src = item.directus_file_id
             ? directusAssetUrl(item.directus_file_id, '?width=1280&quality=80&format=webp')
             : item.image_url;
         image.dataset.src = image.src;
         image.alt = item.alt_text || image.alt;
         image.title = item.caption || image.alt;
-        image.loading = 'lazy';
-        image.decoding = 'async';
     });
     const giftType = (item) => item?.gift_type || item?.type || item?.category;
     const groomGift = gifts.find((item) => giftType(item) === 'groom') || gifts[0];
     const brideGift = gifts.find((item) => giftType(item) === 'bride') || gifts[1];
     const homeGift = gifts.find((item) => giftType(item) === 'home') || gifts.find((item) => giftType(item) === 'address');
-    const setGift = (item, nameSelector, numberSelector, addressSelector = null) => {
+    const setGift = (item, nameSelector, numberSelector, recipient = null) => {
         if (!item) {
             return;
         }
-        setCmsText(nameSelector, addressSelector ? item.name : item.account_name);
-        setCmsText(numberSelector, item.account_number || item.address);
-        if (addressSelector) {
-            setCmsText(addressSelector, item.address || item.account_number);
+        if (recipient) {
+            const owner = item.account_name || '';
+            if (!item.account_number || owner.trim() !== recipient.trim()) {
+                return;
+            }
+            setCmsText(nameSelector, owner);
+            setCmsText(numberSelector, item.account_number);
+        } else if (item.address) {
+            setCmsText(nameSelector, item.name);
+            setCmsText(numberSelector, item.address);
         }
     };
-    const gift = gifts[0];
-    if (gift) {
-        setCmsText('gift-account-name', gift.account_name);
-        setCmsText('gift-account-number', gift.account_number);
-        document.querySelectorAll('[data-cms="gift-account-number"]').forEach((element) => { element.dataset.copy = gift.account_number; });
-    }
-    setGift(groomGift, 'gift-groom-account-name', 'gift-groom-account-number');
-    setGift(brideGift, 'gift-bride-account-name', 'gift-bride-account-number');
+    setGift(groomGift, 'gift-groom-account-name', 'gift-groom-account-number', wedding.groom_name);
+    setGift(brideGift, 'gift-bride-account-name', 'gift-bride-account-number', wedding.bride_name);
     setGift(homeGift, 'gift-home-name', 'gift-home-address');
 };
 const loadCms = async () => {
