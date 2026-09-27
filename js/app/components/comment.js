@@ -212,10 +212,6 @@ export const comment = (() => {
             .then(async (res) => {
                 comments.setAttribute('data-loading', 'false');
 
-                for (const u of lastRender) {
-                    await gif.remove(u);
-                }
-
                 if (res.data.lists.length === 0) {
                     comments.innerHTML = onNullComment();
                     return res;
@@ -317,22 +313,14 @@ export const comment = (() => {
         const badge = document.getElementById(`badge-${id}`);
         const isChecklist = !!badge && badge.getAttribute('data-is-presence') === 'true';
 
-        const gifIsOpen = gif.isOpen(id);
-        const gifId = gif.getResultId(id);
-        const gifCancel = gif.buttonCancel(id);
-
-        if (gifIsOpen && gifId) {
-            gifCancel.hide();
-        }
-
         const form = document.getElementById(`form-inner-${id}`);
 
-        if (id && !gifIsOpen && util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) {
+        if (id && util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) {
             removeInnerForm(id);
             return;
         }
 
-        if (!gifIsOpen && form.value?.trim().length === 0) {
+        if (form.value?.trim().length === 0) {
             util.notify('Comments cannot be empty.').warning();
             return;
         }
@@ -350,7 +338,7 @@ export const comment = (() => {
 
         const status = await request(HTTP_PUT, `/api/comment/${owns.get(id)}?lang=${lang.getLanguage()}`)
             .token(session.getToken())
-            .body(dto.updateCommentRequest(presence ? isPresent : null, gifIsOpen ? null : form.value, gifId))
+            .body(dto.updateCommentRequest(presence ? isPresent : null, form.value, null))
             .send(dto.statusResponse)
             .then((res) => res.data.status);
 
@@ -368,39 +356,31 @@ export const comment = (() => {
 
         btn.restore();
 
-        if (gifIsOpen && gifId) {
-            gifCancel.show();
-        }
-
         if (!status) {
             return;
         }
 
-        if (gifIsOpen && gifId) {
-            document.getElementById(`img-gif-${id}`).src = document.getElementById(`gif-result-${id}`)?.querySelector('img').src;
-            gifCancel.click();
-        }
-
         removeInnerForm(id);
 
-        if (!gifIsOpen) {
-            const showButton = document.querySelector(`[onclick="undangan.comment.showMore(this, '${id}')"]`);
+        const showButton = document.querySelector(`[onclick="undangan.comment.showMore(this, '${id}')"]`);
+        const content = document.getElementById(`content-${id}`);
+        content.setAttribute('data-comment', util.base64Encode(form.value));
 
-            const content = document.getElementById(`content-${id}`);
-            content.setAttribute('data-comment', util.base64Encode(form.value));
-
-            const original = util.convertMarkdownToHTML(util.escapeHtml(form.value));
-            if (form.value.length > card.maxCommentLength) {
-                util.safeInnerHTML(content, showButton?.getAttribute('data-show') === 'false' ? original.slice(0, card.maxCommentLength) + '...' : original);
-                showButton?.classList.replace('d-none', 'd-block');
-            } else {
-                util.safeInnerHTML(content, original);
-                showButton?.classList.replace('d-block', 'd-none');
-            }
+        const original = util.convertMarkdownToHTML(util.escapeHtml(form.value));
+        if (form.value.length > card.maxCommentLength) {
+            util.safeInnerHTML(content, showButton?.getAttribute('data-show') === 'false' ? original.slice(0, card.maxCommentLength) + '...' : original);
+            showButton?.classList.replace('d-none', 'd-block');
+        } else {
+            util.safeInnerHTML(content, original);
+            showButton?.classList.replace('d-block', 'd-none');
         }
 
         if (presence) {
-            document.getElementById('form-presence').value = isPresent ? '1' : '2';
+            const choice = document.querySelector(`input[name="attendance"][value="${isPresent ? '1' : '2'}"]`);
+            if (choice) {
+                choice.checked = true;
+                choice.dispatchEvent(new Event('change', { bubbles: true }));
+            }
             storage('information').set('presence', isPresent);
         }
 
@@ -435,27 +415,14 @@ export const comment = (() => {
             return;
         }
 
-        const presence = document.getElementById('form-presence');
-        if (!id && presence && presence.value === '0') {
+        const presence = document.querySelector('input[name="attendance"]:checked');
+        if (!id && !presence) {
             util.notify('Pilih konfirmasi kehadiran terlebih dahulu.').warning();
             return;
         }
 
-        const gifIsOpen = gif.isOpen(id ? id : gif.default);
-        const gifId = gif.getResultId(id ? id : gif.default);
-        const gifCancel = gif.buttonCancel(id);
-
-        if (gifIsOpen && !gifId) {
-            util.notify('Gif cannot be empty.').warning();
-            return;
-        }
-
-        if (gifIsOpen && gifId) {
-            gifCancel.hide();
-        }
-
         const form = document.getElementById(`form-${id ? `inner-${id}` : 'comment'}`);
-        if (!gifIsOpen && form.value?.trim().length === 0) {
+        if (form.value?.trim().length === 0) {
             util.notify('Comments cannot be empty.').warning();
             return;
         }
@@ -491,7 +458,7 @@ export const comment = (() => {
 
         const response = await request(HTTP_POST, `/api/comment?lang=${lang.getLanguage()}`)
             .token(session.getToken())
-            .body(dto.postCommentRequest(id, nameValue, isPresence, gifIsOpen ? null : form.value, gifId))
+            .body(dto.postCommentRequest(id, nameValue, isPresence, form.value, null))
             .send(dto.getCommentResponse);
 
         if (name) {
@@ -510,10 +477,6 @@ export const comment = (() => {
             presence.disabled = false;
         }
 
-        if (gifIsOpen && gifId) {
-            gifCancel.show();
-        }
-
         btn.restore();
 
         if (!response || response.code !== HTTP_STATUS_CREATED) {
@@ -524,10 +487,6 @@ export const comment = (() => {
 
         if (form) {
             form.value = null;
-        }
-
-        if (gifIsOpen && gifId) {
-            gifCancel.click();
         }
 
         if (!id) {
@@ -581,9 +540,9 @@ export const comment = (() => {
     /**
      * @param {HTMLButtonElement} button
      * @param {string} id
-     * @returns {Promise<void>}
+     * @returns {void}
      */
-    const cancel = async (button, id) => {
+    const cancel = (button, id) => {
         const presence = document.getElementById(`form-inner-presence-${id}`);
         const isPresent = presence ? presence.value === '1' : false;
 
@@ -591,12 +550,6 @@ export const comment = (() => {
         const isChecklist = badge && owns.has(id) && presence ? badge.getAttribute('data-is-presence') === 'true' : false;
 
         const btn = util.disableButton(button);
-
-        if (gif.isOpen(id) && ((!gif.getResultId(id) && isChecklist === isPresent) || util.ask('Are you sure?'))) {
-            await gif.remove(id);
-            removeInnerForm(id);
-            return;
-        }
 
         const form = document.getElementById(`form-inner-${id}`);
         if (form.value.length === 0 || (util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) || util.ask('Are you sure?')) {
@@ -614,18 +567,15 @@ export const comment = (() => {
     const reply = (uuid) => {
         changeActionButton(uuid, true);
 
-        gif.remove(uuid).then(() => {
-            gif.onOpen(uuid, () => gif.removeGifSearch(uuid));
-            document.getElementById(`button-${uuid}`).insertAdjacentElement('afterend', card.renderReply(uuid));
-        });
+        document.getElementById(`button-${uuid}`).insertAdjacentElement('afterend', card.renderReply(uuid));
     };
 
     /**
      * @param {HTMLButtonElement} button 
      * @param {boolean} is_parent
-     * @returns {Promise<void>}
+     * @returns {void}
      */
-    const edit = async (button, is_parent) => {
+    const edit = (button, is_parent) => {
         const id = button.getAttribute('data-uuid');
 
         changeActionButton(id, true);
@@ -637,23 +587,8 @@ export const comment = (() => {
         const badge = document.getElementById(`badge-${id}`);
         const isChecklist = !!badge && badge.getAttribute('data-is-presence') === 'true';
 
-        const gifImage = document.getElementById(`img-gif-${id}`);
-        if (gifImage) {
-            await gif.remove(id);
-        }
-
         const isParent = is_parent && !session.isAdmin();
-        document.getElementById(`button-${id}`).insertAdjacentElement('afterend', card.renderEdit(id, isChecklist, isParent, !!gifImage));
-
-        if (gifImage) {
-            gif.onOpen(id, () => {
-                gif.removeGifSearch(id);
-                gif.removeButtonBack(id);
-            });
-
-            await gif.open(id);
-            return;
-        }
+        document.getElementById(`button-${id}`).insertAdjacentElement('afterend', card.renderEdit(id, isChecklist, isParent));
 
         const formInner = document.getElementById(`form-inner-${id}`);
         const original = util.base64Decode(document.getElementById(`content-${id}`)?.getAttribute('data-comment'));
@@ -666,6 +601,7 @@ export const comment = (() => {
      * @returns {void}
      */
     const init = () => {
+        // Historical GIF wishes still need the cache to render; no GIF picker is exposed.
         gif.init();
         like.init();
         card.init();
@@ -687,7 +623,6 @@ export const comment = (() => {
     };
 
     return {
-        gif,
         like,
         pagination,
         init,

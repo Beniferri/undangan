@@ -2,6 +2,7 @@ import { video } from './video.js';
 import { initOpening } from './opening.js';
 import { initInvitationMenu } from './menu.js';
 import { initSectionScroll } from './section-scroll.js';
+import { initAttendance } from './attendance.js';
 import { image } from './image.js';
 import { audio } from './audio.js';
 import { progress } from './progress.js';
@@ -421,7 +422,11 @@ export const guest = (() => {
         buildGoogleCalendar();
 
         if (information.has('presence')) {
-            document.getElementById('form-presence').value = information.get('presence') ? '1' : '2';
+            const choice = document.querySelector(`input[name="attendance"][value="${information.get('presence') ? '1' : '2'}"]`);
+            if (choice) {
+                choice.checked = true;
+                choice.dispatchEvent(new Event('change', { bubbles: true }));
+            }
         }
 
         // An early open may already have dismissed the cover while assets load.
@@ -701,6 +706,7 @@ export const guest = (() => {
             initOpening();
             initInvitationMenu();
             initGift();
+            initAttendance();
             arrangeEditorialFlow();
             initSectionScroll();
             document.addEventListener('undangan.open', initRevealMotion, { once: true });
