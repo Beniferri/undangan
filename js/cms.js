@@ -142,13 +142,17 @@ const formatDate = (value, timezone, includeWeekday = false) => new Intl.DateTim
 const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories = [] }) => {
     const couple = `${wedding.groom_name} & ${wedding.bride_name}`;
     const shortName = (value, nickname, fallback) => String(nickname || value || fallback).trim().split(/\s+/)[0] || fallback;
-    const shortCouple = `${shortName(wedding.groom_name, wedding.groom_nickname || wedding.groom_short_name, 'Daniyal')} & ${shortName(wedding.bride_name, wedding.bride_nickname || wedding.bride_short_name, 'Balqis')}`;
+    const groomShort = shortName(wedding.groom_name, wedding.groom_nickname || wedding.groom_short_name, 'Daniyal');
+    const brideShort = shortName(wedding.bride_name, wedding.bride_nickname || wedding.bride_short_name, 'Balqis');
+    const shortCouple = `${groomShort} & ${brideShort}`;
     const dateLabel = formatDate(wedding.wedding_date, wedding.timezone);
     setCmsText('couple-groom-name', wedding.groom_name);
     setCmsText('couple-bride-name', wedding.bride_name);
     setCmsText('couple-short-names', shortCouple);
-    setCmsText('opening-groom-name', shortName(wedding.groom_name, wedding.groom_nickname || wedding.groom_short_name, 'Daniyal'));
-    setCmsText('opening-bride-name', shortName(wedding.bride_name, wedding.bride_nickname || wedding.bride_short_name, 'Balqis'));
+    setCmsText('opening-groom-name', groomShort);
+    setCmsText('opening-bride-name', brideShort);
+    setCmsText('opening-groom-initial', Array.from(groomShort)[0].toLocaleUpperCase('id-ID'));
+    setCmsText('opening-bride-initial', Array.from(brideShort)[0].toLocaleUpperCase('id-ID'));
     setCmsText('wedding-date', dateLabel);
     setCmsText('groom-name', wedding.groom_name);
     setCmsText('bride-name', wedding.bride_name);
