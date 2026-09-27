@@ -27,7 +27,7 @@ test('calendar reads hydrated event dates for its range and event descriptions',
 
 test('RSVP communicates its combined action and uses Indonesian validation', () => {
     assert.match(html, /Kirim Konfirmasi &amp; Ucapan/);
-    assert.match(html, /Pilih kehadiran, lalu tulis doa Anda/);
+    assert.match(html, /Mohon kabari kami apakah Anda dapat hadir/);
     assert.match(html, /Pilih konfirmasi kehadiran terlebih dahulu/);
     assert.doesNotMatch(source('js/app/components/comment.js'), /Please select your attendance status/);
 });
@@ -72,7 +72,8 @@ test('gallery prioritizes the visible slide while retaining lazy secondary slide
     assert.match(loader, /progress\.complete\('image', true\)/);
 });
 
-test('navigation and copy feedback use local language', () => {
+test('navigation and RSVP feedback use local language', () => {
     assert.match(html, /aria-label="Navigasi undangan"/);
-    assert.match(html, /aria-label="Tutup pemberitahuan"/);
+    assert.match(html, /Pilih konfirmasi kehadiran terlebih dahulu/);
+    assert.doesNotMatch(html, /id="information"/);
 });
