@@ -24,7 +24,7 @@ export const initSectionScroll = (doc = document, win = window) => {
     const available = () => doc.body.classList.contains('invitation-opened')
         && !doc.body.classList.contains('invitation-menu-open');
     const interactive = (target) => target instanceof Element
-        && Boolean(target.closest('textarea, select, [contenteditable], .invitation-menu'));
+        && Boolean(target.closest('textarea, select, [contenteditable], .invitation-menu, .overflow-y-scroll'));
     const touchControl = (target) => interactive(target)
         || (target instanceof Element && Boolean(target.closest('input')));
 

@@ -76,6 +76,22 @@ test('one wheel gesture never skips a section, and long sections remain readable
     }
 });
 
+test('nested story scroll remains independent of section gestures', () => {
+    const fixture = setup();
+    try {
+        class StoryTarget extends Element {
+            closest(selector) { return selector.includes('.overflow-y-scroll') ? this : null; }
+        }
+        const target = new StoryTarget();
+        assert.equal(fixture.wheel(2500, target), false);
+        assert.equal(fixture.win.scrollY, 0);
+        assert.equal(fixture.key('ArrowDown'), true);
+        assert.equal(fixture.win.scrollY, 100);
+    } finally {
+        fixture.cleanup();
+    }
+});
+
 test('keyboard section navigation does not skip and leaves unrelated keys alone', () => {
     const fixture = setup();
     try {

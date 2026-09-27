@@ -1,0 +1,202 @@
+/* Compact section-as-page rhythm; content still grows on genuinely short screens. */
+body.islamic-modern .editorial-section:not(.editorial-hero) {
+    min-height: 100svh;
+    min-height: 100dvh;
+    padding-block: clamp(1.25rem, 4vh, 2.5rem) !important;
+}
+
+body.islamic-modern .editorial-section:not(.editorial-hero) h2.font-esthetic {
+    font-size: clamp(1.75rem, 4vw, 2.45rem) !important;
+    line-height: 1.12;
+    margin-bottom: 0.75rem !important;
+    padding-block: 0 !important;
+}
+
+body.islamic-modern .editorial-section:not(.editorial-hero) h2.font-esthetic::after {
+    margin-top: 0.35rem;
+}
+
+body.islamic-modern .editorial-lead {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+body.islamic-modern .editorial-verse .verse-arabic {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+}
+
+body.islamic-modern .editorial-verse .verse-intro {
+    margin: 0 auto 0.8rem;
+    line-height: 1.5;
+}
+
+body.islamic-modern .editorial-verse .verse-card {
+    margin-block: 0.45rem;
+    padding: 0.85rem 1rem;
+}
+
+body.islamic-modern .editorial-verse .verse-card p:not(.verse-source) {
+    margin-bottom: 0.35rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    line-height: 1.35;
+}
+
+body.islamic-modern .editorial-verse .verse-card .verse-source {
+    margin-bottom: 0;
+}
+
+body.islamic-modern .editorial-events {
+    gap: 0.65rem;
+    padding-inline: 0.75rem !important;
+}
+
+body.islamic-modern .editorial-events .event-overview h2.font-esthetic {
+    font-size: clamp(1.8rem, 5vw, 2.35rem) !important;
+}
+
+body.islamic-modern .editorial-events .event-overview .editorial-lead {
+    margin: 0.25rem auto 0;
+    font-size: 0.875rem;
+    line-height: 1.35;
+}
+
+body.islamic-modern .editorial-events .event-schedule {
+    gap: 0.5rem;
+}
+
+body.islamic-modern .editorial-events .event-card {
+    max-width: none;
+    padding: 0.7rem 0.9rem !important;
+}
+
+body.islamic-modern .editorial-events .event-card h3 {
+    margin: 0.15rem 0 0.35rem;
+    font-size: clamp(1.55rem, 4vw, 2rem);
+    line-height: 1;
+}
+
+body.islamic-modern .editorial-events .event-order,
+body.islamic-modern .editorial-events .event-date,
+body.islamic-modern .editorial-events .event-time,
+body.islamic-modern .editorial-events .event-venue {
+    margin-bottom: 0.2rem;
+    font-size: 0.875rem;
+    line-height: 1.3;
+}
+
+body.islamic-modern .editorial-events .event-map-button {
+    min-height: 2.75rem;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    letter-spacing: 0;
+}
+
+body.islamic-modern .editorial-countdown .countdown-panel {
+    padding-block: 0.65rem !important;
+}
+
+body.islamic-modern .editorial-gallery .gallery-panel,
+body.islamic-modern .editorial-story .story-panel {
+    padding: 0.85rem !important;
+}
+
+body.islamic-modern .editorial-gallery .carousel {
+    margin-top: 0.5rem !important;
+}
+
+body.islamic-modern .editorial-gallery .gallery-panel .carousel-item img {
+    aspect-ratio: 16 / 9;
+}
+
+body.islamic-modern .editorial-hero > .bg-overlay-auto {
+    padding-block: 1.25rem 2.5rem;
+}
+
+body.islamic-modern .editorial-hero [data-cms="profile-image"] {
+    width: clamp(7rem, 18vh, 10rem);
+    height: clamp(7rem, 18vh, 10rem);
+    margin-block: 0.5rem !important;
+}
+
+body.islamic-modern .editorial-hero [data-cms="couple-names"] {
+    margin-block: 0.5rem !important;
+    font-size: clamp(1.6rem, 3.5vw, 2.1rem) !important;
+}
+
+body.islamic-modern .editorial-hero > .bg-overlay-auto > h1 {
+    padding-bottom: 0.35rem !important;
+    font-size: clamp(1.2rem, 3vw, 1.7rem) !important;
+}
+
+body.islamic-modern .editorial-hero [data-cms="wedding-date"] {
+    margin-block: 0.3rem !important;
+}
+
+body.islamic-modern .editorial-rsvp-form > .container > .border {
+    padding: 0.85rem 1rem !important;
+}
+
+body.islamic-modern .editorial-rsvp-form .rsvp-instruction {
+    margin-bottom: 0.5rem;
+}
+
+body.islamic-modern .editorial-rsvp-form .form-label {
+    margin-block: 0 !important;
+}
+
+body.islamic-modern .editorial-rsvp-form .form-control,
+body.islamic-modern .editorial-rsvp-form .form-select {
+    min-height: 2.75rem;
+    font-size: 0.9rem;
+}
+
+body.islamic-modern .editorial-rsvp-form #form-comment {
+    min-height: 4.5rem;
+}
+
+body.islamic-modern .editorial-rsvp-form #information {
+    margin-bottom: 0.5rem;
+    padding: 0.45rem 3rem 0.45rem 0.75rem;
+    font-size: 0.825rem;
+}
+
+body.islamic-modern .editorial-rsvp-form .mb-3,
+body.islamic-modern .editorial-rsvp-form .d-block.mb-3 {
+    margin-bottom: 0.55rem !important;
+}
+
+body.islamic-modern .editorial-footer {
+    padding-bottom: clamp(3rem, 8vh, 5rem) !important;
+}
+
+body.islamic-modern .editorial-footer .footer-thanks {
+    padding-top: 0 !important;
+}
+
+@media screen and (max-width: 576px) {
+    body.islamic-modern .editorial-section:not(.editorial-hero) {
+        padding-block: 1.5rem max(3.5rem, env(safe-area-inset-bottom)) !important;
+    }
+
+    body.islamic-modern .editorial-section:not(.editorial-hero) h2.font-esthetic {
+        font-size: clamp(1.8rem, 7vw, 2.35rem) !important;
+    }
+
+    body.islamic-modern .editorial-events {
+        gap: 0.45rem;
+    }
+
+    body.islamic-modern .editorial-events .event-overview .section-eyebrow {
+        margin-bottom: 0.15rem;
+    }
+
+    body.islamic-modern .editorial-events .event-card {
+        padding: 0.65rem 0.75rem !important;
+    }
+
+    body.islamic-modern .editorial-story .story-panel .overflow-y-scroll {
+        height: min(15rem, 28vh) !important;
+        overscroll-behavior-y: contain;
+    }
+}
