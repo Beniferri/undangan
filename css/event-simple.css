@@ -1,0 +1,135 @@
+/* Reference-inspired editorial event list: no nested cards or repeated chrome. */
+body.islamic-modern .editorial-events.event-simple {
+    gap: clamp(1.25rem, 3vh, 2rem);
+    background: #173d34 !important;
+    color: #fffdf8;
+}
+
+body.islamic-modern .event-simple .event-overview h2.font-esthetic {
+    color: #ead8b7 !important;
+    font-size: clamp(2rem, 5vw, 3rem) !important;
+    line-height: 1.1;
+    padding: 0;
+}
+
+body.islamic-modern .event-simple .event-overview {
+    max-width: 52rem;
+    height: auto;
+    min-height: 0;
+}
+
+body.islamic-modern .event-simple .event-overview h2.font-esthetic::after {
+    display: none;
+}
+
+body.islamic-modern .event-simple .event-schedule {
+    width: min(100%, 40rem);
+    gap: 0;
+}
+
+body.islamic-modern .event-simple .event-snap-panel {
+    display: block;
+    border: 0;
+}
+
+body.islamic-modern .event-simple .event-snap-panel + .event-snap-panel {
+    border-top: 1px solid rgba(234, 216, 183, 0.34);
+}
+
+body.islamic-modern .event-simple .event-snap-panel .event-card,
+body.islamic-modern .event-simple .event-snap-panel:nth-of-type(odd) .event-card,
+[data-bs-theme="dark"] body.islamic-modern .event-simple .event-snap-panel .event-card {
+    width: 100%;
+    padding: clamp(1rem, 2.5vh, 1.5rem) 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    text-align: left;
+    transform: none;
+}
+
+body.islamic-modern .event-simple .event-snap-panel .event-card:hover,
+[data-bs-theme="dark"] body.islamic-modern .event-simple .event-snap-panel .event-card:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+body.islamic-modern .event-simple .event-snap-panel .event-card h3,
+[data-bs-theme="dark"] body.islamic-modern .event-simple .event-snap-panel .event-card h3 {
+    margin: 0 0 0.5rem;
+    color: #fffdf8 !important;
+    font-size: clamp(1.65rem, 5vw, 2.2rem);
+    line-height: 1.1;
+}
+
+body.islamic-modern .event-simple .event-date,
+body.islamic-modern .event-simple .event-time,
+body.islamic-modern .event-simple .event-venue {
+    display: block;
+    max-width: none;
+    margin: 0 0 0.3rem;
+    color: #fffdf8 !important;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    text-align: left;
+    white-space: normal;
+}
+
+body.islamic-modern .event-simple .event-date,
+[data-bs-theme="dark"] body.islamic-modern .event-simple .event-date {
+    color: #ead8b7 !important;
+    font-weight: 600;
+}
+
+body.islamic-modern .event-simple .event-date > i,
+body.islamic-modern .event-simple .event-time > i,
+body.islamic-modern .event-simple .event-venue > i {
+    display: none;
+}
+
+body.islamic-modern .event-simple .event-map-button,
+body.islamic-modern[data-bs-theme="dark"] .event-simple .event-map-button {
+    display: inline-flex;
+    width: auto;
+    min-height: 2.75rem;
+    margin-top: 0.15rem !important;
+    padding: 0.55rem 0 !important;
+    border: 0 !important;
+    border-radius: 0;
+    background: none !important;
+    color: #ead8b7 !important;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+    box-shadow: none;
+    transform: none;
+}
+
+body.islamic-modern .event-simple .event-map-button:hover,
+body.islamic-modern .event-simple .event-map-button:focus-visible,
+body.islamic-modern[data-bs-theme="dark"] .event-simple .event-map-button:hover,
+body.islamic-modern[data-bs-theme="dark"] .event-simple .event-map-button:focus-visible {
+    background: none !important;
+    color: #fffdf8 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    outline: 2px solid #ead8b7;
+    outline-offset: 3px;
+}
+
+@media screen and (max-width: 576px) {
+    body.islamic-modern .editorial-events.event-simple {
+        gap: 0.8rem;
+        padding-block: 1.5rem max(3rem, env(safe-area-inset-bottom)) !important;
+    }
+
+    body.islamic-modern .event-simple .event-snap-panel .event-card,
+    body.islamic-modern .event-simple .event-snap-panel:nth-of-type(odd) .event-card {
+        padding-block: 0.85rem !important;
+    }
+}
