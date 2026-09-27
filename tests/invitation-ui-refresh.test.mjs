@@ -18,7 +18,7 @@ test('menu trigger is a minimal top-right control and existing menu remains avai
     assert.match(html, /id="invitation-menu"/);
     assert.match(html, /<svg viewBox="0 0 24 24" aria-hidden="true">\s*<path d="M3 8h18M8 16h13"\/>/);
     const trigger = cinematic.match(/body\.islamic-modern \.invitation-menu-trigger\s*\{([^}]*)\}/)?.[1] || '';
-    for (const declaration of [/width:\s*2\.75rem/, /height:\s*2\.75rem/, /border:\s*0/, /border-radius:\s*0/, /background:\s*transparent/, /box-shadow:\s*none/, /backdrop-filter:\s*none/]) {
+    for (const declaration of [/width:\s*44px/, /height:\s*44px/, /border:\s*0/, /border-radius:\s*0/, /background:\s*transparent/, /box-shadow:\s*none/, /backdrop-filter:\s*none/]) {
         assert.match(trigger, declaration);
     }
     assert.match(cinematic, /\.invitation-menu-trigger:hover,[\s\S]*?\.invitation-menu-trigger:focus-visible\s*\{[^}]*background:\s*transparent/);
