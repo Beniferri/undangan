@@ -9,7 +9,7 @@ test('each event card gives its own date and a directions action', () => {
     for (const n of [1, 2]) {
         assert.match(html, new RegExp(`data-cms="event-${n}-date"[^>]*>Minggu, 17 Januari 2027<`));
     }
-    assert.equal((html.match(/Petunjuk Arah ke Masjid/g) || []).length, 2);
+    assert.equal((html.match(/data-cms-event-map="[12]"[^>]*>Google Maps<\/a>/g) || []).length, 2);
     const cms = source('js/cms.js');
     assert.match(cms, /setCmsText\(`event-\$\{index \+ 1\}-date`, formatDate\(event\.event_date, wedding\.timezone, true\)\)/);
     assert.match(cms, /dateElement\.parentElement\.hidden = !event\.event_date/);
