@@ -1,6 +1,7 @@
 import { video } from './video.js';
 import { initOpening } from './opening.js';
 import { initInvitationMenu } from './menu.js';
+import { initSectionScroll } from './section-scroll.js';
 import { image } from './image.js';
 import { audio } from './audio.js';
 import { progress } from './progress.js';
@@ -710,6 +711,7 @@ export const guest = (() => {
             initInvitationMenu();
             initGift();
             arrangeEditorialFlow();
+            initSectionScroll();
             document.addEventListener('undangan.open', initRevealMotion, { once: true });
             pool.init(pageLoaded, [
                 'image',
