@@ -14,7 +14,9 @@ test('event details remain readable and map actions meet minimum touch size on m
 test('calendar CTA meets minimum touch size and gold gift labels have readable contrast', () => {
     const styles = `${css('editorial-refresh.css')}\n${css('guest.css')}`;
 
-    assert.match(styles, /\[data-calendar-button\]\s*\{[^}]*min-height:\s*2\.75rem/s);
+    assert.match(styles, /\.editorial-countdown \.countdown-calendar-button\s*\{[^}]*min-height:\s*2\.75rem/s);
+    assert.match(styles, /\.countdown-calendar-button:focus-visible\s*\{[^}]*outline:\s*2px solid/s);
+    assert.match(styles, /body\.islamic-modern\[data-bs-theme="dark"\] \.editorial-countdown \.countdown-calendar-button\s*\{[^}]*background:\s*#ead8b7;[^}]*color:\s*#10251f/s);
     assert.match(styles, /\.gift-detail-label\s*\{[^}]*color:\s*#76500f[^}]*font-size:\s*0\.75rem/s);
 });
 

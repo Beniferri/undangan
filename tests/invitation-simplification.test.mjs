@@ -4,9 +4,13 @@ import test from 'node:test';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
-test('invitation keeps one calendar action near the wedding date', () => {
+test('one calendar action sits below the countdown, not on the first page', () => {
+    const home = html.slice(html.indexOf('id="home"'), html.indexOf('<!-- Groom -->'));
+    const countdown = html.slice(html.indexOf('id="countdown"'), html.indexOf('<!-- Dresscode -->'));
+    assert.doesNotMatch(home, /data-calendar-button/);
     assert.equal((html.match(/data-calendar-button/g) || []).length, 1);
-    assert.match(html, /Simpan ke Google Calendar/);
+    assert.match(countdown, /id="second"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>\s*<button class="countdown-calendar-button" type="button" data-calendar-button>/);
+    assert.match(countdown, /Simpan ke Google Calendar/);
 });
 
 test('event heading uses Indonesian copy', () => {
