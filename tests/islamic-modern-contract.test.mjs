@@ -6,8 +6,10 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../css/guest.css', import.meta.url), 'utf8');
 
 test('RSVP presence choices use requested attendance wording', () => {
-    const presence = html.match(/<select[^>]*id="form-presence"[^>]*>[\s\S]*?<\/select>/)[0];
-    assert.match(presence, /Insyaallah hadir/);
+    const presence = html.match(/<fieldset[^>]*attendance-choice[^>]*>[\s\S]*?<\/fieldset>/)?.[0];
+    assert.ok(presence);
+    assert.match(presence, /Hadir/);
+    assert.match(presence, /Berhalangan/);
     assert.doesNotMatch(presence, />[^<]*Datang</);
 });
 

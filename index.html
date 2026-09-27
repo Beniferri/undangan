@@ -59,11 +59,11 @@
     <link rel="stylesheet" href="./css/cinematic.css?v=initial-opening-2">
     <link rel="stylesheet" href="./css/fullpage.css?v=rsvp-simple-1">
     <link rel="stylesheet" href="./css/event-simple.css?v=event-simple-1">
-    <link rel="stylesheet" href="./css/rsvp-simple.css?v=rsvp-simple-1">
+    <link rel="stylesheet" href="./css/rsvp-simple.css?v=rsvp-choice-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
-    <script defer src="./dist/guest.js?v=rsvp-simple-1"></script>
+    <script defer src="./dist/guest.js?v=rsvp-choice-1"></script>
     <script defer src="./dist/cms.js?v=initial-opening-1"></script>
     <script>
     /* Preserve comment section: set data-preserve="comment" so js can check without patching native APIs */
@@ -448,16 +448,17 @@
                                 <input dir="auto" type="text" class="form-control shadow-sm rounded-4" id="form-name" minlength="2" maxlength="50" placeholder="Nama Anda" autocomplete="name" data-offline-disabled="false">
                             </div>
 
-                            <div class="mb-3">
-                                <label for="form-presence" class="form-label my-1"><i class="fa-solid fa-person-circle-question me-2"></i>Kehadiran</label>
-                                <select class="form-select shadow-sm rounded-4" id="form-presence" autocomplete="off" data-offline-disabled="false">
-                                    <option value="0" selected>Pilih jawaban Anda</option>
-                                    <option value="1">Insyaallah hadir</option>
-                                    <option value="2">Mohon maaf, berhalangan</option>
-                                </select>
-                            </div>
+                            <fieldset class="mb-3 attendance-choice">
+                                <legend class="form-label my-1">Kehadiran</legend>
+                                <div class="attendance-options">
+                                    <input type="radio" name="attendance" value="1" id="attendance-present" data-offline-disabled="false">
+                                    <label for="attendance-present">Hadir</label>
+                                    <input type="radio" name="attendance" value="2" id="attendance-absent" data-offline-disabled="false">
+                                    <label for="attendance-absent">Berhalangan</label>
+                                </div>
+                            </fieldset>
 
-                            <div class="mb-3">
+                            <div class="mb-3" id="guest-count-field" hidden>
                                 <label for="form-count" class="form-label my-1"><i class="fa-solid fa-users me-2"></i>Jumlah Tamu</label>
                                 <select class="form-select shadow-sm rounded-4" id="form-count" autocomplete="off">
                                     <option value="1" selected>1 orang</option>
@@ -469,13 +470,8 @@
 
                             <div class="d-block mb-3" id="comment-form-default">
                                 <label for="form-comment" class="form-label my-1"><i class="fa-solid fa-comment me-2"></i>Ucapan &amp; Doa</label>
-                                <div class="position-relative">
-                                    <button class="btn btn-secondary btn-sm rounded-4 shadow-sm me-1 my-1 position-absolute bottom-0 end-0" onclick="undangan.comment.gif.open(undangan.comment.gif.default)" aria-label="button gif" data-offline-disabled="false"><i class="fa-solid fa-photo-film"></i></button>
-                                    <textarea dir="auto" class="form-control shadow-sm rounded-4" id="form-comment" rows="4" minlength="1" maxlength="1000" placeholder="Tulis ucapan dan doa Anda" autocomplete="off" data-offline-disabled="false"></textarea>
-                                </div>
+                                <textarea dir="auto" class="form-control shadow-sm rounded-4" id="form-comment" rows="4" minlength="1" maxlength="1000" placeholder="Tulis ucapan dan doa Anda" autocomplete="off" data-offline-disabled="false"></textarea>
                             </div>
-
-                            <div class="d-none mb-3" id="gif-form-default"></div>
 
                             <div class="d-grid">
                                 <button class="btn btn-primary btn-sm rounded-4 shadow m-1" onclick="undangan.comment.send(this)" data-offline-disabled="false">
@@ -695,11 +691,11 @@
             if (!window.undangan?.comment) return;
             window.undangan.comment.send = async (button) => {
                 const name = document.getElementById('form-name').value.trim();
-                const presence = document.getElementById('form-presence').value;
-                const guestCount = Number(document.getElementById('form-count')?.value || 1);
+                const presence = document.querySelector('input[name="attendance"]:checked')?.value;
+                const guestCount = presence === '1' ? Number(document.getElementById('form-count').value) : 1;
                 const message = document.getElementById('form-comment').value.trim();
                 if (name.length < 2) { alert('Isi nama Anda (minimal 2 karakter).'); return; }
-                if (presence === '0') { alert('Pilih konfirmasi kehadiran terlebih dahulu.'); return; }
+                if (!presence) { alert('Pilih konfirmasi kehadiran terlebih dahulu.'); return; }
                 if (!message) { alert('Tulis ucapan dan doa Anda terlebih dahulu.'); return; }
                 button.disabled = true;
                 try {
