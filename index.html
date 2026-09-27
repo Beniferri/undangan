@@ -54,15 +54,16 @@
     <!-- Dependencies CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/guest.css?v=section-scroll-1">
+    <link rel="stylesheet" href="./css/guest.css?v=rsvp-simple-1">
     <link rel="stylesheet" href="./css/editorial-refresh.css?v=guest-ux-audit-1">
     <link rel="stylesheet" href="./css/cinematic.css?v=initial-opening-2">
-    <link rel="stylesheet" href="./css/fullpage.css?v=fullpage-1">
+    <link rel="stylesheet" href="./css/fullpage.css?v=rsvp-simple-1">
     <link rel="stylesheet" href="./css/event-simple.css?v=event-simple-1">
+    <link rel="stylesheet" href="./css/rsvp-simple.css?v=rsvp-simple-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
-    <script defer src="./dist/guest.js?v=fullpage-1"></script>
+    <script defer src="./dist/guest.js?v=rsvp-simple-1"></script>
     <script defer src="./dist/cms.js?v=initial-opening-1"></script>
     <script>
     /* Preserve comment section: set data-preserve="comment" so js can check without patching native APIs */
@@ -435,11 +436,12 @@
                 </section>
 
                 <!-- RSVP Form -->
-                <section class="bg-light-dark my-0 pb-0 pt-3 editorial-section editorial-rsvp editorial-rsvp-form" id="rsvp">
+                <section class="bg-light-dark my-0 editorial-section editorial-rsvp editorial-rsvp-form rsvp-simple" id="rsvp" aria-labelledby="rsvp-title">
                     <div class="container">
-                        <div class="border rounded-5 shadow p-3 mb-2">
-                            <h2 class="font-esthetic text-center mt-2 mb-4">Konfirmasi Kehadiran</h2>
-                            <p class="rsvp-instruction">Pilih kehadiran, lalu tulis doa Anda.</p>
+                        <div class="rsvp-surface">
+                            <p class="rsvp-eyebrow">RSVP</p>
+                            <h2 class="font-esthetic text-center" id="rsvp-title">Konfirmasi Kehadiran</h2>
+                            <p class="rsvp-instruction">Mohon kabari kami apakah Anda dapat hadir.</p>
 
                             <div class="mb-3">
                                 <label for="form-name" class="form-label my-1"><i class="fa-solid fa-person me-2"></i>Nama</label>
@@ -447,7 +449,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="form-presence" class="form-label my-1"><i class="fa-solid fa-person-circle-question me-2"></i>Konfirmasi Kehadiran</label>
+                                <label for="form-presence" class="form-label my-1"><i class="fa-solid fa-person-circle-question me-2"></i>Kehadiran</label>
                                 <select class="form-select shadow-sm rounded-4" id="form-presence" autocomplete="off" data-offline-disabled="false">
                                     <option value="0" selected>Pilih jawaban Anda</option>
                                     <option value="1">Insyaallah hadir</option>
@@ -466,13 +468,6 @@
                             </div>
 
                             <div class="d-block mb-3" id="comment-form-default">
-                                <div id="information" class="alert alert-info alert-dismissible fade show rounded-4" role="alert">
-                                    <button type="button" class="btn-close rounded-4 p-3" data-bs-dismiss="alert" aria-label="Tutup pemberitahuan" onclick="undangan.guest.closeInformation()"></button>
-
-                                    <p class="form-section-title">Tinggalkan Ucapan</p>
-                                    <p class="m-0">Tuliskan doa terbaik Anda untuk langkah baru kami.</p>
-                                </div>
-
                                 <label for="form-comment" class="form-label my-1"><i class="fa-solid fa-comment me-2"></i>Ucapan &amp; Doa</label>
                                 <div class="position-relative">
                                     <button class="btn btn-secondary btn-sm rounded-4 shadow-sm me-1 my-1 position-absolute bottom-0 end-0" onclick="undangan.comment.gif.open(undangan.comment.gif.default)" aria-label="button gif" data-offline-disabled="false"><i class="fa-solid fa-photo-film"></i></button>

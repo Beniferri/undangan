@@ -289,11 +289,6 @@ export const guest = (() => {
     /**
      * @returns {void}
      */
-    const closeInformation = () => information.set('info', true);
-
-    /**
-     * @returns {void}
-     */
     const normalizeArabicFont = () => {
         document.querySelectorAll('.font-arabic').forEach((el) => {
             el.innerHTML = String(el.innerHTML).normalize('NFC');
@@ -427,10 +422,6 @@ export const guest = (() => {
 
         if (information.has('presence')) {
             document.getElementById('form-presence').value = information.get('presence') ? '1' : '2';
-        }
-
-        if (information.get('info')) {
-            document.getElementById('information')?.remove();
         }
 
         // An early open may already have dismissed the cover while assets load.
@@ -730,7 +721,6 @@ export const guest = (() => {
                 open,
                 modal,
                 showStory,
-                closeInformation,
             },
         };
     };

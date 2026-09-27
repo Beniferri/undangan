@@ -1,0 +1,124 @@
+/* Quiet RSVP layout inspired by the reference, without altering the form data flow. */
+body.islamic-modern .editorial-rsvp-form.rsvp-simple {
+    padding-block: clamp(2.5rem, 5vh, 3.5rem) !important;
+}
+
+body.islamic-modern .rsvp-simple > .container {
+    width: min(100%, 36rem);
+    padding-inline: clamp(1rem, 3vw, 2rem);
+}
+
+body.islamic-modern .rsvp-simple .rsvp-surface {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+}
+
+body.islamic-modern .rsvp-simple .rsvp-eyebrow {
+    margin-bottom: 0.3rem;
+    color: #654f2f;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-align: center;
+}
+
+body.islamic-modern .rsvp-simple h2.font-esthetic {
+    margin: 0 0 0.35rem !important;
+    font-size: clamp(1.85rem, 5vw, 2.5rem) !important;
+    line-height: 1.1;
+}
+
+body.islamic-modern .rsvp-simple h2.font-esthetic::after {
+    display: none;
+}
+
+body.islamic-modern .rsvp-simple .rsvp-instruction {
+    margin: 0 auto 1.2rem;
+    color: #36554d;
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+body.islamic-modern .rsvp-simple .mb-3,
+body.islamic-modern .rsvp-simple .d-block.mb-3 {
+    margin-bottom: 0.8rem !important;
+}
+
+body.islamic-modern .rsvp-simple .form-label {
+    margin: 0 0 0.3rem !important;
+    color: #183d35;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+body.islamic-modern .rsvp-simple .form-label i {
+    display: none;
+}
+
+body.islamic-modern .rsvp-simple .form-control,
+body.islamic-modern .rsvp-simple .form-select {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #72887d;
+    border-radius: 0.25rem !important;
+    background-color: #fffdf8;
+    color: #183d35;
+    font-size: 0.95rem;
+    box-shadow: none !important;
+}
+
+body.islamic-modern .rsvp-simple .form-control::placeholder {
+    color: #52665f;
+    opacity: 1;
+}
+
+body.islamic-modern .rsvp-simple #form-comment {
+    min-height: 4.5rem;
+    padding-right: 3.7rem;
+    resize: vertical;
+}
+
+body.islamic-modern .rsvp-simple .d-grid > button {
+    min-height: 2.75rem;
+    margin: 0 !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+}
+
+body.islamic-modern .rsvp-simple #comment-form-default .position-relative > button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin: 0.2rem !important;
+    border-radius: 0.25rem !important;
+    box-shadow: none !important;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .rsvp-simple .rsvp-eyebrow,
+body.islamic-modern[data-bs-theme="dark"] .rsvp-simple .form-label {
+    color: #ead8b7;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .rsvp-simple .rsvp-instruction {
+    color: #e2e9e1;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .rsvp-simple .form-control,
+body.islamic-modern[data-bs-theme="dark"] .rsvp-simple .form-select {
+    border-color: #aabfb3;
+    background-color: #183d35;
+    color: #fffdf8;
+}
+
+body.islamic-modern[data-bs-theme="dark"] .rsvp-simple .form-control::placeholder {
+    color: #d4dfd5;
+}
+
+@media screen and (max-width: 576px) {
+    body.islamic-modern .editorial-rsvp-form.rsvp-simple {
+        padding-block: 2rem max(3rem, env(safe-area-inset-bottom)) !important;
+    }
+}

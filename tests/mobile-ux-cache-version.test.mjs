@@ -5,8 +5,8 @@ import test from 'node:test';
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
 test('mobile UX CSS fixes use a fresh cache key', () => {
-    assert.match(html, /\.\/css\/guest\.css\?v=section-scroll-1/);
+    assert.match(html, /\.\/css\/guest\.css\?v=rsvp-simple-1/);
     assert.match(html, /\.\/css\/editorial-refresh\.css\?v=guest-ux-audit-1/);
     assert.match(html, /\.\/css\/cinematic\.css\?v=initial-opening-2/);
-    assert.match(html, /\.\/css\/fullpage\.css\?v=fullpage-1/);
+    assert.match(html, /\.\/css\/fullpage\.css\?v=rsvp-simple-1/);
 });
