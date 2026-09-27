@@ -56,12 +56,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/guest.css?v=guest-ux-audit-1">
     <link rel="stylesheet" href="./css/editorial-refresh.css?v=guest-ux-audit-1">
-    <link rel="stylesheet" href="./css/cinematic.css?v=sora-navbar-1">
+    <link rel="stylesheet" href="./css/cinematic.css?v=initial-opening-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
     <script defer src="./dist/guest.js?v=guest-ux-audit-1"></script>
-    <script defer src="./dist/cms.js?v=guest-ux-audit-1"></script>
+    <script defer src="./dist/cms.js?v=initial-opening-1"></script>
     <script>
     /* Preserve comment section: set data-preserve="comment" so js can check without patching native APIs */
     document.addEventListener('DOMContentLoaded', () => {
@@ -532,6 +532,13 @@
 
     <!-- Opening Cover -->
     <div class="loading-page opening-cover" id="welcome" style="opacity: 1;" role="dialog" aria-modal="true" aria-labelledby="opening-title">
+        <div class="opening-intro" aria-hidden="true">
+            <p class="opening-intro-kicker">THE WEDDING OF</p>
+            <p class="opening-intro-names" data-cms="couple-short-names">Daniyal &amp; Balqis</p>
+            <div class="opening-intro-mask">
+                <p class="opening-intro-initials"><span data-cms="opening-groom-initial">D</span><span data-cms="opening-bride-initial">B</span></p>
+            </div>
+        </div>
         <img class="opening-image" src="./assets/images/opening-mosque.webp" data-src="./assets/images/opening-mosque.webp" alt="" aria-hidden="true">
         <video id="opening-video" class="opening-film" muted playsinline preload="none" poster="./assets/images/opening-mosque.webp" aria-hidden="true" tabindex="-1">
             <source data-opening-src="./assets/video/opening-atmosphere.mp4" type="video/mp4">

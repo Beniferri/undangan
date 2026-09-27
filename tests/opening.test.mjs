@@ -82,6 +82,23 @@ test('opening cover has no monogram or closing greeting and keeps separated CMS-
     assert.match(cms, /setCmsText\('opening-bride-name',/);
 });
 
+test('intro reveals CMS-backed couple names and initials before the accessible cover', () => {
+    const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+    const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
+    const cms = readFileSync(new URL('../js/cms.js', import.meta.url), 'utf8');
+    const cover = html.slice(html.indexOf('<!-- Opening Cover -->'), html.indexOf('<!-- Hidden Menu Overlay -->'));
+    assert.match(cover, /class="opening-intro" aria-hidden="true"/);
+    assert.match(cover, /class="opening-intro-names" data-cms="couple-short-names">Daniyal &amp; Balqis/);
+    assert.match(cover, /data-cms="opening-groom-initial">D<\/span><span data-cms="opening-bride-initial">B<\/span>/);
+    assert.match(cms, /setCmsText\('opening-groom-initial', Array\.from\(groomShort\)\[0\]/);
+    assert.match(cms, /setCmsText\('opening-bride-initial', Array\.from\(brideShort\)\[0\]/);
+    assert.match(css, /\.opening-intro-initials\s*\{[^}]*animation:\s*opening-intro-initials 1\.1s 2\.7s/s);
+    assert.match(css, /@keyframes opening-intro-exit/);
+    assert.match(css, /\.opening-cover\.is-closing \.opening-intro\s*\{\s*display:\s*none/s);
+    assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.opening-intro\s*\{\s*display:\s*none/s);
+    assert.match(html, /dist\/cms\.js\?v=initial-opening-1/);
+});
+
 test('cover keeps prominent mobile names with centered compact guest actions and CTA', () => {
     const css = readFileSync(new URL('../css/cinematic.css', import.meta.url), 'utf8');
     assert.match(css, /\.opening-cover-kicker,\s*body\.islamic-modern \.opening-cover-date\s*\{[^}]*font-size:\s*0\.7rem/s);
@@ -90,7 +107,7 @@ test('cover keeps prominent mobile names with centered compact guest actions and
     assert.match(css, /\.opening-guest-card\s*\{[^}]*width:\s*min\(100%, 21rem\)/s);
     assert.match(css, /@media screen and \(max-width: 576px\)\s*\{\s*body\.islamic-modern \.opening-cover-names\s*\{[^}]*font-size:\s*clamp\(4rem, 22vw, 5\.4rem\)/s);
     assert.match(css, /@media screen and \(max-height: 700px\) and \(max-width: 576px\)[\s\S]*?\.opening-cover-names\s*\{[^}]*font-size:\s*clamp\(3\.7rem, 18\.5vw, 4\.5rem\)/s);
-    assert.match(readFileSync(new URL('../index.html', import.meta.url), 'utf8'), /cinematic\.css\?v=sora-navbar-1/);
+    assert.match(readFileSync(new URL('../index.html', import.meta.url), 'utf8'), /cinematic\.css\?v=initial-opening-1/);
     assert.match(css, /\.opening-cover-name,\s*body\.islamic-modern \.opening-cover-amp\s*\{[^}]*display:\s*block/s);
     assert.match(css, /\.opening-cover-names\s*\{[^}]*max-width:\s*100%[^}]*overflow-wrap:\s*anywhere/s);
     assert.doesNotMatch(css, /\.opening-monogram|\.monogram-amp/);

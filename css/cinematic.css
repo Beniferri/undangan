@@ -31,6 +31,68 @@ body.islamic-modern.invitation-opened .editorial-hero {
     animation: cinematic-hero-enter 1.2s ease both;
 }
 
+/* Short title-to-initials sequence before the existing invitation cover. */
+body.islamic-modern .opening-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: rgba(4, 26, 28, 0.97);
+    color: var(--cinema-paper);
+    pointer-events: none;
+    animation: opening-intro-exit 0.7s 3.9s ease-in-out both;
+}
+
+body.islamic-modern .opening-cover.is-closing .opening-intro {
+    display: none;
+}
+
+body.islamic-modern .opening-intro-kicker,
+body.islamic-modern .opening-intro-names {
+    position: absolute;
+    width: min(calc(100% - 2rem), 35rem);
+    margin: 0;
+    text-align: center;
+}
+
+body.islamic-modern .opening-intro-kicker {
+    font: 600 0.9rem/1.5 'DM Sans', sans-serif;
+    letter-spacing: 0.24em;
+    animation: opening-intro-first 1.3s 0.2s ease-in-out both;
+}
+
+body.islamic-modern .opening-intro-names {
+    color: var(--cinema-gold);
+    font: 500 clamp(1.5rem, 5vw, 2.4rem)/1.2 'Cormorant Garamond', Georgia, serif;
+    overflow-wrap: anywhere;
+    animation: opening-intro-second 2s 1.35s ease-in-out both;
+}
+
+body.islamic-modern .opening-intro-mask {
+    position: absolute;
+    top: calc(50% - 7rem);
+    width: min(calc(100% - 2rem), 26rem);
+    height: 7rem;
+    overflow: hidden;
+}
+
+body.islamic-modern .opening-intro-initials {
+    display: flex;
+    justify-content: center;
+    gap: 0.35em;
+    margin: 0;
+    color: var(--cinema-gold);
+    font: 400 clamp(4.5rem, 19vw, 6.5rem)/1 'Cormorant Garamond', Georgia, serif;
+    animation: opening-intro-initials 1.1s 2.7s ease-out both;
+}
+
+body.islamic-modern .opening-intro-initials span {
+    min-width: 0.65em;
+    text-align: center;
+}
+
 body.islamic-modern .opening-image,
 body.islamic-modern .opening-film {
     position: absolute;
@@ -418,6 +480,27 @@ body.islamic-modern .cinematic-music-control .btn:focus-visible {
     outline-offset: 3px;
 }
 
+@keyframes opening-intro-first {
+    0%, 100% { opacity: 0; }
+    20%, 78% { opacity: 1; }
+}
+
+@keyframes opening-intro-second {
+    0% { opacity: 0; transform: translateY(0); }
+    35%, 75% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 1; transform: translateY(2.5rem); }
+}
+
+@keyframes opening-intro-initials {
+    from { opacity: 0; transform: translateY(7rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes opening-intro-exit {
+    0% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
 @keyframes opening-dawn {
     from { opacity: 1; filter: brightness(0.2); }
     to { opacity: 0.88; filter: brightness(1); }
@@ -657,7 +740,8 @@ body.islamic-modern .editorial-events .event-snap-panel .event-map-button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    body.islamic-modern .opening-film {
+    body.islamic-modern .opening-film,
+    body.islamic-modern .opening-intro {
         display: none;
     }
 
