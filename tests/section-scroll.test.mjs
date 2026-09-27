@@ -36,14 +36,14 @@ const setup = () => {
         handlers.get('wheel')({ deltaY, target, ctrlKey: false, preventDefault: () => { prevented = true; } });
         return prevented;
     };
-    const key = (value) => {
+    const key = (value, target = null) => {
         let prevented = false;
-        handlers.get('keydown')({ key: value, target: null, repeat: false, shiftKey: false,
+        handlers.get('keydown')({ key: value, target, repeat: false, shiftKey: false,
             altKey: false, ctrlKey: false, metaKey: false, preventDefault: () => { prevented = true; } });
         return prevented;
     };
-    const touch = (type, x, y) => handlers.get(type)({
-        target: null,
+    const touch = (type, x, y, target = null) => handlers.get(type)({
+        target,
         touches: [{ clientX: x, clientY: y }],
         preventDefault: () => {},
     });
@@ -87,6 +87,100 @@ test('nested story scroll remains independent of section gestures', () => {
         assert.equal(fixture.win.scrollY, 0);
         assert.equal(fixture.key('ArrowDown'), true);
         assert.equal(fixture.win.scrollY, 100);
+    } finally {
+        fixture.cleanup();
+    }
+});
+
+test('wheel over RSVP wishes text moves on when textarea has no own scroll', () => {
+    const fixture = setup();
+    try {
+        class WishesInput extends Element {
+            closest(selector) { return selector.includes('textarea') ? this : null; }
+        }
+        const input = new WishesInput();
+        input.clientHeight = 100;
+        input.scrollHeight = 100;
+        input.scrollTop = 0;
+        fixture.win.scrollY = 200;
+        assert.equal(fixture.wheel(500, input), true);
+        assert.equal(fixture.win.scrollY, 300);
+    } finally {
+        fixture.cleanup();
+    }
+});
+
+test('long RSVP wishes textarea keeps wheel gestures until its scroll boundary', () => {
+    const fixture = setup();
+    try {
+        class WishesInput extends Element {
+            closest(selector) { return selector.includes('textarea') ? this : null; }
+        }
+        const input = new WishesInput();
+        input.clientHeight = 100;
+        input.scrollHeight = 250;
+        input.scrollTop = 20;
+        fixture.win.scrollY = 200;
+        assert.equal(fixture.wheel(500, input), false);
+        assert.equal(fixture.win.scrollY, 200);
+        input.scrollTop = 150;
+        assert.equal(fixture.wheel(500, input), true);
+        assert.equal(fixture.win.scrollY, 300);
+    } finally {
+        fixture.cleanup();
+    }
+});
+
+test('wheel over RSVP wishes textarea navigates upward only after reaching its top', () => {
+    const fixture = setup();
+    try {
+        class WishesInput extends Element {
+            closest(selector) { return selector.includes('textarea') ? this : null; }
+        }
+        const input = new WishesInput();
+        input.clientHeight = 100;
+        input.scrollHeight = 250;
+        input.scrollTop = 20;
+        fixture.win.scrollY = 300;
+        assert.equal(fixture.wheel(-500, input), false);
+        assert.equal(fixture.win.scrollY, 300);
+        input.scrollTop = 0;
+        assert.equal(fixture.wheel(-500, input), true);
+        assert.equal(fixture.win.scrollY, 200);
+    } finally {
+        fixture.cleanup();
+    }
+});
+
+test('swipe starting on a short RSVP wishes textarea advances one section', () => {
+    const fixture = setup();
+    try {
+        class WishesInput extends Element {
+            closest(selector) { return selector.includes('textarea') ? this : null; }
+        }
+        const input = new WishesInput();
+        input.clientHeight = 100;
+        input.scrollHeight = 100;
+        input.scrollTop = 0;
+        fixture.win.scrollY = 200;
+        fixture.touch('touchstart', 50, 90, input);
+        fixture.touch('touchmove', 50, 10, input);
+        assert.equal(fixture.win.scrollY, 300);
+    } finally {
+        fixture.cleanup();
+    }
+});
+
+test('focused RSVP textarea retains navigation keys for editing', () => {
+    const fixture = setup();
+    try {
+        class WishesInput extends Element {
+            closest(selector) { return selector.includes('textarea') ? this : null; }
+        }
+        const input = new WishesInput();
+        fixture.win.scrollY = 200;
+        assert.equal(fixture.key('ArrowDown', input), false);
+        assert.equal(fixture.win.scrollY, 200);
     } finally {
         fixture.cleanup();
     }

@@ -24,7 +24,16 @@ export const initSectionScroll = (doc = document, win = window) => {
     const available = () => doc.body.classList.contains('invitation-opened')
         && !doc.body.classList.contains('invitation-menu-open');
     const interactive = (target) => target instanceof Element
-        && Boolean(target.closest('textarea, select, [contenteditable], .invitation-menu, .overflow-y-scroll'));
+        && Boolean(target.closest('select, [contenteditable], .invitation-menu, .overflow-y-scroll'));
+    const textareaCanScroll = (target, direction) => {
+        const textarea = target instanceof Element ? target.closest('textarea') : null;
+        if (!textarea || textarea.scrollHeight <= textarea.clientHeight + 1) {
+            return false;
+        }
+        return direction > 0
+            ? textarea.scrollTop + textarea.clientHeight < textarea.scrollHeight - 1
+            : textarea.scrollTop > 1;
+    };
     const touchControl = (target) => interactive(target)
         || (target instanceof Element && Boolean(target.closest('input')));
 
@@ -78,7 +87,8 @@ export const initSectionScroll = (doc = document, win = window) => {
     };
 
     doc.addEventListener('wheel', (event) => {
-        if (!available() || event.ctrlKey || interactive(event.target) || !event.deltaY) {
+        if (!available() || event.ctrlKey || interactive(event.target) || !event.deltaY
+            || textareaCanScroll(event.target, event.deltaY)) {
             return;
         }
         event.preventDefault();
@@ -98,6 +108,7 @@ export const initSectionScroll = (doc = document, win = window) => {
 
     doc.addEventListener('keydown', (event) => {
         if (!available() || interactive(event.target) || (event.target instanceof Element
+            && event.target.closest('textarea')) || (event.target instanceof Element
             && event.target.closest('button, a, input, [role="button"]'))
             || event.altKey || event.ctrlKey || event.metaKey || event.repeat) {
             return;
@@ -131,6 +142,9 @@ export const initSectionScroll = (doc = document, win = window) => {
             return;
         }
         const delta = touch.y - event.touches[0].clientY;
+        if (textareaCanScroll(event.target, delta)) {
+            return;
+        }
         if (Math.abs(delta) < Math.abs(touch.x - event.touches[0].clientX)) {
             return; // Preserve horizontal gallery gestures.
         }
