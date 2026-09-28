@@ -357,14 +357,14 @@ body.islamic-modern .invitation-menu-nav {
     display: grid;
     align-content: start;
     flex: 0 0 auto;
-    gap: 0.1rem;
+    gap: 12px;
 }
 
 body.islamic-modern .invitation-menu-nav a {
     display: block;
-    padding: 0.48rem 0.7rem;
+    padding: 12px 24px;
     color: var(--cinema-paper);
-    font: 500 clamp(1.35rem, 3.5vw, 1.85rem) / 1.1 Marcellus, Georgia, serif;
+    font: 400 32px/1 Marcellus, Georgia, serif;
     text-decoration: none;
     opacity: 0;
     filter: blur(10px);
@@ -525,6 +525,20 @@ body.islamic-modern .cinematic-music-control .btn:focus-visible {
         width: min(400px, calc(100vw - 39px));
         height: min(500px, calc(100dvh - 24px));
         padding: 60px 20px 12px 10px;
+    }
+
+    body.islamic-modern .invitation-menu-nav {
+        gap: 0;
+    }
+
+    body.islamic-modern .invitation-menu-nav a {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    body.islamic-modern .invitation-menu-nav a {
+        padding-inline: 12px;
     }
 }
 
