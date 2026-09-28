@@ -37,7 +37,7 @@ test('gift choices are reconciled after CMS hydration and mismatched owners are 
     assert.match(js, /Promise\.resolve\(window\.cmsReady\)\.then\(refreshGiftAvailability\)/);
     assert.ok(/const refreshGiftAvailability = \(\) =>/.test(js));
     assert.match(js, /ownerName === recipientName/);
-    assert.match(js, /button\.hidden = !available/);
+    assert.match(js, /card\.hidden = !available/);
     assert.match(js, /toggle\.hidden = !hasAvailableGift/);
     assert.match(html, /id="gift-toggle"[^>]* hidden>/);
 });

@@ -521,7 +521,7 @@ export const guest = (() => {
         toast.setAttribute('role', 'status');
         toast.setAttribute('aria-live', 'polite');
         toast.textContent = message;
-        document.body.appendChild(toast);
+        (document.querySelector('#gift-dialog[open]') || document.body).appendChild(toast);
         toast.classList.add('is-visible');
         util.timeOut(() => {
             toast.classList.remove('is-visible');
@@ -532,81 +532,59 @@ export const guest = (() => {
     const refreshGiftAvailability = () => {
         const gift = document.getElementById('gift');
         const toggle = document.getElementById('gift-toggle');
-        const options = document.getElementById('gift-options');
-        if (!gift || !toggle || !options) {
+        const dialog = document.getElementById('gift-dialog');
+        if (!gift || !toggle || !dialog) {
             return;
         }
-        let firstAvailable = null;
-        options.querySelectorAll('[data-gift-view]').forEach((button) => {
-            const panel = options.querySelector(`[data-gift-panel="${button.dataset.giftView}"]`);
-            const source = panel?.querySelector('[data-copy-from]');
-            const value = panel?.querySelector(`[data-cms="${source?.dataset.copyFrom}"]`)?.textContent.trim() || '';
-            const ownerName = panel?.querySelector('strong')?.textContent.trim() || '';
-            let recipientName = null;
-            if (button.dataset.giftView === 'groom') {
-                recipientName = document.querySelector('[data-cms="groom-name"]')?.textContent.trim();
-            } else if (button.dataset.giftView === 'bride') {
-                recipientName = document.querySelector('[data-cms="bride-name"]')?.textContent.trim();
-            }
+        let hasAvailableGift = false;
+        dialog.querySelectorAll('[data-gift-card]').forEach((card) => {
+            const source = card.querySelector('[data-copy-from]');
+            const value = card.querySelector(`[data-cms="${source.dataset.copyFrom}"]`)?.textContent.trim() || '';
+            const ownerName = card.querySelector('strong')?.textContent.trim() || '';
+            const recipientName = document.querySelector(`[data-cms="${card.dataset.giftCard}-name"]`)?.textContent.trim();
             const available = Boolean(value && ownerName && !/belum tersedia/i.test(`${value} ${ownerName}`)
-                && (!recipientName || ownerName === recipientName));
-            button.hidden = !available;
-            button.disabled = !available;
-            if (source) {
-                source.hidden = !available;
-                source.disabled = !available;
-            }
-            if (available && !firstAvailable) {
-                firstAvailable = button;
-            }
+                && (card.dataset.giftCard === 'home' || (recipientName && ownerName === recipientName)));
+            card.hidden = !available;
+            source.disabled = !available;
+            hasAvailableGift ||= available;
         });
-        const hasAvailableGift = Boolean(firstAvailable);
         gift.hidden = !hasAvailableGift;
         toggle.hidden = !hasAvailableGift;
         document.querySelectorAll('.invitation-menu-nav a[href="#gift"]').forEach((link) => {
             link.hidden = !hasAvailableGift;
         });
-        if (firstAvailable) {
-            firstAvailable.click();
-        } else {
-            options.hidden = true;
-            toggle.setAttribute('aria-expanded', 'false');
+        if (!hasAvailableGift && dialog.open) {
+            dialog.close();
         }
     };
 
     const initGift = () => {
         const toggle = document.getElementById('gift-toggle');
-        const options = document.getElementById('gift-options');
-        if (!toggle || !options) {
+        const dialog = document.getElementById('gift-dialog');
+        const closeButton = document.getElementById('gift-close');
+        if (!toggle || !dialog || !closeButton) {
             return;
         }
 
-        toggle.addEventListener('click', () => {
-            const isHidden = options.hidden;
-            options.hidden = !isHidden;
-            toggle.setAttribute('aria-expanded', `${isHidden}`);
-            toggle.classList.toggle('is-open', isHidden);
+        toggle.addEventListener('click', () => dialog.showModal());
+        closeButton.addEventListener('click', () => dialog.close());
+        dialog.addEventListener('click', (event) => {
+            if (event.target === dialog) {
+                dialog.close();
+            }
         });
+        dialog.addEventListener('close', () => toggle.focus({ preventScroll: true }));
 
-        options.querySelectorAll('[data-gift-view]').forEach((button) => {
-            button.addEventListener('click', () => {
-                const view = button.dataset.giftView;
-                options.querySelectorAll('[data-gift-view]').forEach((item) => {
-                    const active = item === button;
-                    item.classList.toggle('is-active', active);
-                    item.setAttribute('aria-selected', `${active}`);
-                });
-                options.querySelectorAll('[data-gift-panel]').forEach((panel) => {
-                    const active = panel.dataset.giftPanel === view;
-                    panel.hidden = !active;
-                    panel.classList.toggle('is-active', active);
-                });
+        dialog.querySelectorAll('[data-gift-card]').forEach((card) => {
+            card.addEventListener('click', (event) => {
+                if (!event.target.closest('button')) {
+                    card.querySelector('[data-copy-from]')?.click();
+                }
             });
         });
-
-        options.querySelectorAll('[data-copy-from]').forEach((button) => {
+        dialog.querySelectorAll('[data-copy-from]').forEach((button) => {
             button.addEventListener('click', async () => {
-                const source = document.querySelector(`[data-cms="${button.dataset.copyFrom}"]`);
+                const source = dialog.querySelector(`[data-cms="${button.dataset.copyFrom}"]`);
                 const value = source?.textContent.trim() ?? '';
                 if (!value || /belum tersedia/i.test(value)) {
                     util.notify('Data belum tersedia').warning();

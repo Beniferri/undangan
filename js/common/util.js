@@ -198,7 +198,7 @@ export const util = (() => {
             textarea.setAttribute('readonly', '');
             textarea.style.position = 'fixed';
             textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
+            (button.closest('dialog[open]') || document.body).appendChild(textarea);
             try {
                 textarea.select();
                 if (!document.execCommand('copy')) {

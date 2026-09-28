@@ -76,6 +76,19 @@ test('one wheel gesture never skips a section, and long sections remain readable
     }
 });
 
+test('wheel gestures inside a modal never advance the invitation', () => {
+    const fixture = setup();
+    try {
+        class DialogTarget extends Element {
+            closest(selector) { return selector.includes('dialog[open]') ? this : null; }
+        }
+        assert.equal(fixture.wheel(2500, new DialogTarget()), false);
+        assert.equal(fixture.win.scrollY, 0);
+    } finally {
+        fixture.cleanup();
+    }
+});
+
 test('nested story scroll remains independent of section gestures', () => {
     const fixture = setup();
     try {
