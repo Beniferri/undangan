@@ -55,16 +55,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" integrity="sha256-4rTIfo5GQTi/7UJqoyUJQKzxW8VN/YBH31+Cy+vTZj4=" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/guest.css?v=rsvp-simple-1">
-    <link rel="stylesheet" href="./css/editorial-refresh.css?v=guest-ux-audit-1">
+    <link rel="stylesheet" href="./css/editorial-refresh.css?v=gallery-rows-1">
     <link rel="stylesheet" href="./css/cinematic.css?v=menu-type-1">
-    <link rel="stylesheet" href="./css/fullpage.css?v=rsvp-simple-1">
+    <link rel="stylesheet" href="./css/fullpage.css?v=gallery-rows-1">
     <link rel="stylesheet" href="./css/event-simple.css?v=event-simple-1">
     <link rel="stylesheet" href="./css/rsvp-simple.css?v=rsvp-choice-1">
+    <link rel="stylesheet" href="./css/gallery-reference.css?v=gallery-rows-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
-    <script defer src="./dist/guest.js?v=scroll-after-rsvp-1"></script>
-    <script defer src="./dist/cms.js?v=initial-opening-1"></script>
+    <script defer src="./dist/guest.js?v=gallery-rows-1"></script>
+    <script defer src="./dist/cms.js?v=gallery-rows-1"></script>
     <script>
     /* Preserve comment section: set data-preserve="comment" so js can check without patching native APIs */
     document.addEventListener('DOMContentLoaded', () => {
@@ -320,72 +321,32 @@
                 </section>
 
                 <!-- Galeri -->
-                <section class="bg-white-black pb-5 pt-3 editorial-section editorial-gallery" id="gallery">
-                    <div class="container">
-                        <div class="border rounded-5 shadow p-3 gallery-panel">
-
-                            <h2 class="font-esthetic text-center py-2 m-0">Galeri</h2>
-
-                            <div id="carousel-image-one" data-aos="fade-up" data-aos-duration="700" class="carousel slide mt-4" data-bs-ride="carousel">
-                                <div class="carousel-indicators">
-                                    <button type="button" data-bs-target="#carousel-image-one" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                    <button type="button" data-bs-target="#carousel-image-one" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                    <button type="button" data-bs-target="#carousel-image-one" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                </div>
-
-                                <div class="carousel-inner rounded-4">
-                                    <div class="carousel-item active">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="1" alt="Foto galeri pernikahan 1" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="eager" decoding="async">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="2" alt="Foto galeri pernikahan 2" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="3" alt="Foto galeri pernikahan 3" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
-                                    </div>
-                                </div>
-
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-image-one" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-
-                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-image-one" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-
-                            <div id="carousel-image-two" data-aos="fade-up" data-aos-duration="700" class="carousel slide mt-4" data-bs-ride="carousel">
-                                <div class="carousel-indicators">
-                                    <button type="button" data-bs-target="#carousel-image-two" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                    <button type="button" data-bs-target="#carousel-image-two" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                    <button type="button" data-bs-target="#carousel-image-two" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                </div>
-
-                                <div class="carousel-inner rounded-4">
-                                    <div class="carousel-item active">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="4" alt="Foto galeri pernikahan 4" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="5" alt="Foto galeri pernikahan 5" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="6" alt="Foto galeri pernikahan 6" class="d-block img-fluid cursor-pointer" onclick="undangan.guest.modal(this)" width="640" height="640" loading="lazy" decoding="async">
-                                    </div>
-                                </div>
-
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-image-two" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-
-                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-image-two" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
+                <section class="bg-white-black editorial-section editorial-gallery" id="gallery">
+                    <div class="gallery-panel">
+                        <div id="gallery-row-one" class="gallery-scroll" role="group" aria-label="Foto galeri baris pertama" tabindex="0">
+                            <button type="button" class="gallery-item" onclick="undangan.guest.modal(this.querySelector('img'))">
+                                <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="1" alt="Foto galeri pernikahan 1" width="640" height="640" loading="eager" decoding="async">
+                            </button>
+                            <button type="button" class="gallery-item" hidden onclick="undangan.guest.modal(this.querySelector('img'))">
+                                <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="2" alt="Foto galeri pernikahan 2" width="640" height="640" loading="lazy" decoding="async">
+                            </button>
+                            <button type="button" class="gallery-item" hidden onclick="undangan.guest.modal(this.querySelector('img'))">
+                                <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="3" alt="Foto galeri pernikahan 3" width="640" height="640" loading="lazy" decoding="async">
+                            </button>
                         </div>
+                        <div id="gallery-row-two" class="gallery-scroll" hidden role="group" aria-label="Foto galeri baris kedua" tabindex="0">
+                            <button type="button" class="gallery-item" hidden onclick="undangan.guest.modal(this.querySelector('img'))">
+                                <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="4" alt="Foto galeri pernikahan 4" width="640" height="640" loading="lazy" decoding="async">
+                            </button>
+                            <button type="button" class="gallery-item" hidden onclick="undangan.guest.modal(this.querySelector('img'))">
+                                <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="5" alt="Foto galeri pernikahan 5" width="640" height="640" loading="lazy" decoding="async">
+                            </button>
+                            <button type="button" class="gallery-item" hidden onclick="undangan.guest.modal(this.querySelector('img'))">
+                                <img src="./assets/images/placeholder.webp" data-src="./assets/images/placeholder.webp" data-cms-gallery="6" alt="Foto galeri pernikahan 6" width="640" height="640" loading="lazy" decoding="async">
+                            </button>
+                        </div>
+                        <h2 class="font-esthetic">Galeri</h2>
+                        <p class="gallery-hint" hidden>Geser foto untuk melihat momen lainnya.</p>
                     </div>
                 </section>
 

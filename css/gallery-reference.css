@@ -1,0 +1,112 @@
+/* Two swipeable photo strips, inspired by the reference gallery. */
+body.islamic-modern .editorial-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: clamp(4.5rem, 8vh, 6rem) 0;
+}
+
+body.islamic-modern .editorial-gallery .gallery-panel {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 56rem;
+    margin-inline: auto;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none;
+}
+
+body.islamic-modern .editorial-gallery .gallery-scroll {
+    display: flex;
+    width: 100%;
+    height: 180px;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+}
+
+body.islamic-modern .editorial-gallery .gallery-scroll + .gallery-scroll {
+    margin-top: 10px;
+}
+
+body.islamic-modern .editorial-gallery .gallery-scroll[hidden],
+body.islamic-modern .editorial-gallery .gallery-item[hidden] {
+    display: none;
+}
+
+body.islamic-modern .editorial-gallery .gallery-item {
+    box-sizing: border-box;
+    display: block;
+    flex: 0 0 120px;
+    height: 180px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+    scroll-snap-align: start;
+}
+
+body.islamic-modern .editorial-gallery .gallery-item:focus-visible,
+body.islamic-modern .editorial-gallery .gallery-scroll:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -3px;
+}
+
+body.islamic-modern .editorial-gallery .gallery-item:nth-child(2) {
+    flex-basis: 320px;
+}
+
+body.islamic-modern .editorial-gallery .gallery-item:nth-child(3) {
+    flex-basis: 160px;
+}
+
+body.islamic-modern .editorial-gallery #gallery-row-two .gallery-item:first-child {
+    flex-basis: 280px;
+}
+
+body.islamic-modern .editorial-gallery #gallery-row-two[data-single="true"] .gallery-item {
+    flex-basis: 100%;
+}
+
+body.islamic-modern .editorial-gallery #gallery-row-two .gallery-item:nth-child(2) {
+    flex-basis: 120px;
+}
+
+body.islamic-modern .editorial-gallery #gallery-row-two .gallery-item:nth-child(3) {
+    flex-basis: 240px;
+}
+
+body.islamic-modern .editorial-gallery .gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+body.islamic-modern .editorial-gallery .gallery-panel > h2 {
+    margin: clamp(2rem, 5vh, 3rem) 0 0;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    text-align: center;
+}
+
+body.islamic-modern .editorial-gallery .gallery-hint {
+    margin: 8px 20px 0;
+    color: inherit;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+@media screen and (max-width: 576px) {
+    body.islamic-modern .editorial-gallery .gallery-panel > h2 {
+        font-size: 2rem;
+    }
+}

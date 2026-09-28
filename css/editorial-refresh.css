@@ -374,22 +374,6 @@ body.islamic-modern[data-bs-theme="dark"] .editorial-countdown .countdown-calend
     }
 }
 
-.islamic-modern .gallery-panel {
-    max-width: 56rem;
-    margin-inline: auto;
-}
-
-.islamic-modern .gallery-panel .carousel-inner {
-    border-radius: 0.7rem !important;
-    background: #e7dfd2;
-}
-
-.islamic-modern .gallery-panel .carousel-item img {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-}
-
 .islamic-modern .editorial-rsvp-form > .container > .border {
     max-width: 43rem;
     margin-inline: auto;
@@ -493,7 +477,6 @@ body.islamic-modern .editorial-wishes .wishes-panel {
 }
 
 [data-bs-theme="dark"] body.islamic-modern .story-panel,
-[data-bs-theme="dark"] body.islamic-modern .gallery-panel,
 [data-bs-theme="dark"] body.islamic-modern .editorial-rsvp-form > .container > .border,
 [data-bs-theme="dark"] body.islamic-modern .wishes-panel,
 [data-bs-theme="dark"] body.islamic-modern .gift-panel,
@@ -513,10 +496,6 @@ body.islamic-modern .editorial-wishes .wishes-panel {
 
 [data-bs-theme="dark"] body.islamic-modern .editorial-section .story-panel .fw-bold {
     color: #ead8b7;
-}
-
-[data-bs-theme="dark"] body.islamic-modern .editorial-section .gallery-panel .carousel-inner {
-    background: #10251f;
 }
 
 [data-bs-theme="dark"] body.islamic-modern .editorial-section .editorial-rsvp-form .form-control,
