@@ -61,11 +61,11 @@
     <link rel="stylesheet" href="./css/event-simple.css?v=event-simple-1">
     <link rel="stylesheet" href="./css/rsvp-simple.css?v=rsvp-choice-1">
     <link rel="stylesheet" href="./css/gallery-reference.css?v=gallery-rows-1">
-    <link rel="stylesheet" href="./css/gift-modal.css?v=gift-modal-1">
+    <link rel="stylesheet" href="./css/gift-inline.css?v=gift-inline-1">
 
     <!-- Dependencies JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
-    <script defer src="./dist/guest.js?v=gift-modal-1"></script>
+    <script defer src="./dist/guest.js?v=gift-inline-1"></script>
     <script defer src="./dist/cms.js?v=gallery-rows-1"></script>
     <script>
     /* Preserve comment section: set data-preserve="comment" so js can check without patching native APIs */
@@ -356,13 +356,35 @@
                     <div class="container text-center">
                         <div class="gift-panel">
                             <p class="gift-eyebrow">TANDA KASIH</p>
-                            <h2 class="font-esthetic gift-title">Tanda Kasih</h2>
-                            <p class="gift-intro">Kehadiran dan doa Anda sudah sangat berarti. Jika berkenan mengirimkan tanda kasih, tersedia pilihan berikut.</p>
-
-                            <button class="gift-reveal-button" type="button" id="gift-toggle" aria-haspopup="dialog" hidden>
-                                SEND GIFT
-                            </button>
-
+                            <h2 class="font-esthetic gift-title">Wedding Gift</h2>
+                            <p class="gift-intro">Kehadiran Anda adalah hadiah terindah. Jika berkenan memberi tanda kasih, kami sangat berterima kasih.</p>
+                            <div class="gift-shell" id="gift-shell">
+                                <button class="gift-reveal-button" type="button" id="gift-toggle" aria-expanded="false" aria-controls="gift-options" hidden>SEND GIFT</button>
+                                <div class="gift-options" id="gift-options" hidden>
+                                    <button type="button" id="gift-close" aria-label="Tutup daftar hadiah">CLOSE</button>
+                                    <div class="gift-list">
+                                        <article class="gift-item" data-gift-card="groom" hidden>
+                                            <i class="fa-solid fa-building-columns gift-item-icon" aria-hidden="true"></i>
+                                            <div class="gift-item-info"><p class="gift-detail-label">Rekening Mempelai Pria</p><strong data-cms="gift-groom-account-name">Data belum tersedia</strong><span data-cms="gift-groom-account-number">Data rekening belum tersedia</span></div>
+                                            <button type="button" class="gift-detail-copy" data-copy-from="gift-groom-account-number" data-copy-feedback="Nomor rekening disalin!" aria-label="Salin rekening mempelai pria" title="Salin nomor rekening"><i class="fa-solid fa-copy" aria-hidden="true"></i></button>
+                                        </article>
+                                        <article class="gift-item" data-gift-card="bride" hidden>
+                                            <i class="fa-solid fa-building-columns gift-item-icon" aria-hidden="true"></i>
+                                            <div class="gift-item-info"><p class="gift-detail-label">Rekening Mempelai Wanita</p><strong data-cms="gift-bride-account-name">Data belum tersedia</strong><span data-cms="gift-bride-account-number">Data rekening belum tersedia</span></div>
+                                            <button type="button" class="gift-detail-copy" data-copy-from="gift-bride-account-number" data-copy-feedback="Nomor rekening disalin!" aria-label="Salin rekening mempelai wanita" title="Salin nomor rekening"><i class="fa-solid fa-copy" aria-hidden="true"></i></button>
+                                        </article>
+                                        <article class="gift-item" data-gift-card="home" hidden>
+                                            <i class="fa-solid fa-gift gift-item-icon" aria-hidden="true"></i>
+                                            <div class="gift-item-info"><p class="gift-detail-label">Kirim Hadiah</p><strong data-cms="gift-home-name">Rumah Mempelai</strong><span data-cms="gift-home-address">Alamat rumah belum tersedia</span></div>
+                                            <button type="button" class="gift-detail-copy" data-copy-from="gift-home-address" data-copy-feedback="Alamat disalin!" aria-label="Salin alamat rumah" title="Salin alamat rumah"><i class="fa-solid fa-copy" aria-hidden="true"></i></button>
+                                        </article>
+                                        <div class="gift-item gift-note-card">
+                                            <i class="fa-solid fa-heart gift-item-icon" aria-hidden="true"></i>
+                                            <div class="gift-item-info"><p class="gift-detail-label">Doa Terbaik</p><strong>Terima kasih atas kehadiran dan doa restu Anda.</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -555,36 +577,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Wedding Gift dialog: only CMS-verified payment/address cards are revealed. -->
-    <dialog id="gift-dialog" aria-labelledby="gift-dialog-title" aria-describedby="gift-dialog-intro">
-        <div class="gift-dialog-heading">
-            <h2 id="gift-dialog-title" class="font-esthetic">Wedding Gift</h2>
-            <button type="button" id="gift-close" aria-label="Tutup Wedding Gift" title="Tutup">&times;</button>
-        </div>
-        <p id="gift-dialog-intro">Kehadiran dan doa Anda adalah hadiah terindah. Jika berkenan memberi tanda kasih, kami sangat berterima kasih.</p>
-        <div class="gift-modal-list">
-            <article class="gift-modal-card" data-gift-card="groom" hidden>
-                <p class="gift-detail-label">Rekening Mempelai Pria</p>
-                <strong data-cms="gift-groom-account-name">Data belum tersedia</strong>
-                <div class="gift-detail-value"><span data-cms="gift-groom-account-number">Data rekening belum tersedia</span><button type="button" class="gift-detail-copy" data-copy-from="gift-groom-account-number" data-copy-feedback="Nomor rekening disalin!" aria-label="Salin rekening mempelai pria" title="Salin nomor rekening"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></div>
-            </article>
-            <article class="gift-modal-card" data-gift-card="bride" hidden>
-                <p class="gift-detail-label">Rekening Mempelai Wanita</p>
-                <strong data-cms="gift-bride-account-name">Data belum tersedia</strong>
-                <div class="gift-detail-value"><span data-cms="gift-bride-account-number">Data rekening belum tersedia</span><button type="button" class="gift-detail-copy" data-copy-from="gift-bride-account-number" data-copy-feedback="Nomor rekening disalin!" aria-label="Salin rekening mempelai wanita" title="Salin nomor rekening"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></div>
-            </article>
-            <article class="gift-modal-card" data-gift-card="home" hidden>
-                <p class="gift-detail-label">Alamat Rumah</p>
-                <strong data-cms="gift-home-name">Rumah Mempelai</strong>
-                <div class="gift-detail-value gift-address-value"><span data-cms="gift-home-address">Alamat rumah belum tersedia</span><button type="button" class="gift-detail-copy" data-copy-from="gift-home-address" data-copy-feedback="Alamat disalin!" aria-label="Salin alamat rumah" title="Salin alamat rumah"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></div>
-            </article>
-            <div class="gift-modal-card gift-note-card">
-                <p class="gift-detail-label">Doa Terbaik</p>
-                <strong>Terima kasih atas kehadiran dan doa restu Anda.</strong>
-            </div>
-        </div>
-    </dialog>
 
     <!-- Modal Image -->
     <div class="modal fade" id="modal-image" tabindex="-1" aria-hidden="true">

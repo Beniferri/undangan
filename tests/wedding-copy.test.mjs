@@ -23,7 +23,7 @@ test('story keeps its three CMS hooks and concise fallback copy', () => {
 });
 
 test('copy and CMS metadata fallback do not revive an old couple', () => {
-    assert.match(html, /Kehadiran dan doa Anda sudah sangat berarti/);
+    assert.match(html, /Kehadiran Anda adalah hadiah terindah/);
     assert.match(html, /<a href="#gift">Tanda Kasih<\/a>/);
     assert.match(cms, /Dengan memohon rahmat Allah, \$\{wedding\.groom_name\} dan \$\{wedding\.bride_name\}/);
     assert.match(cms, /setStructuredData\(wedding, events, seoDescription\)/);

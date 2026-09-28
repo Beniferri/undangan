@@ -29,8 +29,8 @@ test('date badges have theme contrast on hero and desktop sidebar', () => {
 });
 
 test('gift heading cannot be replaced by a bank label but account CMS remains available', () => {
-    const gift = html.slice(html.indexOf('id="gift"'), html.indexOf('<!-- RSVP Form -->')) + html.slice(html.indexOf('<!-- Wedding Gift dialog'), html.indexOf('<!-- Modal Image -->'));
-    assert.match(gift, /<h2 class="font-esthetic gift-title">Tanda Kasih<\/h2>/);
+    const gift = html.slice(html.indexOf('id="gift"'), html.indexOf('<!-- RSVP Form -->'));
+    assert.match(gift, /<h2 class="font-esthetic gift-title">Wedding Gift<\/h2>/);
     assert.doesNotMatch(gift, /Bank Syariah Indonesia|\bBSI\b|data-cms="gift-label"/i);
     assert.match(gift, /data-cms="gift-groom-account-number"/);
     assert.match(gift, /data-copy-from="gift-groom-account-number"/);
