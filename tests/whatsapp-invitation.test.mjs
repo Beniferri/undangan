@@ -50,5 +50,5 @@ test('invitation composer is gated behind admin login and does not persist phone
         assert.match(panel, new RegExp(`id="${id}"`));
     }
     assert.match(panel, /target="_blank" rel="noopener noreferrer"/);
-    assert.match(html, /dist\/admin\.js\?v=whatsapp-invitation-1/);
+    assert.match(html, /dist\/admin\.js\?v=guest-roster-1/);
 });
