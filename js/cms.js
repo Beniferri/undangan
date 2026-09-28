@@ -299,18 +299,23 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
         setCmsText(`story-${index + 1}-body`, story.body);
     });
     document.querySelectorAll('[data-cms-gallery]').forEach((image, index) => {
-        const slide = image.closest('.carousel-item');
-        const carousel = image.closest('.carousel');
-        const offset = carousel?.id === 'carousel-image-two' ? 3 : 0;
-        const slot = carousel ? Array.from(carousel.querySelectorAll('[data-cms-gallery]')).indexOf(image) : index;
-        const shouldHide = gallery.length > 0 && offset + slot >= Math.min(gallery.length, 6);
-        if (slide) {
-            slide.hidden = shouldHide;
-        }
-        if (carousel?.id === 'carousel-image-two') {
-            carousel.hidden = gallery.length > 0 && gallery.length <= 3;
+        const item = image.closest('.gallery-item');
+        if (item) {
+            item.hidden = gallery.length === 0 ? index > 0 : index >= Math.min(gallery.length, 6);
         }
     });
+    const secondGalleryRow = document.querySelector('#gallery-row-two');
+    if (secondGalleryRow) {
+        if (gallery.length === 3) {
+            secondGalleryRow.prepend(document.querySelector('[data-cms-gallery="3"]').closest('.gallery-item'));
+        }
+        secondGalleryRow.dataset.single = String(gallery.length === 3);
+        secondGalleryRow.hidden = gallery.length < 3;
+    }
+    const galleryHint = document.querySelector('.gallery-hint');
+    if (galleryHint) {
+        galleryHint.hidden = gallery.length <= 1;
+    }
     gallery.slice(0, 6).forEach((item, index) => {
         const image = document.querySelector(`[data-cms-gallery="${index + 1}"]`);
         if (!image) {

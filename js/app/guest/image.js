@@ -84,7 +84,7 @@ export const image = (() => {
      * @returns {void}
      */
     const getByGallery = (el) => {
-        if (el.loading === 'eager' && !el.closest('.carousel-item')?.hidden) {
+        if (el.loading === 'eager' && !el.closest('.gallery-item')?.hidden) {
             getByDefault(el);
         } else {
             // A lazy slide must not block the opening loader, but a failed image

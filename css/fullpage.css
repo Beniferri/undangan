@@ -96,17 +96,8 @@ body.islamic-modern .editorial-countdown .countdown-panel {
     padding-block: 0.65rem !important;
 }
 
-body.islamic-modern .editorial-gallery .gallery-panel,
 body.islamic-modern .editorial-story .story-panel {
     padding: 0.85rem !important;
-}
-
-body.islamic-modern .editorial-gallery .carousel {
-    margin-top: 0.5rem !important;
-}
-
-body.islamic-modern .editorial-gallery .gallery-panel .carousel-item img {
-    aspect-ratio: 16 / 9;
 }
 
 body.islamic-modern .editorial-hero > .bg-overlay-auto {
