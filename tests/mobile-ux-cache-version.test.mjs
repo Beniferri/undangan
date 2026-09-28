@@ -8,5 +8,5 @@ test('mobile UX CSS fixes use a fresh cache key', () => {
     assert.match(html, /\.\/css\/guest\.css\?v=rsvp-simple-1/);
     assert.match(html, /\.\/css\/editorial-refresh\.css\?v=gallery-rows-1/);
     assert.match(html, /\.\/css\/cinematic\.css\?v=cover-rhythm-1/);
-    assert.match(html, /\.\/css\/fullpage\.css\?v=gallery-rows-1/);
+    assert.match(html, /\.\/css\/fullpage\.css\?v=home-rhythm-1/);
 });
