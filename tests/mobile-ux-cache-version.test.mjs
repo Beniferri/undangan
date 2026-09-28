@@ -7,6 +7,6 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 test('mobile UX CSS fixes use a fresh cache key', () => {
     assert.match(html, /\.\/css\/guest\.css\?v=rsvp-simple-1/);
     assert.match(html, /\.\/css\/editorial-refresh\.css\?v=gallery-rows-1/);
-    assert.match(html, /\.\/css\/cinematic\.css\?v=menu-type-1/);
+    assert.match(html, /\.\/css\/cinematic\.css\?v=mobile-initials-1/);
     assert.match(html, /\.\/css\/fullpage\.css\?v=gallery-rows-1/);
 });
