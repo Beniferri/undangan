@@ -14,7 +14,7 @@ test('published audio_url hydrates the audio source without erasing static fallb
     assert.match(html, /data-audio-fallback="\.\/assets\/music\/pure-love-304010\.mp3"/);
     assert.match(guest, /aud\.load\(\)/);
     assert.match(read('js/app/guest/audio.js'), /await Promise\.resolve\(window\.cmsReady\)/);
-    assert.match(html, /dist\/cms\.js\?v=music-directus-1/);
+    assert.match(html, /dist\/cms\.js\?v=gift-bank-1/);
     assert.match(html, /dist\/guest\.js\?v=music-directus-1/);
 });
 

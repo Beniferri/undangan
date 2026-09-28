@@ -9,22 +9,27 @@ body.islamic-modern .editorial-gift .gift-title {
 }
 
 body.islamic-modern .gift-shell {
+    position: relative;
+    min-height: 2.75rem;
     width: 8.75rem;
     max-width: 100%;
     margin: 1.5rem auto 0;
     border: 1px solid #b88a44;
     border-radius: 1.25rem;
     background: transparent;
-    transition: width 500ms ease-in-out, background-color 500ms ease-in-out, border-color 500ms ease-in-out;
+    transition: width 500ms ease-in-out 850ms, background-color 500ms ease-in-out 850ms, border-color 500ms ease-in-out 850ms;
 }
 
 body.islamic-modern .gift-shell.is-open {
     width: 100%;
     border-color: rgba(222, 222, 222, 0.2);
     background: rgba(22, 30, 27, 0.85);
+    transition: width 500ms ease-in-out, background-color 500ms ease-in-out, border-color 500ms ease-in-out;
 }
 
 body.islamic-modern .gift-shell .gift-reveal-button {
+    position: absolute;
+    inset: 0 0 auto;
     display: block;
     width: 100%;
     min-height: 2.75rem;
@@ -50,7 +55,6 @@ body.islamic-modern .gift-item[hidden] {
 }
 
 body.islamic-modern .gift-shell.is-open .gift-reveal-button {
-    position: absolute;
     pointer-events: none;
     opacity: 0;
 }
@@ -126,17 +130,6 @@ body.islamic-modern .gift-shell.is-open .gift-item {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 650ms;
-}
-
-body.islamic-modern .gift-item-icon {
-    display: grid;
-    place-items: center;
-    flex: 0 0 2.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.16);
-    color: #fff;
 }
 
 body.islamic-modern .gift-item-info {

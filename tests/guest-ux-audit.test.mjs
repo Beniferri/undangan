@@ -45,8 +45,8 @@ test('gift choices are reconciled after CMS hydration and mismatched owners are 
 test('CMS never hydrates a mismatched gift owner into the page', () => {
     const cms = source('js/cms.js');
     assert.match(cms, /owner\.trim\(\) !== recipient\.trim\(\)/);
-    assert.match(cms, /setGift\(groomGift, 'gift-groom-account-name', 'gift-groom-account-number', wedding\.groom_name\)/);
-    assert.match(cms, /setGift\(brideGift, 'gift-bride-account-name', 'gift-bride-account-number', wedding\.bride_name\)/);
+    assert.match(cms, /setGift\(groomGift, 'gift-groom-account-name', 'gift-groom-account-number', wedding\.groom_name, 'gift-groom-bank'\)/);
+    assert.match(cms, /setGift\(brideGift, 'gift-bride-account-name', 'gift-bride-account-number', wedding\.bride_name, 'gift-bride-bank'\)/);
 });
 
 test('mobile controls have readable type and at least 44px hit area without clipping RSVP', () => {

@@ -355,8 +355,9 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     const giftType = (item) => item?.gift_type || item?.type || item?.category;
     const groomGift = gifts.find((item) => giftType(item) === 'groom') || gifts[0];
     const brideGift = gifts.find((item) => giftType(item) === 'bride') || gifts[1];
-    const homeGift = gifts.find((item) => giftType(item) === 'home') || gifts.find((item) => giftType(item) === 'address');
-    const setGift = (item, nameSelector, numberSelector, recipient = null) => {
+    const homeGift = gifts.find((item) => giftType(item) === 'home' || giftType(item) === 'address')
+        || gifts.find((item) => item.label?.trim().toLowerCase() === 'rumah');
+    const setGift = (item, nameSelector, numberSelector, recipient = null, bankSelector = null) => {
         if (!item) {
             return;
         }
@@ -366,14 +367,17 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
                 return;
             }
             setCmsText(nameSelector, owner);
+            if (bankSelector && item.label?.trim()) {
+                setCmsText(bankSelector, item.label);
+            }
             setCmsText(numberSelector, item.account_number);
         } else if (item.address) {
-            setCmsText(nameSelector, item.name);
+            setCmsText(nameSelector, item.account_name || item.name);
             setCmsText(numberSelector, item.address);
         }
     };
-    setGift(groomGift, 'gift-groom-account-name', 'gift-groom-account-number', wedding.groom_name);
-    setGift(brideGift, 'gift-bride-account-name', 'gift-bride-account-number', wedding.bride_name);
+    setGift(groomGift, 'gift-groom-account-name', 'gift-groom-account-number', wedding.groom_name, 'gift-groom-bank');
+    setGift(brideGift, 'gift-bride-account-name', 'gift-bride-account-number', wedding.bride_name, 'gift-bride-bank');
     setGift(homeGift, 'gift-home-name', 'gift-home-address');
 };
 const loadCms = async () => {

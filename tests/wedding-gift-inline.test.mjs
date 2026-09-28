@@ -24,7 +24,7 @@ test('inline list contains only CMS-backed payment/address rows plus an informat
         assert.match(gift, new RegExp(`data-copy-from="gift-${key}"`));
     }
     assert.equal((gift.match(/data-gift-card=/g) || []).length, 3);
-    assert.match(gift, /class="gift-item gift-note-card"/);
+    assert.doesNotMatch(gift, /gift-note-card/);
     assert.match(guest, /ownerName === recipientName/);
     assert.match(guest, /card\.hidden = !available/);
     assert.doesNotMatch(gift, /Samuel|Evelyn|123456789|987654321|08123456789|Arcadia/);
@@ -35,6 +35,6 @@ test('panel is glassy, fluid width, divided rows and reduced-motion aware', () =
     assert.match(css, /\.gift-options\s*\{[^}]*backdrop-filter:\s*blur\(/s);
     assert.match(css, /\.gift-item\s*\{[^}]*border-bottom:/s);
     assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)/);
-    assert.match(html, /css\/gift-inline\.css\?v=gift-motion-1/);
+    assert.match(html, /css\/gift-inline\.css\?v=gift-close-1/);
     assert.match(html, /dist\/guest\.js\?v=music-directus-1/);
 });
