@@ -22,6 +22,7 @@ test('menu expands from the top right into a glass panel without a page scrim', 
     assert.match(panel, /width:\s*68px;[^}]*height:\s*50px/);
     assert.match(opened, /width:\s*min\(400px, calc\(100vw - 24px\)\)/);
     assert.match(opened, /height:\s*min\(640px, calc\(100dvh - 24px\)\)/);
+    assert.match(css, /@media screen and \(max-width: 576px\)\s*\{[\s\S]*?\.invitation-menu-overlay\.is-open \.invitation-menu-surface\s*\{[^}]*width:\s*min\(400px, calc\(100vw - 39px\)\);[^}]*height:\s*min\(500px, calc\(100dvh - 24px\)\);[^}]*padding:\s*60px 20px 12px 10px;/);
     assert.match(opened, /background:\s*rgba\(0, 0, 0, 0\.48\)/);
     assert.match(opened, /backdrop-filter:\s*blur\(18px\)/);
     assert.match(panel, /transition:\s*width 0\.65s ease-in-out/);
