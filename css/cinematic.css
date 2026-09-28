@@ -39,7 +39,7 @@ body.islamic-modern .opening-intro {
     display: grid;
     place-items: center;
     overflow: hidden;
-    background: rgba(4, 26, 28, 0.97);
+    background: var(--cinema-night);
     color: var(--cinema-paper);
     pointer-events: none;
     animation: opening-intro-exit 0.9s 5.6s ease-in-out both;
@@ -492,8 +492,8 @@ body.islamic-modern .cinematic-music-control .btn:focus-visible {
 }
 
 @keyframes opening-intro-initials {
-    from { opacity: 0; transform: translateY(7rem); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes opening-intro-exit {
