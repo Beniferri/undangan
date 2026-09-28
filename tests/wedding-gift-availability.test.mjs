@@ -9,7 +9,7 @@ const js = source('js/app/guest/guest.js');
 
 test('gift opens inline, never in a dialog overlay', () => {
     assert.match(gift, /id="gift-toggle"[^>]*aria-expanded="false"[^>]*aria-controls="gift-options"[^>]*hidden/);
-    assert.match(gift, /id="gift-options"[^>]*hidden/);
+    assert.match(gift, /id="gift-options"[^>]*inert/);
     assert.match(gift, /id="gift-close"/);
     assert.doesNotMatch(html, /id="gift-dialog"/);
     assert.doesNotMatch(js, /dialog\.showModal\(\)/);

@@ -72,6 +72,12 @@ Pada collection `weddings`, pilih `video_source`:
 
 Frontend mengubah URL YouTube menjadi embed `youtube-nocookie.com`, sedangkan file Directus diputar sebagai video HTML5. Jika field CMS kosong, file video lokal lama tetap menjadi fallback.
 
+## Musik undangan
+
+Pada item `weddings` berstatus `published`, ubah field `audio_url` untuk mengganti lagu tanpa rebuild frontend. Isi dengan path file musik yang tersedia pada origin website (misalnya `/assets/music/lagu.mp3`) **atau** URL HTTPS asset Directus (`https://directus.benifin.my.id/assets/<file-id>`). Upload file baru ke Directus Files terlebih dahulu dan pastikan public role dapat membaca file audio tersebut; uji URL dari browser tanpa sesi admin. URL eksternal lain, skema tidak aman, atau nilai kosong tidak digunakan; frontend memakai MP3 lokal bawaan sebagai fallback. Tombol musik baru muncul setelah undangan dibuka, dan bila autoplay ditolak pengunjung masih dapat memutar secara manual.
+
+Untuk pratinjau, simpan sebagai draft dan buka preview Directus; hanya item `published` yang dibaca pengunjung umum. Jika musik tidak terputar, periksa akses public asset, content type audio, dan network request di browser sebelum publish.
+
 ## Frontend loading dan favicon
 
 Loading screen hanya menahan tampilan sekitar 900 ms agar visitor tidak menunggu seluruh asset berat. Gambar, video, audio, dan library tetap dilanjutkan secara asynchronous dengan fallback existing.

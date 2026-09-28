@@ -9,7 +9,7 @@ const guest = read('js/app/guest/guest.js');
 
 test('gift expands within its own section instead of opening a dialog', () => {
     assert.match(gift, /id="gift-toggle"[^>]*aria-expanded="false"[^>]*aria-controls="gift-options"[^>]*hidden/);
-    assert.match(gift, /id="gift-options"[^>]*hidden/);
+    assert.match(gift, /id="gift-options"[^>]*inert/);
     assert.match(gift, /id="gift-close"[^>]*>CLOSE<\/button>/);
     assert.match(gift, /Wedding Gift/);
     assert.doesNotMatch(html, /<dialog[^>]*id="gift-dialog"/);
@@ -35,6 +35,6 @@ test('panel is glassy, fluid width, divided rows and reduced-motion aware', () =
     assert.match(css, /\.gift-options\s*\{[^}]*backdrop-filter:\s*blur\(/s);
     assert.match(css, /\.gift-item\s*\{[^}]*border-bottom:/s);
     assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)/);
-    assert.match(html, /css\/gift-inline\.css\?v=gift-inline-1/);
-    assert.match(html, /dist\/guest\.js\?v=gift-inline-1/);
+    assert.match(html, /css\/gift-inline\.css\?v=gift-motion-1/);
+    assert.match(html, /dist\/guest\.js\?v=music-directus-1/);
 });

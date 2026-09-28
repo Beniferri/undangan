@@ -554,7 +554,8 @@ export const guest = (() => {
             link.hidden = !hasAvailableGift;
         });
         if (!hasAvailableGift) {
-            options.hidden = true;
+            options.setAttribute('inert', '');
+            toggle.removeAttribute('inert');
             toggle.setAttribute('aria-expanded', 'false');
             document.getElementById('gift-shell')?.classList.remove('is-open');
         }
@@ -570,13 +571,15 @@ export const guest = (() => {
         }
 
         toggle.addEventListener('click', () => {
-            options.hidden = false;
+            options.removeAttribute('inert');
+            toggle.setAttribute('inert', '');
             shell.classList.add('is-open');
             toggle.setAttribute('aria-expanded', 'true');
             closeButton.focus({ preventScroll: true });
         });
         closeButton.addEventListener('click', () => {
-            options.hidden = true;
+            options.setAttribute('inert', '');
+            toggle.removeAttribute('inert');
             shell.classList.remove('is-open');
             toggle.setAttribute('aria-expanded', 'false');
             toggle.focus({ preventScroll: true });
