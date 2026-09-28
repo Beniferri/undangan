@@ -24,7 +24,7 @@ export const initSectionScroll = (doc = document, win = window) => {
     const available = () => doc.body.classList.contains('invitation-opened')
         && !doc.body.classList.contains('invitation-menu-open');
     const interactive = (target) => target instanceof Element
-        && Boolean(target.closest('select, [contenteditable], .invitation-menu, .overflow-y-scroll'));
+        && Boolean(target.closest('select, [contenteditable], .invitation-menu, dialog[open], .overflow-y-scroll'));
     const textareaCanScroll = (target, direction) => {
         const textarea = target instanceof Element ? target.closest('textarea') : null;
         if (!textarea || textarea.scrollHeight <= textarea.clientHeight + 1) {
