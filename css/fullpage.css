@@ -101,17 +101,17 @@ body.islamic-modern .editorial-story .story-panel {
 }
 
 body.islamic-modern .editorial-hero > .bg-overlay-auto {
-    padding-block: 1.25rem 2.5rem;
+    padding-block: 1.5rem 3.5rem;
 }
 
 body.islamic-modern .editorial-hero [data-cms="profile-image"] {
     width: clamp(7rem, 18vh, 10rem);
     height: clamp(7rem, 18vh, 10rem);
-    margin-block: 0.5rem !important;
+    margin-block: 1rem !important;
 }
 
 body.islamic-modern .editorial-hero [data-cms="couple-names"] {
-    margin-block: 0.5rem !important;
+    margin-block: 1rem !important;
     font-size: clamp(1.6rem, 3.5vw, 2.1rem) !important;
 }
 
@@ -121,7 +121,7 @@ body.islamic-modern .editorial-hero > .bg-overlay-auto > h1 {
 }
 
 body.islamic-modern .editorial-hero [data-cms="wedding-date"] {
-    margin-block: 0.3rem !important;
+    margin-block: 0.75rem !important;
 }
 
 body.islamic-modern .editorial-rsvp-form > .container > .border {

@@ -46,8 +46,9 @@ test('old gallery carousel styles are removed', () => {
 });
 
 test('new stylesheet is loaded last with a fresh cache key', () => {
-    for (const sheet of ['editorial-refresh', 'fullpage', 'gallery-reference']) {
+    for (const sheet of ['editorial-refresh', 'gallery-reference']) {
         assert.ok(html.includes(`css/${sheet}.css?v=gallery-rows-1`));
     }
+    assert.ok(html.includes('css/fullpage.css?v=home-rhythm-1'));
     assert.ok(html.indexOf('css/gallery-reference.css?v=gallery-rows-1') > html.indexOf('css/rsvp-simple.css'));
 });
