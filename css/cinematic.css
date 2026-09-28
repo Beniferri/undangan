@@ -521,6 +521,14 @@ body.islamic-modern .cinematic-music-control .btn:focus-visible {
 }
 
 @media screen and (max-width: 576px) {
+    body.islamic-modern .invitation-menu-overlay.is-open .invitation-menu-surface {
+        width: min(400px, calc(100vw - 39px));
+        height: min(500px, calc(100dvh - 24px));
+        padding: 60px 20px 12px 10px;
+    }
+}
+
+@media screen and (max-width: 576px) {
     body.islamic-modern .opening-intro-mask {
         top: calc(50% - 5rem);
     }
