@@ -12,24 +12,18 @@ export const audio = (() => {
      * @returns {Promise<void>}
      */
     const load = async (playOnOpen = true) => {
+        // Capture the opening gesture before waiting for Directus or the audio cache.
+        let openedBeforeReady = false;
+        document.addEventListener('undangan.open', () => {
+            openedBeforeReady = true;
+        }, { once: true });
 
+        await Promise.resolve(window.cmsReady);
         const url = document.body.getAttribute('data-audio');
         if (!url) {
             progress.complete('audio', true);
             return;
         }
-
-        /**
-         * Whether the user opened the invitation before audio finished loading.
-         * @type {boolean}
-         */
-        let openedBeforeReady = false;
-
-        // Install the opening listener BEFORE the async cache fetch so we never
-        // miss the user gesture even on slow connections.
-        document.addEventListener('undangan.open', () => {
-            openedBeforeReady = true;
-        }, { once: true });
 
         /**
          * @type {HTMLAudioElement|null}

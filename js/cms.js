@@ -47,6 +47,27 @@ const directusAssetUrl = (file, options = '') => {
     const cacheBust = version ? `${options ? '&' : '?'}v=${encodeURIComponent(version)}` : '';
     return `${CMS_BASE}/assets/${encodeURIComponent(id)}${options}${cacheBust}`;
 };
+const safeAudioUrl = (value) => {
+    if (typeof value !== 'string' || !value.trim()) {
+        return null;
+    }
+    try {
+        const url = new URL(value.trim(), window.location.origin);
+        if (url.protocol !== 'https:' && url.origin !== window.location.origin) {
+            return null;
+        }
+        if (url.origin === window.location.origin && /^\/assets\/music\/[\w./-]+\.(mp3|ogg|m4a|wav)$/i.test(url.pathname)) {
+            return url.toString();
+        }
+        if (url.protocol === 'https:' && url.hostname === 'directus.benifin.my.id'
+            && /^\/assets\/[a-f0-9-]{36}$/i.test(url.pathname)) {
+            return url.toString();
+        }
+    } catch {
+        return null;
+    }
+    return null;
+};
 const weddingImageUrl = (wedding, options = '') => {
     const file = wedding.og_image_id || wedding.cover_image_id;
     return file ? directusAssetUrl(file, options) : wedding.cover_image_url;
@@ -163,6 +184,7 @@ const applyWedding = ({ wedding, events = [], gallery = [], gifts = [], stories 
     setCmsText('dress-code', wedding.dress_code);
     document.body.dataset.time = wedding.wedding_date;
     document.body.dataset.timezone = wedding.timezone || 'Asia/Jakarta';
+    document.body.dataset.audio = safeAudioUrl(wedding.audio_url) || document.body.dataset.audioFallback;
     configureVideo(wedding);
     const safeMapUrl = (value) => {
         try {
