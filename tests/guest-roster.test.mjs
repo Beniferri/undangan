@@ -2,6 +2,24 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { parseGuestCsv } from '../js/app/admin/guest-csv.js';
+import { inviteeSaveError, inviteeStatus } from '../js/app/admin/roster-ui.js';
+
+const first = { name: 'Ayu', phone: '628123456789', sent_at: null };
+const second = { name: 'Budi', phone: '628987654321', sent_at: '2026-09-28T10:00:00Z' };
+
+test('two roster rows show independent manual status and actionable save errors', () => {
+    const rows = [first, second];
+    assert.equal(rows.length, 2);
+    assert.deepEqual(rows.map(inviteeStatus), [
+        { label: 'Belum ditandai', className: 'text-bg-secondary' },
+        { label: 'Sudah dikirim (manual)', className: 'text-bg-success' },
+    ]);
+    assert.equal(inviteeSaveError(409, 'Phone already exists.'), 'Nomor WA sudah ada di daftar tamu. Gunakan nomor lain atau Edit kontak yang sudah ada.');
+    assert.equal(inviteeSaveError(422, 'Invalid invitee name or Indonesian mobile phone.'), 'Nama atau nomor WA tidak valid. Periksa kembali format nomor Indonesia.');
+    assert.equal(inviteeSaveError(403, 'Invalid CSRF token.'), 'Sesi admin tidak valid. Muat ulang dashboard lalu login kembali.');
+    assert.equal(inviteeSaveError(500, 'Internal server error'), 'Internal server error');
+});
+
 
 const html = readFileSync(new URL('../dashboard.html', import.meta.url), 'utf8');
 const js = readFileSync(new URL('../js/admin.js', import.meta.url), 'utf8');
@@ -26,5 +44,10 @@ test('guest roster controls are behind login and reuse existing composer', () =>
     }
     assert.match(js, /\/api\/admin\/invitees/);
     assert.match(js, /buildWhatsAppInvitation/);
-    assert.match(html, /dist\/admin\.js\?v=guest-roster-1/);
+    assert.match(html, /dist\/admin\.js\?v=guest-roster-2/);
+    assert.match(html, /setiap tamu perlu nomor WA yang berbeda/);
+    assert.match(js, /inviteeSaveError\(error\.status, error\.message\)/);
+    assert.doesNotMatch(js, /inviteeRows\.some\(\(row\) => row\.phone === phone/);
+    assert.match(js, /name\.append\(document\.createElement\('br'\), badge\)/);
+    assert.match(js, /statusCell\.append\(actionButton\(row\.sent_at/);
 });

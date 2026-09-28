@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { buildWhatsAppInvitation, defaultInvitationTemplate, normalizeIndonesianPhone } from './app/admin/invitation.js';
 import { parseGuestCsv } from './app/admin/guest-csv.js';
+import { inviteeSaveError, inviteeStatus } from './app/admin/roster-ui.js';
 
 let inviteeRows = [];
 let editingInviteeId = null;
@@ -48,7 +49,9 @@ const request = async (path, options = {}) => {
     const response = await fetch(`${API_BASE}${path}`, { ...options, headers, credentials: 'include' });
     const body = await response.json().catch(() => ({}));
     if (!response.ok) {
-        throw new Error(body.error || `Request gagal (${response.status})`);
+        const error = new Error(body.error || `Request gagal (${response.status})`);
+        error.status = response.status;
+        throw error;
     }
     return body;
 };
@@ -184,6 +187,20 @@ const renderInvitees = (rows) => {
     rows.forEach((row) => {
         const tr = document.createElement('tr');
         const actions = document.createElement('td');
+        const name = cell(row.name);
+        const status = inviteeStatus(row);
+        const badge = document.createElement('span');
+        badge.className = `badge ${status.className} d-inline-block mt-1`;
+        badge.textContent = status.label;
+        name.append(document.createElement('br'), badge);
+        const statusCell = document.createElement('td');
+        statusCell.append(actionButton(row.sent_at ? 'Batalkan tanda' : 'Tandai sudah dikirim', 'outline-success', async () => {
+            try {
+                await request(`/api/admin/invitees/${encodeURIComponent(row.id)}`, { method: 'PATCH', body: JSON.stringify({ sent: !row.sent_at }) });
+                await loadInvitees();
+                setNotice('Status manual diperbarui; WhatsApp tidak memverifikasi pengiriman.', 'success');
+            } catch (error) { setNotice(error.message, 'danger'); }
+        }));
         const compose = actionButton('Siapkan WA', 'success', () => {
             byId('invitation-name').value = row.name;
             byId('invitation-phone').value = row.phone;
@@ -203,13 +220,6 @@ const renderInvitees = (rows) => {
             byId('invitee-cancel').hidden = false;
             byId('invitee-name').focus();
         }));
-        actions.append(actionButton(row.sent_at ? 'Batalkan tanda' : 'Tandai sudah dikirim', 'outline-success', async () => {
-            try {
-                await request(`/api/admin/invitees/${encodeURIComponent(row.id)}`, { method: 'PATCH', body: JSON.stringify({ sent: !row.sent_at }) });
-                await loadInvitees();
-                setNotice('Status manual diperbarui; WhatsApp tidak memverifikasi pengiriman.', 'success');
-            } catch (error) { setNotice(error.message, 'danger'); }
-        }));
         actions.append(actionButton('Hapus', 'outline-danger', async () => {
             if (!window.confirm(`Hapus data tamu “${row.name}” secara permanen?`)) { return; }
             try {
@@ -219,7 +229,7 @@ const renderInvitees = (rows) => {
                 setNotice('Data tamu dihapus.', 'success');
             } catch (error) { setNotice(error.message, 'danger'); }
         }));
-        tr.append(cell(row.name), cell(row.phone), cell(row.sent_at ? 'Sudah dikirim (manual)' : 'Belum ditandai'), actions);
+        tr.append(name, cell(row.phone), statusCell, actions);
         table.append(tr);
     });
 };
@@ -287,9 +297,10 @@ byId('invitee-form').addEventListener('submit', async (event) => {
         const path = editingInviteeId ? `/api/admin/invitees/${encodeURIComponent(editingInviteeId)}` : '/api/admin/invitees';
         await request(path, { method: editingInviteeId ? 'PATCH' : 'POST', body: JSON.stringify({ name, phone }) });
         resetInviteeForm();
-        await loadInvitees();
         setNotice('Data tamu tersimpan.', 'success');
-    } catch (error) { setNotice(error.message, 'danger'); }
+        try { await loadInvitees(); }
+        catch { setNotice('Tamu tersimpan, tetapi daftar belum dapat dimuat. Tekan Refresh sebelum menyimpan lagi.', 'warning'); }
+    } catch (error) { setNotice(inviteeSaveError(error.status, error.message), 'danger'); }
     finally { button.disabled = false; }
 });
 const clearImport = () => {
