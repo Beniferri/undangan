@@ -1,5 +1,10 @@
 /* eslint-disable no-use-before-define */
-import { buildWhatsAppInvitation, defaultInvitationTemplate } from './app/admin/invitation.js';
+import { buildWhatsAppInvitation, defaultInvitationTemplate, normalizeIndonesianPhone } from './app/admin/invitation.js';
+import { parseGuestCsv } from './app/admin/guest-csv.js';
+
+let inviteeRows = [];
+let editingInviteeId = null;
+let pendingImport = null;
 
 const API_BASE = 'https://api.benifin.my.id';
 const CMS_BASE = 'https://directus.benifin.my.id';
@@ -65,6 +70,15 @@ const showLogin = () => {
     byId('invitation-result').hidden = true;
     byId('invitation-whatsapp').removeAttribute('href');
     byId('invitation-link').removeAttribute('href');
+    inviteeRows = [];
+    editingInviteeId = null;
+    pendingImport = null;
+    byId('invitee-table').replaceChildren();
+    byId('invitee-form').reset();
+    byId('invitee-csv').value = '';
+    byId('invitee-import-preview').hidden = true;
+    byId('invitee-cancel').hidden = true;
+    byId('invitee-save').textContent = 'Simpan tamu';
 };
 const loadPublishedWedding = async () => {
     publishedWedding = null;
@@ -149,9 +163,71 @@ const actionButton = (label, style, handler) => {
 const loadStats = async () => setStats((await request('/api/admin/stats')).data);
 const loadRsvps = async () => renderRsvps((await request('/api/admin/rsvps?limit=500')).data);
 const loadGuestbook = async () => renderGuestbook((await request(`/api/admin/guestbook?status=${encodeURIComponent(byId('guestbook-status').value)}`)).data);
+const resetInviteeForm = () => {
+    editingInviteeId = null;
+    byId('invitee-form').reset();
+    byId('invitee-save').textContent = 'Simpan tamu';
+    byId('invitee-cancel').hidden = true;
+};
+const renderInvitees = (rows) => {
+    inviteeRows = rows;
+    const table = byId('invitee-table');
+    table.replaceChildren();
+    if (!rows.length) {
+        const tr = document.createElement('tr');
+        const empty = cell('Belum ada tamu tersimpan.', 'text-secondary');
+        empty.colSpan = 4;
+        tr.append(empty);
+        table.append(tr);
+        return;
+    }
+    rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const actions = document.createElement('td');
+        const compose = actionButton('Siapkan WA', 'success', () => {
+            byId('invitation-name').value = row.name;
+            byId('invitation-phone').value = row.phone;
+            clearInvitationPreview();
+            try { renderInvitationPreview(); }
+            catch (error) { setNotice(error.message, 'danger'); }
+            byId('invitation-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            byId('invitation-whatsapp').focus();
+        });
+        compose.disabled = !publishedWedding;
+        actions.append(compose);
+        actions.append(actionButton('Edit', 'outline-secondary', () => {
+            editingInviteeId = row.id;
+            byId('invitee-name').value = row.name;
+            byId('invitee-phone').value = row.phone;
+            byId('invitee-save').textContent = 'Simpan perubahan';
+            byId('invitee-cancel').hidden = false;
+            byId('invitee-name').focus();
+        }));
+        actions.append(actionButton(row.sent_at ? 'Batalkan tanda' : 'Tandai sudah dikirim', 'outline-success', async () => {
+            try {
+                await request(`/api/admin/invitees/${encodeURIComponent(row.id)}`, { method: 'PATCH', body: JSON.stringify({ sent: !row.sent_at }) });
+                await loadInvitees();
+                setNotice('Status manual diperbarui; WhatsApp tidak memverifikasi pengiriman.', 'success');
+            } catch (error) { setNotice(error.message, 'danger'); }
+        }));
+        actions.append(actionButton('Hapus', 'outline-danger', async () => {
+            if (!window.confirm(`Hapus data tamu “${row.name}” secara permanen?`)) { return; }
+            try {
+                await request(`/api/admin/invitees/${encodeURIComponent(row.id)}`, { method: 'DELETE' });
+                if (editingInviteeId === row.id) { resetInviteeForm(); }
+                await loadInvitees();
+                setNotice('Data tamu dihapus.', 'success');
+            } catch (error) { setNotice(error.message, 'danger'); }
+        }));
+        tr.append(cell(row.name), cell(row.phone), cell(row.sent_at ? 'Sudah dikirim (manual)' : 'Belum ditandai'), actions);
+        table.append(tr);
+    });
+};
+const loadInvitees = async () => renderInvitees((await request('/api/admin/invitees')).data);
 const loadDashboard = async () => {
     clearNotice();
-    const results = await Promise.allSettled([loadStats(), loadRsvps(), loadGuestbook(), loadPublishedWedding()]);
+    const results = await Promise.allSettled([loadStats(), loadRsvps(), loadGuestbook(), loadPublishedWedding(), loadInvitees()]);
+    if (publishedWedding && inviteeRows.length) { renderInvitees(inviteeRows); }
     if (results.some((result) => result.status === 'rejected')) {
         setNotice('Sebagian data dashboard atau metadata undangan gagal dimuat. Coba Refresh.', 'warning');
     }
@@ -196,6 +272,70 @@ byId('logout-button').addEventListener('click', async () => {
 });
 byId('refresh-button').addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
 byId('invitation-template').value = defaultInvitationTemplate;
+byId('invitee-cancel').addEventListener('click', resetInviteeForm);
+byId('invitee-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const name = byId('invitee-name').value.trim();
+    const phone = normalizeIndonesianPhone(byId('invitee-phone').value);
+    if (name.length < 2 || name.length > 80 || /[\r\n]/.test(name) || !phone) {
+        setNotice('Nama atau nomor WA tidak valid.', 'danger');
+        return;
+    }
+    const button = byId('invitee-save');
+    button.disabled = true;
+    try {
+        const path = editingInviteeId ? `/api/admin/invitees/${encodeURIComponent(editingInviteeId)}` : '/api/admin/invitees';
+        await request(path, { method: editingInviteeId ? 'PATCH' : 'POST', body: JSON.stringify({ name, phone }) });
+        resetInviteeForm();
+        await loadInvitees();
+        setNotice('Data tamu tersimpan.', 'success');
+    } catch (error) { setNotice(error.message, 'danger'); }
+    finally { button.disabled = false; }
+});
+const clearImport = () => {
+    pendingImport = null;
+    byId('invitee-import-preview').hidden = true;
+};
+byId('invitee-import-cancel').addEventListener('click', clearImport);
+byId('invitee-csv').addEventListener('change', clearImport);
+byId('invitee-import').addEventListener('click', async () => {
+    clearImport();
+    const file = byId('invitee-csv').files?.[0];
+    if (!file || file.size > 1_000_000) { setNotice('Pilih file CSV maksimal 1 MB.', 'danger'); return; }
+    try {
+        const rows = parseGuestCsv(await file.text());
+        const seen = new Set(inviteeRows.map((row) => row.phone));
+        let duplicates = 0;
+        const valid = [];
+        for (const [index, row] of rows.entries()) {
+            const phone = normalizeIndonesianPhone(row.phone);
+            if (!phone || row.name.length < 2 || row.name.length > 80 || /[\r\n]/.test(row.name)) {
+                throw new Error(`Nama/nomor tidak valid pada baris ${index + 2}. Tidak ada data diimpor.`);
+            }
+            if (seen.has(phone)) { duplicates += 1; continue; }
+            seen.add(phone);
+            valid.push({ name: row.name, phone });
+        }
+        if (!rows.length) { throw new Error('CSV tidak berisi tamu.'); }
+        pendingImport = valid;
+        byId('invitee-import-summary').textContent = `${valid.length} tamu baru, ${duplicates} nomor duplikat dilewati. Periksa file sebelum konfirmasi.`;
+        byId('invitee-import-preview').hidden = false;
+        byId('invitee-import-confirm').disabled = valid.length === 0;
+    } catch (error) { setNotice(error.message, 'danger'); }
+});
+byId('invitee-import-confirm').addEventListener('click', async () => {
+    if (!pendingImport?.length) { return; }
+    const button = byId('invitee-import-confirm');
+    button.disabled = true;
+    try {
+        const result = await request('/api/admin/invitees/import', { method: 'POST', body: JSON.stringify({ rows: pendingImport }) });
+        clearImport();
+        byId('invitee-csv').value = '';
+        await loadInvitees();
+        setNotice(`Impor selesai: ${result.data.created} ditambahkan, ${result.data.duplicates} duplikat saat impor dilewati.`, 'success');
+    } catch (error) { setNotice(error.message, 'danger'); }
+    finally { button.disabled = false; }
+});
 const clearInvitationPreview = () => {
     byId('invitation-result').hidden = true;
     byId('invitation-whatsapp').removeAttribute('href');
@@ -204,24 +344,24 @@ const clearInvitationPreview = () => {
 for (const id of ['invitation-name', 'invitation-phone', 'invitation-template']) {
     byId(id).addEventListener('input', clearInvitationPreview);
 }
+const renderInvitationPreview = () => {
+    const result = buildWhatsAppInvitation({
+        name: byId('invitation-name').value,
+        phone: byId('invitation-phone').value,
+        template: byId('invitation-template').value,
+        wedding: publishedWedding,
+    });
+    byId('invitation-preview').value = result.message;
+    byId('invitation-link').href = result.invitationUrl;
+    byId('invitation-link').textContent = result.invitationUrl;
+    byId('invitation-whatsapp').href = result.whatsappUrl;
+    byId('invitation-result').hidden = false;
+};
 byId('invitation-form').addEventListener('submit', (event) => {
     event.preventDefault();
     clearInvitationPreview();
-    try {
-        const result = buildWhatsAppInvitation({
-            name: byId('invitation-name').value,
-            phone: byId('invitation-phone').value,
-            template: byId('invitation-template').value,
-            wedding: publishedWedding,
-        });
-        byId('invitation-preview').value = result.message;
-        byId('invitation-link').href = result.invitationUrl;
-        byId('invitation-link').textContent = result.invitationUrl;
-        byId('invitation-whatsapp').href = result.whatsappUrl;
-        byId('invitation-result').hidden = false;
-    } catch (error) {
-        setNotice(error.message, 'danger');
-    }
+    try { renderInvitationPreview(); }
+    catch (error) { setNotice(error.message, 'danger'); }
 });
 byId('guestbook-status').addEventListener('change', () => loadGuestbook().catch((error) => setNotice(error.message, 'danger')));
 byId('export-rsvp').addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at])));
