@@ -28,6 +28,16 @@ test('menu expands from the top right into a glass panel without a page scrim', 
     assert.match(panel, /transition:\s*width 0\.65s ease-in-out/);
 });
 
+test('navigation labels use the reference typography rhythm without changing the site font', () => {
+    const nav = css.match(/body\.islamic-modern \.invitation-menu-nav\s*\{([^}]*)\}/)?.[1] || '';
+    const link = css.match(/body\.islamic-modern \.invitation-menu-nav a\s*\{([^}]*)\}/)?.[1] || '';
+    assert.match(nav, /gap:\s*12px;/);
+    assert.match(link, /padding:\s*12px 24px;/);
+    assert.match(link, /font:\s*400 32px\/1 Marcellus, Georgia, serif;/);
+    assert.match(css, /@media screen and \(max-width: 576px\)[\s\S]*?\.invitation-menu-nav\s*\{[^}]*gap:\s*0;[^}]*\}[\s\S]*?\.invitation-menu-nav a\s*\{[^}]*font-size:\s*28px;/);
+    assert.match(css, /@media screen and \(max-width: 360px\)[\s\S]*?\.invitation-menu-nav a\s*\{[^}]*padding-inline:\s*12px;/);
+});
+
 test('menu links fade in from blur with staggered timing and reduced-motion support', () => {
     const link = css.match(/body\.islamic-modern \.invitation-menu-nav a\s*\{([^}]*)\}/)?.[1] || '';
     assert.match(link, /opacity:\s*0;[^}]*filter:\s*blur\(10px\)/);

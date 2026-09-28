@@ -110,7 +110,7 @@ test('cover keeps prominent mobile names with centered compact guest actions and
     assert.match(css, /\.opening-guest-card\s*\{[^}]*width:\s*min\(100%, 21rem\)/s);
     assert.match(css, /@media screen and \(max-width: 576px\)[\s\S]*?body\.islamic-modern \.opening-cover-names\s*\{[^}]*font-size:\s*clamp\(4rem, 22vw, 5\.4rem\)/s);
     assert.match(css, /@media screen and \(max-height: 700px\) and \(max-width: 576px\)[\s\S]*?\.opening-cover-names\s*\{[^}]*font-size:\s*clamp\(3\.7rem, 18\.5vw, 4\.5rem\)/s);
-    assert.match(readFileSync(new URL('../index.html', import.meta.url), 'utf8'), /cinematic\.css\?v=compact-menu-1/);
+    assert.match(readFileSync(new URL('../index.html', import.meta.url), 'utf8'), /cinematic\.css\?v=menu-type-1/);
     assert.match(css, /\.opening-cover-name,\s*body\.islamic-modern \.opening-cover-amp\s*\{[^}]*display:\s*block/s);
     assert.match(css, /\.opening-cover-names\s*\{[^}]*max-width:\s*100%[^}]*overflow-wrap:\s*anywhere/s);
     assert.doesNotMatch(css, /\.opening-monogram|\.monogram-amp/);
