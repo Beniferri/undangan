@@ -68,9 +68,9 @@ const safeAudioUrl = (value) => {
     }
     return null;
 };
-const weddingImageUrl = (wedding, options = '') => {
-    const file = wedding.og_image_id || wedding.cover_image_id;
-    return file ? directusAssetUrl(file, options) : wedding.cover_image_url;
+const weddingImageUrl = (wedding) => {
+    const file = wedding.og_image_id || wedding.profile_image_id || wedding.cover_image_id;
+    return file ? directusAssetUrl(file, '?width=1200&height=1200&fit=cover&format=jpeg&quality=80') : wedding.cover_image_url;
 };
 const youtubeEmbedUrl = (value) => {
     try {
