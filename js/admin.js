@@ -1,5 +1,10 @@
 /* eslint-disable no-use-before-define */
+import { buildWhatsAppInvitation, defaultInvitationTemplate } from './app/admin/invitation.js';
+
 const API_BASE = 'https://api.benifin.my.id';
+const CMS_BASE = 'https://directus.benifin.my.id';
+const CMS_SLUG = 'beta-storia-2027';
+let publishedWedding = null;
 const csrfStorageKey = 'betastoria-admin-csrf';
 let csrfToken = sessionStorage.getItem(csrfStorageKey) || '';
 let rsvpRows = [];
@@ -52,6 +57,31 @@ const showLogin = () => {
     byId('login-panel').hidden = false;
     byId('app-panel').hidden = true;
     byId('logout-button').hidden = true;
+    publishedWedding = null;
+    byId('invitation-name').value = '';
+    byId('invitation-phone').value = '';
+    byId('invitation-preview').value = '';
+    byId('invitation-generate').disabled = true;
+    byId('invitation-result').hidden = true;
+    byId('invitation-whatsapp').removeAttribute('href');
+    byId('invitation-link').removeAttribute('href');
+};
+const loadPublishedWedding = async () => {
+    publishedWedding = null;
+    byId('invitation-generate').disabled = true;
+    byId('invitation-result').hidden = true;
+    const params = new URLSearchParams({
+        'filter[slug][_eq]': CMS_SLUG,
+        'filter[status][_eq]': 'published',
+        fields: 'groom_name,bride_name,wedding_date,timezone',
+        limit: '1',
+    });
+    const response = await fetch(`${CMS_BASE}/items/weddings?${params}`, { headers: { Accept: 'application/json' } });
+    if (!response.ok) {throw new Error('Data pernikahan terbit tidak bisa dimuat.');}
+    const wedding = (await response.json()).data?.[0];
+    if (!wedding?.groom_name || !wedding?.bride_name || !wedding?.wedding_date) {throw new Error('Data pernikahan terbit belum lengkap.');}
+    publishedWedding = wedding;
+    byId('invitation-generate').disabled = false;
 };
 const setStats = (data) => {
     byId('stat-total').textContent = formatNumber(data.total);
@@ -121,7 +151,10 @@ const loadRsvps = async () => renderRsvps((await request('/api/admin/rsvps?limit
 const loadGuestbook = async () => renderGuestbook((await request(`/api/admin/guestbook?status=${encodeURIComponent(byId('guestbook-status').value)}`)).data);
 const loadDashboard = async () => {
     clearNotice();
-    await Promise.all([loadStats(), loadRsvps(), loadGuestbook()]);
+    const results = await Promise.allSettled([loadStats(), loadRsvps(), loadGuestbook(), loadPublishedWedding()]);
+    if (results.some((result) => result.status === 'rejected')) {
+        setNotice('Sebagian data dashboard atau metadata undangan gagal dimuat. Coba Refresh.', 'warning');
+    }
 };
 const moderate = async (id, status) => {
     try {
@@ -162,6 +195,34 @@ byId('logout-button').addEventListener('click', async () => {
     setNotice('Anda sudah keluar.', 'success');
 });
 byId('refresh-button').addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
+byId('invitation-template').value = defaultInvitationTemplate;
+const clearInvitationPreview = () => {
+    byId('invitation-result').hidden = true;
+    byId('invitation-whatsapp').removeAttribute('href');
+    byId('invitation-link').removeAttribute('href');
+};
+for (const id of ['invitation-name', 'invitation-phone', 'invitation-template']) {
+    byId(id).addEventListener('input', clearInvitationPreview);
+}
+byId('invitation-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    clearInvitationPreview();
+    try {
+        const result = buildWhatsAppInvitation({
+            name: byId('invitation-name').value,
+            phone: byId('invitation-phone').value,
+            template: byId('invitation-template').value,
+            wedding: publishedWedding,
+        });
+        byId('invitation-preview').value = result.message;
+        byId('invitation-link').href = result.invitationUrl;
+        byId('invitation-link').textContent = result.invitationUrl;
+        byId('invitation-whatsapp').href = result.whatsappUrl;
+        byId('invitation-result').hidden = false;
+    } catch (error) {
+        setNotice(error.message, 'danger');
+    }
+});
 byId('guestbook-status').addEventListener('change', () => loadGuestbook().catch((error) => setNotice(error.message, 'danger')));
 byId('export-rsvp').addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at])));
 byId('export-guestbook').addEventListener('click', () => downloadCsv('betastoria-guestbook.csv', ['Nama', 'Pesan', 'Like', 'Status', 'Waktu'], guestbookRows.map((row) => [row.name, row.message, row.like_count, row.status, row.created_at])));
