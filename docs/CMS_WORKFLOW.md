@@ -72,6 +72,12 @@ Pada collection `weddings`, pilih `video_source`:
 
 Frontend mengubah URL YouTube menjadi embed `youtube-nocookie.com`, sedangkan file Directus diputar sebagai video HTML5. Jika field CMS kosong, file video lokal lama tetap menjadi fallback.
 
+## Wedding Gift
+
+Untuk rekening di `wedding_gifts`, isi `label` dengan **nama bank** (misalnya nama bank lengkap), `account_name` dengan nama pemilik yang sesuai mempelai, dan `account_number` dengan nomor rekening. Frontend menampilkan rekening hanya bila pemilik dan nomor valid; jangan menaruh alamat di kolom rekening.
+
+Untuk kartu alamat, buat/pastikan field teks `address` pada collection `wedding_gifts` dan izinkan **read** field itu pada public role untuk item wedding yang boleh terbit. Isi `address` pada record berlabel `Rumah` (atau bertipe `home`/`address` bila field tipe tersedia); field `account_name` adalah nama penerima, **bukan** alamat. Periksa respons API publik `/items/wedding_gifts` tanpa login: record Rumah harus memuat `address` dengan nilai nyata. Jika key `address` tidak ada, cek schema dan public field permission; jika ada tetapi kosong, simpan nilainya di field tersebut. Kartu dan tombol salin alamat tetap tersembunyi sampai alamat valid terbit. Jangan membuka akses write atau draft untuk public role.
+
 ## Musik undangan
 
 Pada item `weddings` berstatus `published`, ubah field `audio_url` untuk mengganti lagu tanpa rebuild frontend. Isi dengan path file musik yang tersedia pada origin website (misalnya `/assets/music/lagu.mp3`) **atau** URL HTTPS asset Directus (`https://directus.benifin.my.id/assets/<file-id>`). Upload file baru ke Directus Files terlebih dahulu dan pastikan public role dapat membaca file audio tersebut; uji URL dari browser tanpa sesi admin. URL eksternal lain, skema tidak aman, atau nilai kosong tidak digunakan; frontend memakai MP3 lokal bawaan sebagai fallback. Tombol musik baru muncul setelah undangan dibuka, dan bila autoplay ditolak pengunjung masih dapat memutar secara manual.

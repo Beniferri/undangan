@@ -12,7 +12,7 @@ test('gift panel widens before its clipped content expands and rows fade in', ()
     assert.match(css, /\.gift-content\s*\{[^}]*overflow:\s*hidden/s);
     assert.match(css, /\.gift-shell\.is-open \.gift-item\s*\{[^}]*opacity:\s*1/s);
     assert.match(html, /class="gift-content"/);
-    assert.match(html, /css\/gift-inline\.css\?v=gift-motion-1/);
+    assert.match(html, /css\/gift-inline\.css\?v=gift-close-1/);
 });
 
 test('collapsed gift content is inert rather than removed from layout for animation', () => {

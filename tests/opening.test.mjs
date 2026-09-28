@@ -99,7 +99,7 @@ test('intro reveals CMS-backed couple names and initials before the accessible c
     assert.match(css, /@keyframes opening-intro-exit/);
     assert.match(css, /\.opening-cover\.is-closing \.opening-intro\s*\{\s*display:\s*none/s);
     assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.opening-intro\s*\{\s*display:\s*none/s);
-    assert.match(html, /dist\/cms\.js\?v=music-directus-1/);
+    assert.match(html, /dist\/cms\.js\?v=gift-bank-1/);
 });
 
 test('cover keeps prominent mobile names with centered compact guest actions and CTA', () => {
