@@ -16,7 +16,7 @@ test('simplified RSVP preserves the existing submission contract', () => {
     assert.doesNotMatch(section, /undangan\.comment\.gif\.open/);
     assert.doesNotMatch(section, /id="information"|alert-info|border rounded-5 shadow/);
     assert.match(html, /css\/rsvp-simple\.css\?v=rsvp-choice-1/);
-    assert.match(html, /dist\/guest\.js\?v=gift-modal-1/);
+    assert.match(html, /dist\/guest\.js\?v=gift-inline-1/);
     const guest = read('js/app/guest/guest.js');
     assert.doesNotMatch(guest, /closeInformation|information\.get\('info'\)/);
     assert.match(guest, /initAttendance\(\)/);

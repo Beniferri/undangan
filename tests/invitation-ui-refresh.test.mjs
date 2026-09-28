@@ -50,7 +50,7 @@ test('dress section includes accessible color swatches', () => {
 });
 
 test('gift contains no bank brand wording and CMS gift account data remains', () => {
-    const gift = html.slice(html.indexOf('id="gift"'), html.indexOf('<!-- RSVP Form -->')) + html.slice(html.indexOf('<!-- Wedding Gift dialog'), html.indexOf('<!-- Modal Image -->'));
+    const gift = html.slice(html.indexOf('id="gift"'), html.indexOf('<!-- RSVP Form -->'));
     assert.doesNotMatch(gift, /Bank Syariah Indonesia|\bBSI\b/i);
     assert.match(gift, /gift-groom-account-number/);
     assert.match(gift, /gift-bride-account-number/);

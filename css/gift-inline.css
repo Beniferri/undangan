@@ -1,0 +1,164 @@
+/* The reference gift control expands in the section, not in the viewport top layer. */
+body.islamic-modern .editorial-gift .gift-panel {
+    max-width: 34rem;
+    margin-inline: auto;
+}
+
+body.islamic-modern .editorial-gift .gift-title {
+    font-size: clamp(2.2rem, 7vw, 3rem);
+}
+
+body.islamic-modern .gift-shell {
+    width: 8.75rem;
+    max-width: 100%;
+    margin: 1.5rem auto 0;
+    border: 1px solid #b88a44;
+    border-radius: 1.25rem;
+    background: transparent;
+    transition: width 450ms ease, background-color 450ms ease, border-color 450ms ease;
+}
+
+body.islamic-modern .gift-shell.is-open {
+    width: 100%;
+    border-color: rgba(222, 222, 222, 0.2);
+    background: rgba(22, 30, 27, 0.85);
+}
+
+body.islamic-modern .gift-shell .gift-reveal-button {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    margin: 0;
+    border: 0;
+    border-radius: inherit;
+    background: transparent !important;
+    color: inherit !important;
+}
+
+body.islamic-modern .gift-shell .gift-reveal-button:hover,
+body.islamic-modern .gift-shell .gift-reveal-button:focus-visible {
+    box-shadow: none;
+    transform: none;
+    outline: 2px solid #b88a44;
+    outline-offset: 3px;
+}
+
+body.islamic-modern .gift-reveal-button[hidden],
+body.islamic-modern .gift-shell.is-open .gift-reveal-button,
+body.islamic-modern .gift-options[hidden],
+body.islamic-modern .gift-item[hidden] {
+    display: none;
+}
+
+body.islamic-modern .gift-options {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0.65rem 1.25rem 0.85rem;
+    border-radius: inherit;
+    backdrop-filter: blur(12px);
+    color: #fff;
+    text-align: left;
+    animation: gift-inline-enter 400ms ease-out both;
+}
+
+body.islamic-modern #gift-close {
+    display: block;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin-left: auto;
+    padding: 0 0.25rem;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font: italic 700 0.75rem 'DM Sans', sans-serif;
+    letter-spacing: 0.1em;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+body.islamic-modern .gift-list {
+    display: grid;
+}
+
+body.islamic-modern .gift-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 0;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+    color: #fff;
+}
+
+body.islamic-modern .gift-item:last-child {
+    border-bottom: 0;
+}
+
+body.islamic-modern .gift-item-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+body.islamic-modern .gift-item-info {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+body.islamic-modern .gift-item-info .gift-detail-label {
+    margin: 0 0 0.25rem;
+    color: #ead8b7;
+    font-size: 0.69rem;
+}
+
+body.islamic-modern .gift-item-info strong,
+body.islamic-modern .gift-item-info span {
+    display: block;
+    color: #fff;
+    font-size: 0.79rem;
+    line-height: 1.4;
+}
+
+body.islamic-modern .gift-item-info span {
+    color: #e2e0da;
+    font-weight: 400;
+}
+
+body.islamic-modern .gift-item .gift-detail-copy {
+    flex: 0 0 2.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+body.islamic-modern .gift-item .gift-detail-copy:hover,
+body.islamic-modern .gift-item .gift-detail-copy:focus-visible,
+body.islamic-modern #gift-close:focus-visible {
+    outline: 2px solid #ead8b7;
+    outline-offset: 2px;
+}
+
+@keyframes gift-inline-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 360px) {
+    body.islamic-modern .gift-options { padding-inline: 0.85rem; }
+    body.islamic-modern .gift-item { gap: 0.55rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.islamic-modern .gift-shell { transition: none; }
+    body.islamic-modern .gift-options { animation: none; }
+}

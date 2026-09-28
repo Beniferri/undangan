@@ -521,7 +521,7 @@ export const guest = (() => {
         toast.setAttribute('role', 'status');
         toast.setAttribute('aria-live', 'polite');
         toast.textContent = message;
-        (document.querySelector('#gift-dialog[open]') || document.body).appendChild(toast);
+        document.body.appendChild(toast);
         toast.classList.add('is-visible');
         util.timeOut(() => {
             toast.classList.remove('is-visible');
@@ -532,12 +532,12 @@ export const guest = (() => {
     const refreshGiftAvailability = () => {
         const gift = document.getElementById('gift');
         const toggle = document.getElementById('gift-toggle');
-        const dialog = document.getElementById('gift-dialog');
-        if (!gift || !toggle || !dialog) {
+        const options = document.getElementById('gift-options');
+        if (!gift || !toggle || !options) {
             return;
         }
         let hasAvailableGift = false;
-        dialog.querySelectorAll('[data-gift-card]').forEach((card) => {
+        options.querySelectorAll('[data-gift-card]').forEach((card) => {
             const source = card.querySelector('[data-copy-from]');
             const value = card.querySelector(`[data-cms="${source.dataset.copyFrom}"]`)?.textContent.trim() || '';
             const ownerName = card.querySelector('strong')?.textContent.trim() || '';
@@ -553,38 +553,45 @@ export const guest = (() => {
         document.querySelectorAll('.invitation-menu-nav a[href="#gift"]').forEach((link) => {
             link.hidden = !hasAvailableGift;
         });
-        if (!hasAvailableGift && dialog.open) {
-            dialog.close();
+        if (!hasAvailableGift) {
+            options.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
+            document.getElementById('gift-shell')?.classList.remove('is-open');
         }
     };
 
     const initGift = () => {
         const toggle = document.getElementById('gift-toggle');
-        const dialog = document.getElementById('gift-dialog');
+        const options = document.getElementById('gift-options');
+        const shell = document.getElementById('gift-shell');
         const closeButton = document.getElementById('gift-close');
-        if (!toggle || !dialog || !closeButton) {
+        if (!toggle || !options || !shell || !closeButton) {
             return;
         }
 
-        toggle.addEventListener('click', () => dialog.showModal());
-        closeButton.addEventListener('click', () => dialog.close());
-        dialog.addEventListener('click', (event) => {
-            if (event.target === dialog) {
-                dialog.close();
-            }
+        toggle.addEventListener('click', () => {
+            options.hidden = false;
+            shell.classList.add('is-open');
+            toggle.setAttribute('aria-expanded', 'true');
+            closeButton.focus({ preventScroll: true });
         });
-        dialog.addEventListener('close', () => toggle.focus({ preventScroll: true }));
+        closeButton.addEventListener('click', () => {
+            options.hidden = true;
+            shell.classList.remove('is-open');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.focus({ preventScroll: true });
+        });
 
-        dialog.querySelectorAll('[data-gift-card]').forEach((card) => {
+        options.querySelectorAll('[data-gift-card]').forEach((card) => {
             card.addEventListener('click', (event) => {
                 if (!event.target.closest('button')) {
                     card.querySelector('[data-copy-from]')?.click();
                 }
             });
         });
-        dialog.querySelectorAll('[data-copy-from]').forEach((button) => {
+        options.querySelectorAll('[data-copy-from]').forEach((button) => {
             button.addEventListener('click', async () => {
-                const source = dialog.querySelector(`[data-cms="${button.dataset.copyFrom}"]`);
+                const source = options.querySelector(`[data-cms="${button.dataset.copyFrom}"]`);
                 const value = source?.textContent.trim() ?? '';
                 if (!value || /belum tersedia/i.test(value)) {
                     util.notify('Data belum tersedia').warning();
