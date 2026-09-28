@@ -12,6 +12,11 @@ test('cover actions stay grouped and CMS guest hooks survive', () => {
     assert.match(cover, /class="opening-cover-actions"[\s\S]*?id="guest-name"[\s\S]*?class="btn opening-cover-cta"/);
     assert.match(cinematic, /\.opening-cover-actions\s*\{[^}]*margin:\s*0;/s);
     assert.match(cinematic, /--cinema-gold:\s*#f1dfb9/);
+    assert.match(cinematic, /\.opening-cover-content\s*\{[^}]*justify-content:\s*space-evenly;[^}]*gap:\s*clamp\(1\.5rem, 3\.5vh, 2\.25rem\)/s);
+    assert.match(cinematic, /\.opening-cover-names\s*\{[^}]*font-size:\s*clamp\(3rem, 10vw, 4\.4rem\)/s);
+    assert.match(cinematic, /\.opening-guest-card\s*\{[^}]*background:\s*rgba\(4, 26, 28, 0\.64\)/s);
+    assert.doesNotMatch(cinematic, /\.opening-cover-content::after/);
+    assert.match(html, /cinematic\.css\?v=cover-rhythm-1/);
 });
 
 test('event markers are removed while schedule data and hierarchy remain', () => {
