@@ -1,4 +1,6 @@
 {
+    "name": "undangan-wedding",
+    "description": "Frontend undangan pernikahan digital dan portal administrasi Beta Storia Wedding",
     "devDependencies": {
         "@eslint/js": "^9.37.0",
         "eslint": "^9.37.0",
