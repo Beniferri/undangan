@@ -15,6 +15,7 @@ const csrfStorageKey = 'betastoria-admin-csrf';
 let csrfToken = sessionStorage.getItem(csrfStorageKey) || '';
 let rsvpRows = [];
 let guestbookRows = [];
+let currentRole = null;
 
 const byId = (id) => document.getElementById(id);
 const setNotice = (message, type = 'info') => {
@@ -57,31 +58,48 @@ const request = async (path, options = {}) => {
 };
 
 const showApp = () => {
+    if (byId('users-table') && currentRole !== 'admin') {
+        byId('app-panel').hidden = true;
+        byId('login-panel').hidden = true;
+        byId('logout-button').hidden = false;
+        setNotice('Akses ditolak (403). Halaman ini hanya untuk admin.', 'danger');
+        return;
+    }
     byId('login-panel').hidden = true;
     byId('app-panel').hidden = false;
     byId('logout-button').hidden = false;
+    document.querySelectorAll('[data-admin-only]').forEach((link) => { link.hidden = currentRole !== 'admin'; });
 };
 const showLogin = () => {
     byId('login-panel').hidden = false;
     byId('app-panel').hidden = true;
     byId('logout-button').hidden = true;
     publishedWedding = null;
-    byId('invitation-name').value = '';
-    byId('invitation-phone').value = '';
-    byId('invitation-preview').value = '';
-    byId('invitation-generate').disabled = true;
-    byId('invitation-result').hidden = true;
-    byId('invitation-whatsapp').removeAttribute('href');
-    byId('invitation-link').removeAttribute('href');
-    inviteeRows = [];
-    editingInviteeId = null;
-    pendingImport = null;
-    byId('invitee-table').replaceChildren();
-    byId('invitee-form').reset();
-    byId('invitee-csv').value = '';
-    byId('invitee-import-preview').hidden = true;
-    byId('invitee-cancel').hidden = true;
-    byId('invitee-save').textContent = 'Simpan tamu';
+    currentRole = null;
+    document.querySelectorAll('[data-admin-only]').forEach((link) => { link.hidden = true; });
+    if (byId('invitation-form')) {
+        byId('invitation-name').value = '';
+        byId('invitation-phone').value = '';
+        byId('invitation-preview').value = '';
+        byId('invitation-generate').disabled = true;
+        byId('invitation-result').hidden = true;
+        byId('invitation-whatsapp').removeAttribute('href');
+        byId('invitation-link').removeAttribute('href');
+        inviteeRows = [];
+        editingInviteeId = null;
+        pendingImport = null;
+        byId('invitee-table').replaceChildren();
+        byId('invitee-form').reset();
+        byId('invitee-csv').value = '';
+        byId('invitee-import-preview').hidden = true;
+        byId('invitee-cancel').hidden = true;
+        byId('invitee-save').textContent = 'Simpan tamu';
+    }
+    rsvpRows = [];
+    guestbookRows = [];
+    if (byId('rsvp-table')) { byId('rsvp-table').replaceChildren(); }
+    if (byId('guestbook-table')) { byId('guestbook-table').replaceChildren(); }
+    if (byId('users-table')) { byId('users-table').replaceChildren(); }
 };
 const loadPublishedWedding = async () => {
     publishedWedding = null;
@@ -234,29 +252,108 @@ const renderInvitees = (rows) => {
     });
 };
 const loadInvitees = async () => renderInvitees((await request('/api/admin/invitees')).data);
+const loadUsers = async () => renderUsers((await request('/api/admin/users')).data);
+const renderUsers = (rows) => {
+    const table = byId('users-table');
+    table.replaceChildren();
+    if (!rows.length) {
+        const tr = document.createElement('tr');
+        const empty = cell('Belum ada akun.', 'text-secondary');
+        empty.colSpan = 5;
+        tr.append(empty);
+        table.append(tr);
+        return;
+    }
+    rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const role = document.createElement('select');
+        role.className = 'form-select form-select-sm';
+        role.setAttribute('aria-label', `Peran ${row.username}`);
+        for (const value of ['operator', 'admin']) {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            role.append(option);
+        }
+        role.value = row.role;
+        role.addEventListener('change', () => {
+            if (!window.confirm(`Ubah peran ${row.username} menjadi ${role.value}?`)) { role.value = row.role; return; }
+            updateUser(row.id, { role: role.value });
+        });
+        const roleCell = document.createElement('td');
+        roleCell.append(role);
+        const statusCell = document.createElement('td');
+        statusCell.textContent = row.active ? 'Aktif' : 'Nonaktif';
+        const actions = document.createElement('td');
+        actions.append(actionButton(row.active ? 'Nonaktifkan' : 'Aktifkan', 'outline-secondary', () => {
+            if (!window.confirm(`${row.active ? 'Nonaktifkan' : 'Aktifkan'} akun ${row.username}?`)) { return; }
+            updateUser(row.id, { active: !row.active });
+        }));
+        const reset = actionButton('Reset password', 'outline-success', () => {
+            reset.hidden = true;
+            passwordInput.hidden = false;
+            savePassword.hidden = false;
+            passwordInput.focus();
+        });
+        const passwordInput = document.createElement('input');
+        passwordInput.type = 'password';
+        passwordInput.className = 'form-control form-control-sm mb-1';
+        passwordInput.autocomplete = 'new-password';
+        passwordInput.setAttribute('aria-label', `Password baru ${row.username}`);
+        passwordInput.minLength = 12;
+        passwordInput.hidden = true;
+        const savePassword = actionButton('Simpan password', 'success', async () => {
+            const password = passwordInput.value;
+            if (password.length < 12) { setNotice('Password minimal 12 karakter.', 'danger'); return; }
+            passwordInput.value = '';
+            await updateUser(row.id, { password });
+        });
+        savePassword.hidden = true;
+        actions.append(reset, passwordInput, savePassword);
+        tr.append(cell(row.username), roleCell, statusCell, cell(row.created_at ? formatDate(row.created_at) : '—'), actions);
+        table.append(tr);
+    });
+};
+const updateUser = async (id, changes) => {
+    try {
+        await request(`/api/admin/users/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify(changes) });
+        await loadUsers();
+        setNotice('Akun diperbarui.', 'success');
+    } catch (error) { setNotice(error.status === 403 ? 'Akses ditolak (403).' : error.message, 'danger'); await loadUsers().catch(() => {}); }
+};
 const loadDashboard = async () => {
+    if (byId('users-table') && currentRole !== 'admin') { return; }
     clearNotice();
-    const results = await Promise.allSettled([loadStats(), loadRsvps(), loadGuestbook(), loadPublishedWedding(), loadInvitees()]);
-    if (publishedWedding && inviteeRows.length) { renderInvitees(inviteeRows); }
+    const loaders = [];
+    if (byId('stat-total')) { loaders.push(loadStats()); }
+    if (byId('rsvp-table')) { loaders.push(loadRsvps()); }
+    if (byId('guestbook-table')) { loaders.push(loadGuestbook()); }
+    if (byId('invitee-table')) { loaders.push(loadPublishedWedding(), loadInvitees()); }
+    if (byId('users-table') && currentRole === 'admin') { loaders.push(loadUsers()); }
+    const results = await Promise.allSettled(loaders);
+    if (publishedWedding && inviteeRows.length && byId('invitee-table')) { renderInvitees(inviteeRows); }
     if (results.some((result) => result.status === 'rejected')) {
-        setNotice('Sebagian data dashboard atau metadata undangan gagal dimuat. Coba Refresh.', 'warning');
+        const denied = results.some((result) => result.reason?.status === 403);
+        setNotice(denied ? 'Akses ditolak (403). Hubungi admin jika Anda memerlukan izin.' : 'Sebagian data gagal dimuat. Coba Refresh.', 'warning');
     }
 };
 const moderate = async (id, status) => {
     try {
         await request(`/api/admin/guestbook/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify({ status }) });
         setNotice(`Ucapan berhasil diubah menjadi ${status}.`, 'success');
-        await Promise.all([loadStats(), loadGuestbook()]);
+        await loadGuestbook();
     } catch (error) { setNotice(error.message, 'danger'); }
 };
 const restoreSession = async () => {
     try {
         const response = await request('/api/admin/session');
+        if (response.data.authenticated === false || !response.data.csrf_token) { throw new Error('Sesi tidak aktif.'); }
         csrfToken = response.data.csrf_token;
+        currentRole = response.data.role;
         sessionStorage.setItem(csrfStorageKey, csrfToken);
         showApp();
         await loadDashboard();
-    } catch { showLogin(); }
+    } catch { csrfToken = ''; sessionStorage.removeItem(csrfStorageKey); showLogin(); }
 };
 
 byId('login-form').addEventListener('submit', async (event) => {
@@ -265,7 +362,9 @@ byId('login-form').addEventListener('submit', async (event) => {
     button.disabled = true;
     try {
         const response = await request('/api/admin/login', { method: 'POST', body: JSON.stringify({ username: byId('admin-username').value, password: byId('admin-password').value }) });
+        if (!response.data?.csrf_token) { throw new Error('Sesi tidak valid.'); }
         csrfToken = response.data.csrf_token;
+        currentRole = response.data.role;
         sessionStorage.setItem(csrfStorageKey, csrfToken);
         byId('admin-password').value = '';
         showApp();
@@ -284,7 +383,29 @@ byId('logout-button').addEventListener('click', async () => {
     showLogin();
     setNotice('Anda sudah keluar.', 'success');
 });
-byId('refresh-button').addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
+byId('refresh-button')?.addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
+const clearInvitationPreview = () => {
+    byId('invitation-result').hidden = true;
+    byId('invitation-whatsapp').removeAttribute('href');
+    byId('invitation-link').removeAttribute('href');
+};
+const renderInvitationPreview = () => {
+    const result = buildWhatsAppInvitation({
+        name: byId('invitation-name').value,
+        phone: byId('invitation-phone').value,
+        template: byId('invitation-template').value,
+        wedding: publishedWedding,
+    });
+    byId('invitation-preview').value = result.message;
+    byId('invitation-link').href = result.invitationUrl;
+    byId('invitation-link').textContent = result.invitationUrl;
+    byId('invitation-whatsapp').href = result.whatsappUrl;
+    byId('invitation-result').hidden = false;
+};
+if (byId('invitation-template')) {
+    for (const id of ['invitation-name', 'invitation-phone', 'invitation-template']) {
+        byId(id).addEventListener('input', clearInvitationPreview);
+    }
 byId('invitation-template').value = defaultInvitationTemplate;
 byId('invitee-cancel').addEventListener('click', resetInviteeForm);
 byId('invitee-form').addEventListener('submit', async (event) => {
@@ -351,34 +472,32 @@ byId('invitee-import-confirm').addEventListener('click', async () => {
     } catch (error) { setNotice(error.message, 'danger'); }
     finally { button.disabled = false; }
 });
-const clearInvitationPreview = () => {
-    byId('invitation-result').hidden = true;
-    byId('invitation-whatsapp').removeAttribute('href');
-    byId('invitation-link').removeAttribute('href');
-};
-for (const id of ['invitation-name', 'invitation-phone', 'invitation-template']) {
-    byId(id).addEventListener('input', clearInvitationPreview);
-}
-const renderInvitationPreview = () => {
-    const result = buildWhatsAppInvitation({
-        name: byId('invitation-name').value,
-        phone: byId('invitation-phone').value,
-        template: byId('invitation-template').value,
-        wedding: publishedWedding,
-    });
-    byId('invitation-preview').value = result.message;
-    byId('invitation-link').href = result.invitationUrl;
-    byId('invitation-link').textContent = result.invitationUrl;
-    byId('invitation-whatsapp').href = result.whatsappUrl;
-    byId('invitation-result').hidden = false;
-};
 byId('invitation-form').addEventListener('submit', (event) => {
     event.preventDefault();
     clearInvitationPreview();
     try { renderInvitationPreview(); }
     catch (error) { setNotice(error.message, 'danger'); }
 });
-byId('guestbook-status').addEventListener('change', () => loadGuestbook().catch((error) => setNotice(error.message, 'danger')));
-byId('export-rsvp').addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at])));
-byId('export-guestbook').addEventListener('click', () => downloadCsv('betastoria-guestbook.csv', ['Nama', 'Pesan', 'Like', 'Status', 'Waktu'], guestbookRows.map((row) => [row.name, row.message, row.like_count, row.status, row.created_at])));
+}
+byId('guestbook-status')?.addEventListener('change', () => loadGuestbook().catch((error) => setNotice(error.message, 'danger')));
+byId('export-rsvp')?.addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at])));
+byId('export-guestbook')?.addEventListener('click', () => downloadCsv('betastoria-guestbook.csv', ['Nama', 'Pesan', 'Like', 'Status', 'Waktu'], guestbookRows.map((row) => [row.name, row.message, row.like_count, row.status, row.created_at])));
+if (byId('user-form')) {
+    byId('user-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const username = byId('user-username').value.trim();
+        const password = byId('user-password').value;
+        const role = byId('user-role').value;
+        if (!username || password.length < 12) { setNotice('Username wajib dan password minimal 12 karakter.', 'danger'); return; }
+        const button = byId('user-form').querySelector('button[type="submit"]');
+        button.disabled = true;
+        try {
+            await request('/api/admin/users', { method: 'POST', body: JSON.stringify({ username, password, role }) });
+            byId('user-form').reset();
+            await loadUsers();
+            setNotice('Akun dibuat.', 'success');
+        } catch (error) { setNotice(error.status === 403 ? 'Akses ditolak (403).' : error.message, 'danger'); }
+        finally { button.disabled = false; }
+    });
+}
 restoreSession();

@@ -85,6 +85,9 @@ html { scroll-behavior: smooth; }
     transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
+.dashboard-ui [hidden] { display: none !important; }
+.dashboard-ui .dashboard-nav a[hidden] { display: none; }
+.dashboard-ui .dashboard-nav a[aria-current="page"] { background: #d7e9db; color: #134832; }
 .dashboard-ui .dashboard-nav a:focus-visible { outline: 3px solid #17614b; outline-offset: 3px; }
 
 .dashboard-ui .dashboard-nav a:hover,

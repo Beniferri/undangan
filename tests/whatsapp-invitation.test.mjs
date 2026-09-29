@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { buildWhatsAppInvitation, normalizeIndonesianPhone } from '../js/app/admin/invitation.js';
 
-const html = readFileSync(new URL('../dashboard.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('../admin-tamu.html', import.meta.url), 'utf8');
 
 test('accepts Indonesian mobile numbers and rejects unsafe or incomplete destinations', () => {
     assert.equal(normalizeIndonesianPhone('0812-3456-7890'), '6281234567890');
@@ -50,5 +50,5 @@ test('invitation composer is gated behind admin login and does not persist phone
         assert.match(panel, new RegExp(`id="${id}"`));
     }
     assert.match(panel, /target="_blank" rel="noopener noreferrer"/);
-    assert.match(html, /dist\/admin\.js\?v=password-login-1/);
+    assert.match(html, /dist\/admin\.js\?v=admin-pages-1/);
 });
