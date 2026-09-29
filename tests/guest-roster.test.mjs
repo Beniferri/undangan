@@ -35,7 +35,7 @@ test('dashboard navigation targets real admin pages and loads the fresh design',
     assert.match(html, /css\/admin\.css\?v=admin-pages-1/);
     assert.match(html, /<nav class="dashboard-nav" aria-label="Bagian dashboard">/);
     assert.match(html, /class="dashboard-nav-hint">Geser menu/);
-    for (const page of ['dashboard', 'admin-tamu', 'admin-rsvp', 'admin-ucapan', 'admin-pengguna']) {
+    for (const page of ['dashboard', 'admin-tamu', 'admin-rsvp', 'admin-pengguna']) {
         assert.match(html, new RegExp(`href="\\./${page}\\.html"`));
     }
     assert.match(html, /id="app-panel" hidden>[\s\S]*?<nav class="dashboard-nav"/);
@@ -77,7 +77,7 @@ test('guest roster controls are behind login and reuse existing composer', () =>
     }
     assert.match(js, /\/api\/admin\/invitees/);
     assert.match(js, /buildWhatsAppInvitation/);
-    assert.match(rosterHtml, /dist\/admin\.js\?v=admin-pages-2/);
+    assert.match(rosterHtml, /dist\/admin\.js\?v=rsvp-wish-visibility-1/);
     assert.match(rosterHtml, /setiap tamu perlu nomor WA yang berbeda/);
     assert.match(js, /inviteeSaveError\(error\.status, error\.message\)/);
     assert.doesNotMatch(js, /inviteeRows\.some\(\(row\) => row\.phone === phone/);

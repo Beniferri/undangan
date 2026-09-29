@@ -50,5 +50,5 @@ test('invitation composer is gated behind admin login and does not persist phone
         assert.match(panel, new RegExp(`id="${id}"`));
     }
     assert.match(panel, /target="_blank" rel="noopener noreferrer"/);
-    assert.match(html, /dist\/admin\.js\?v=admin-pages-2/);
+    assert.match(html, /dist\/admin\.js\?v=rsvp-wish-visibility-1/);
 });

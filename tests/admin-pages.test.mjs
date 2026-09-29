@@ -3,24 +3,24 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
-const pages = ['dashboard.html', 'admin-tamu.html', 'admin-rsvp.html', 'admin-ucapan.html', 'admin-pengguna.html'];
+const pages = ['dashboard.html', 'admin-tamu.html', 'admin-rsvp.html', 'admin-pengguna.html'];
 
 test('all pages load the same JS and CSS cache keys', () => {
     for (const page of pages) {
         const html = read(page);
         assert.match(html, /css\/admin\.css\?v=admin-pages-1/);
-        assert.match(html, /dist\/admin\.js\?v=admin-pages-2/);
+        assert.match(html, /dist\/admin\.js\?v=rsvp-wish-visibility-1/);
     }
 });
 
-test('five independent pages share gated glass navigation and login', () => {
+test('four independent pages share gated glass navigation and login', () => {
     for (const page of pages) {
         const html = read(page);
         assert.match(html, /<section id="app-panel" hidden>/);
         assert.match(html, /id="login-form"/);
         assert.match(html, /class="dashboard-nav"/);
         for (const destination of pages) assert.ok(html.includes(`href="./${destination}"`), `${page}: ${destination}`);
-        assert.match(html, /dist\/admin\.js\?v=admin-pages-2/);
+        assert.match(html, /dist\/admin\.js\?v=rsvp-wish-visibility-1/);
     }
 });
 
@@ -31,7 +31,6 @@ test('roster and composer share one page while overview contains only stats', ()
     assert.match(read('dashboard.html'), /id="stat-total"/);
     assert.doesNotMatch(read('dashboard.html'), /id="invitee-table"|id="rsvp-table"|id="guestbook-table"/);
     assert.match(read('admin-rsvp.html'), /id="rsvp-table"/);
-    assert.match(read('admin-ucapan.html'), /id="guestbook-table"/);
 });
 
 test('users page offers create and account management, not private guest contact hooks', () => {
@@ -89,15 +88,15 @@ test('login and RSVP copy reflect operator read-only permissions', () => {
         assert.doesNotMatch(read(page), /Masuk sebagai admin|akun admin Anda/);
         assert.match(read(page), new RegExp(`href="\\./${page.replace('.', '\\.')}" aria-current="page"`));
     }
-    assert.match(read('admin-pengguna.html'), /melihat RSVP tanpa mengubahnya/);
+    assert.match(read('admin-pengguna.html'), /mengatur tampilan publik ucapan RSVP/);
 });
 
 test('all hidden controls remain hidden despite Bootstrap display rules', () => {
     assert.match(read('css/admin.css'), /\.dashboard-ui \[hidden\] \{ display: none !important; \}/);
 });
 
-test('public build includes all five HTML entry points', () => {
-    assert.match(read('package.json'), /'admin-tamu\.html', 'admin-rsvp\.html', 'admin-ucapan\.html', 'admin-pengguna\.html'/);
+test('public build includes all four HTML entry points', () => {
+    assert.match(read('package.json'), /'admin-tamu\.html', 'admin-rsvp\.html', 'admin-pengguna\.html'/);
 });
 
 test('admin-only navigation link remains visually hidden for operators', () => {
@@ -106,7 +105,6 @@ test('admin-only navigation link remains visually hidden for operators', () => {
 
 test('page-specific listeners never bind to absent controls', () => {
     const js = read('js/admin.js');
-    assert.match(js, /byId\('guestbook-status'\)\?\.addEventListener/);
     assert.match(js, /byId\('export-rsvp'\)\?\.addEventListener/);
     assert.match(js, /if \(byId\('invitation-template'\)\)/);
 });
