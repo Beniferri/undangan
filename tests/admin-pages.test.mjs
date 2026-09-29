@@ -64,10 +64,14 @@ test('user role and status changes require explicit confirmation', () => {
     assert.match(js, /window\.confirm\(`\$\{row\.active \? 'Nonaktifkan' : 'Aktifkan'\}/);
 });
 
-test('password reset uses a masked inline input rather than a plaintext prompt', () => {
+test('create and reset password enforce the backend minimum of 16 characters', () => {
+    const html = read('admin-pengguna.html');
     const js = read('js/admin.js');
     assert.doesNotMatch(js, /window\.prompt/);
     assert.match(js, /passwordInput\.type = 'password'/);
+    assert.match(html, /id="user-password"[^>]*minlength="16"/);
+    assert.match(js, /passwordInput\.minLength = 16/);
+    assert.match(js, /password\.length < 16/g);
 });
 
 test('all hidden controls remain hidden despite Bootstrap display rules', () => {

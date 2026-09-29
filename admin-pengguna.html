@@ -53,8 +53,8 @@
                 <h2 id="users-heading" class="h3">Kelola Pengguna</h2>
                 <p class="text-secondary small">Hanya admin dapat mengelola akun. Operator dapat mengelola tamu, RSVP dan ucapan, tetapi tidak dapat membuka halaman ini.</p>
                 <form id="user-form" class="row g-2 align-items-end mb-4">
-                    <div class="col-md-4"><label class="form-label" for="user-username">Username</label><input id="user-username" class="form-control" required autocomplete="off" maxlength="80"></div>
-                    <div class="col-md-4"><label class="form-label" for="user-password">Password baru</label><input id="user-password" class="form-control" type="password" required autocomplete="new-password" minlength="12"></div>
+                    <div class="col-md-4"><label class="form-label" for="user-username">Username</label><input id="user-username" class="form-control" required autocomplete="off" minlength="3" maxlength="64" pattern="[A-Za-z0-9][A-Za-z0-9._-]*" title="3–64 karakter: huruf, angka, titik, garis bawah, atau tanda hubung"></div>
+                    <div class="col-md-4"><label class="form-label" for="user-password">Password baru</label><input id="user-password" class="form-control" type="password" required autocomplete="new-password" minlength="16"></div>
                     <div class="col-md-2"><label class="form-label" for="user-role">Peran</label><select id="user-role" class="form-select"><option value="operator">Operator</option><option value="admin">Admin</option></select></div>
                     <div class="col-md-2"><button class="btn btn-success" type="submit">Buat akun</button></div>
                 </form>

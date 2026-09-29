@@ -300,11 +300,11 @@ const renderUsers = (rows) => {
         passwordInput.className = 'form-control form-control-sm mb-1';
         passwordInput.autocomplete = 'new-password';
         passwordInput.setAttribute('aria-label', `Password baru ${row.username}`);
-        passwordInput.minLength = 12;
+        passwordInput.minLength = 16;
         passwordInput.hidden = true;
         const savePassword = actionButton('Simpan password', 'success', async () => {
             const password = passwordInput.value;
-            if (password.length < 12) { setNotice('Password minimal 12 karakter.', 'danger'); return; }
+            if (password.length < 16) { setNotice('Password minimal 16 karakter.', 'danger'); return; }
             passwordInput.value = '';
             await updateUser(row.id, { password });
         });
@@ -488,7 +488,7 @@ if (byId('user-form')) {
         const username = byId('user-username').value.trim();
         const password = byId('user-password').value;
         const role = byId('user-role').value;
-        if (!username || password.length < 12) { setNotice('Username wajib dan password minimal 12 karakter.', 'danger'); return; }
+        if (!/^[a-z0-9][a-z0-9._-]{2,63}$/.test(username.toLowerCase()) || password.length < 16 || password.length > 1024) { setNotice('Username 3–64 karakter dan password 16–1024 karakter diperlukan.', 'danger'); return; }
         const button = byId('user-form').querySelector('button[type="submit"]');
         button.disabled = true;
         try {
