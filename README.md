@@ -9,30 +9,20 @@ Untuk kamu yang ingin melihat demo terlebih dahulu:
 
 [https://wedding.benifin.my.id/](https://wedding.benifin.my.id/)
 
-## 📦 Documentation
+## 📦 Dokumentasi & Panduan
 
-* Jalankan perintah `npm install`, lalu `npm run dev`, dan buka `http://localhost:8080`.
-* Ubah isi file `index.html` sesuai keinginanmu.
-* Konten publik berada di `index.html`, sedangkan interaksi RSVP dan guestbook menggunakan API production.
-* Untuk menjalankan lokal, gunakan API yang aman dan jangan masukkan credential production ke source code.
-* Untuk deployment, ikuti [deployment runbook](docs/DEPLOYMENT.md).
-* Perubahan production harus divalidasi melalui GitHub dan Coolify.
+* Jalankan `npm install`, lalu `npm run dev`, dan buka `http://localhost:8080`.
+* Halaman utama publik berada di `index.html`, sedangkan portal administrasi berada di `dashboard.html` beserta halaman sub-admin (`admin-tamu.html`, `admin-rsvp.html`, `admin-pengguna.html`).
+* Interaksi RSVP, data tamu, dan tampilan ucapan terhubung ke API backend terpisah.
+* Jalankan tes lokal dengan `npm test`, linter dengan `npm run lint:js`, `npm run lint:css`, `npm run lint:html`, dan build publik via `npm run build:public`.
+* Panduan deployment dapat dilihat di [Deployment Runbook](docs/DEPLOYMENT.md).
 
-> Undangan ini hanya menggunakan HTML, CSS, dan JavaScript biasa. NPM digunakan agar file JavaScript bisa langsung dieksekusi (bukan bertipe module lagi).
+## 🛠️ Modul Portal Administrasi
 
-> Jika tetap ingin tanpa NPM, ubah `src="./dist/guest.js"` menjadi `src="./js/guest.js" type="module"` pada tag `<head>` di index dan dashboard.html, dengan risiko glitch tema di awal loading.
-
-> Jika kamu punya pertanyaan, gunakan fitur `discussions` agar bisa dibaca juga oleh teman-teman lainnya.
-
-> Branch production project ini menggunakan `4.x`. Selalu jalankan smoke test setelah deployment.
-
-## 🔥 Deployment API
-
-- Video\
-    otw
-
-- Presentation
-    [https://docs.google.com/presentation](https://docs.google.com/presentation/d/1EY2YmWdZUI7ASoo0f2wvU7ec_Yt0uZanYa8YLbfNysk/edit)
+- **Ringkasan (`dashboard.html`):** Ikhtisar metrik kehadiran tamu dan status respons RSVP.
+- **Buku Tamu & WA (`admin-tamu.html`):** Manajemen penerima undangan, impor CSV, pembentukan link personal `?to=...`, dan penyusunan draf pesan WhatsApp.
+- **Data RSVP (`admin-rsvp.html`):** Rekap konfirmasi kehadiran, ekspor data CSV, dan tombol toggle sembunyikan/tampilkan ucapan di web publik.
+- **Kelola Pengguna (`admin-pengguna.html`):** Khusus peran Admin untuk membuat akun operator baru, mengatur status, dan reset password.
 
 ## ⚙️ Tech stack
 
