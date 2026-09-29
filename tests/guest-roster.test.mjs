@@ -22,6 +22,7 @@ test('two roster rows show independent manual status and actionable save errors'
 
 
 const html = readFileSync(new URL('../dashboard.html', import.meta.url), 'utf8');
+const rosterHtml = readFileSync(new URL('../admin-tamu.html', import.meta.url), 'utf8');
 const js = readFileSync(new URL('../js/admin.js', import.meta.url), 'utf8');
 
 test('dashboard favicon uses the wedding icon instead of the old placeholder', () => {
@@ -30,13 +31,12 @@ test('dashboard favicon uses the wedding icon instead of the old placeholder', (
     assert.equal(icon.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
 });
 
-test('dashboard navigation targets real admin sections and loads the fresh design', () => {
-    assert.match(html, /css\/admin\.css\?v=glass-dashboard-1/);
+test('dashboard navigation targets real admin pages and loads the fresh design', () => {
+    assert.match(html, /css\/admin\.css\?v=admin-pages-1/);
     assert.match(html, /<nav class="dashboard-nav" aria-label="Bagian dashboard">/);
     assert.match(html, /class="dashboard-nav-hint">Geser menu/);
-    for (const id of ['ringkasan', 'daftar-tamu', 'kirim-undangan', 'data-rsvp', 'moderasi-ucapan']) {
-        assert.match(html, new RegExp(`href="#${id}"`));
-        assert.match(html, new RegExp(`id="${id}"`));
+    for (const page of ['dashboard', 'admin-tamu', 'admin-rsvp', 'admin-ucapan', 'admin-pengguna']) {
+        assert.match(html, new RegExp(`href="\\./${page}\\.html"`));
     }
     assert.match(html, /id="app-panel" hidden>[\s\S]*?<nav class="dashboard-nav"/);
 });
@@ -50,12 +50,11 @@ test('dashboard login submits username and password without admin token', () => 
     assert.doesNotMatch(js, /token: byId\('admin-token'\)/);
 });
 
-test('logout only clears local session after API confirms success', () => {
-    const handler = js.slice(js.indexOf("byId('logout-button').addEventListener"), js.indexOf("byId('refresh-button').addEventListener"));
-    assert.match(handler, /try \{[\s\S]*await request\('\/api\/admin\/logout'/);
-    assert.match(handler, /catch \{[\s\S]*Gagal keluar dari server/);
-    assert.match(handler, /return;[\s\S]*csrfToken = ''/);
-    assert.doesNotMatch(handler, /catch \{ \/\* session is cleared locally below \*\/ \}/);
+test('logout invalidates the local session even if server revocation fails', () => {
+    const handler = js.slice(js.indexOf("byId('logout-button').addEventListener"), js.indexOf("byId('refresh-button')?.addEventListener"));
+    assert.match(handler, /request\('\/api\/admin\/logout'[\s\S]*invalidateSession\(\)/);
+    assert.match(handler, /catch \{[\s\S]*Sesi lokal dibersihkan/);
+    assert.match(handler, /logout-start:/);
 });
 
 test('parses BOM, quoted commas/newlines and CRLF CSV with name and phone headers', () => {
@@ -72,14 +71,14 @@ test('rejects malformed CSV, missing columns and oversize files', () => {
 });
 
 test('guest roster controls are behind login and reuse existing composer', () => {
-    const panel = html.slice(html.indexOf('id="app-panel"'), html.indexOf('</main>'));
+    const panel = rosterHtml.slice(rosterHtml.indexOf('id="app-panel"'), rosterHtml.indexOf('</main>'));
     for (const id of ['invitee-form', 'invitee-name', 'invitee-phone', 'invitee-csv', 'invitee-import', 'invitee-table', 'invitee-cancel']) {
         assert.match(panel, new RegExp(`id="${id}"`));
     }
     assert.match(js, /\/api\/admin\/invitees/);
     assert.match(js, /buildWhatsAppInvitation/);
-    assert.match(html, /dist\/admin\.js\?v=password-login-1/);
-    assert.match(html, /setiap tamu perlu nomor WA yang berbeda/);
+    assert.match(rosterHtml, /dist\/admin\.js\?v=admin-pages-2/);
+    assert.match(rosterHtml, /setiap tamu perlu nomor WA yang berbeda/);
     assert.match(js, /inviteeSaveError\(error\.status, error\.message\)/);
     assert.doesNotMatch(js, /inviteeRows\.some\(\(row\) => row\.phone === phone/);
     assert.match(js, /name\.append\(document\.createElement\('br'\), badge\)/);

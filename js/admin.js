@@ -15,6 +15,29 @@ const csrfStorageKey = 'betastoria-admin-csrf';
 let csrfToken = sessionStorage.getItem(csrfStorageKey) || '';
 let rsvpRows = [];
 let guestbookRows = [];
+let currentRole = null;
+let authEpoch = 0;
+let outstandingLogout = null;
+let privateRequests = new AbortController();
+const sessionSignalKey = 'betastoria-admin-session';
+const staleRequest = () => new Error('Sesi telah berubah.');
+const isCurrent = (epoch) => epoch === authEpoch;
+const invalidateSession = () => {
+    authEpoch += 1;
+    privateRequests.abort();
+    privateRequests = new AbortController();
+    csrfToken = '';
+    sessionStorage.removeItem(csrfStorageKey);
+    showLogin();
+};
+const beginSession = (data) => {
+    authEpoch += 1;
+    privateRequests.abort();
+    privateRequests = new AbortController();
+    csrfToken = data.csrf_token;
+    currentRole = data.role;
+    sessionStorage.setItem(csrfStorageKey, csrfToken);
+};
 
 const byId = (id) => document.getElementById(id);
 const setNotice = (message, type = 'info') => {
@@ -38,6 +61,8 @@ const downloadCsv = (filename, headers, rows) => {
 };
 
 const request = async (path, options = {}) => {
+    const epoch = authEpoch;
+    const privateCall = !['/api/admin/session', '/api/admin/login', '/api/admin/logout'].includes(path);
     const headers = new Headers(options.headers || {});
     headers.set('Accept', 'application/json');
     if (options.body && !headers.has('Content-Type')) {
@@ -46,8 +71,14 @@ const request = async (path, options = {}) => {
     if (csrfToken && options.method && options.method !== 'GET') {
         headers.set('X-CSRF-Token', csrfToken);
     }
-    const response = await fetch(`${API_BASE}${path}`, { ...options, headers, credentials: 'include' });
+    const response = await fetch(`${API_BASE}${path}`, { ...options, headers, credentials: 'include', signal: privateCall ? privateRequests.signal : options.signal });
+    if (privateCall && !isCurrent(epoch)) { throw staleRequest(); }
+    if (response.status === 401 && privateCall) {
+        invalidateSession();
+        setNotice('Sesi tidak aktif. Silakan masuk kembali.', 'danger');
+    }
     const body = await response.json().catch(() => ({}));
+    if (privateCall && response.status !== 401 && !isCurrent(epoch)) { throw staleRequest(); }
     if (!response.ok) {
         const error = new Error(body.error || `Request gagal (${response.status})`);
         error.status = response.status;
@@ -57,33 +88,61 @@ const request = async (path, options = {}) => {
 };
 
 const showApp = () => {
+    if (byId('users-table') && currentRole !== 'admin') {
+        byId('app-panel').hidden = true;
+        byId('login-panel').hidden = true;
+        byId('logout-button').hidden = false;
+        setNotice('Akses ditolak (403). Halaman ini hanya untuk admin.', 'danger');
+        return;
+    }
     byId('login-panel').hidden = true;
     byId('app-panel').hidden = false;
     byId('logout-button').hidden = false;
+    document.querySelectorAll('[data-admin-only]').forEach((link) => { link.hidden = currentRole !== 'admin'; });
 };
 const showLogin = () => {
     byId('login-panel').hidden = false;
+    byId('admin-password').value = '';
+    if (byId('user-form')) {
+        byId('user-form').reset();
+        firstUserRequired = false;
+        byId('user-role').querySelector('option[value="operator"]').disabled = false;
+    }
     byId('app-panel').hidden = true;
     byId('logout-button').hidden = true;
     publishedWedding = null;
-    byId('invitation-name').value = '';
-    byId('invitation-phone').value = '';
-    byId('invitation-preview').value = '';
-    byId('invitation-generate').disabled = true;
-    byId('invitation-result').hidden = true;
-    byId('invitation-whatsapp').removeAttribute('href');
-    byId('invitation-link').removeAttribute('href');
-    inviteeRows = [];
-    editingInviteeId = null;
-    pendingImport = null;
-    byId('invitee-table').replaceChildren();
-    byId('invitee-form').reset();
-    byId('invitee-csv').value = '';
-    byId('invitee-import-preview').hidden = true;
-    byId('invitee-cancel').hidden = true;
-    byId('invitee-save').textContent = 'Simpan tamu';
+    currentRole = null;
+    document.querySelectorAll('[data-admin-only]').forEach((link) => { link.hidden = true; });
+    if (byId('invitation-form')) {
+        byId('invitation-name').value = '';
+        byId('invitation-phone').value = '';
+        byId('invitation-preview').value = '';
+        byId('invitation-link').textContent = '';
+        byId('invitation-generate').disabled = true;
+        byId('invitation-result').hidden = true;
+        byId('invitation-whatsapp').removeAttribute('href');
+        byId('invitation-link').removeAttribute('href');
+        inviteeRows = [];
+        editingInviteeId = null;
+        pendingImport = null;
+        byId('invitee-table').replaceChildren();
+        byId('invitee-form').reset();
+        byId('invitee-csv').value = '';
+        byId('invitee-import-preview').hidden = true;
+        byId('invitee-import-summary').textContent = '';
+        byId('invitee-import-confirm').disabled = true;
+        byId('invitee-cancel').hidden = true;
+        byId('invitee-save').textContent = 'Simpan tamu';
+    }
+    rsvpRows = [];
+    guestbookRows = [];
+    if (byId('rsvp-table')) { byId('rsvp-table').replaceChildren(); }
+    if (byId('guestbook-table')) { byId('guestbook-table').replaceChildren(); }
+    if (byId('users-table')) { byId('users-table').replaceChildren(); }
+    document.querySelectorAll('[id^="stat-"]').forEach((stat) => { stat.textContent = '—'; });
 };
 const loadPublishedWedding = async () => {
+    const epoch = authEpoch;
     publishedWedding = null;
     byId('invitation-generate').disabled = true;
     byId('invitation-result').hidden = true;
@@ -93,9 +152,11 @@ const loadPublishedWedding = async () => {
         fields: 'groom_name,bride_name,wedding_date,timezone',
         limit: '1',
     });
-    const response = await fetch(`${CMS_BASE}/items/weddings?${params}`, { headers: { Accept: 'application/json' } });
+    const response = await fetch(`${CMS_BASE}/items/weddings?${params}`, { headers: { Accept: 'application/json' }, signal: privateRequests.signal });
+    if (!isCurrent(epoch)) { throw staleRequest(); }
     if (!response.ok) {throw new Error('Data pernikahan terbit tidak bisa dimuat.');}
     const wedding = (await response.json()).data?.[0];
+    if (!isCurrent(epoch)) { throw staleRequest(); }
     if (!wedding?.groom_name || !wedding?.bride_name || !wedding?.wedding_date) {throw new Error('Data pernikahan terbit belum lengkap.');}
     publishedWedding = wedding;
     byId('invitation-generate').disabled = false;
@@ -163,9 +224,15 @@ const actionButton = (label, style, handler) => {
     button.addEventListener('click', handler);
     return button;
 };
-const loadStats = async () => setStats((await request('/api/admin/stats')).data);
-const loadRsvps = async () => renderRsvps((await request('/api/admin/rsvps?limit=500')).data);
-const loadGuestbook = async () => renderGuestbook((await request(`/api/admin/guestbook?status=${encodeURIComponent(byId('guestbook-status').value)}`)).data);
+const loadPrivate = async (path, render) => {
+    const epoch = authEpoch;
+    const result = await request(path);
+    if (!isCurrent(epoch)) { throw staleRequest(); }
+    render(result.data);
+};
+const loadStats = () => loadPrivate('/api/admin/stats', setStats);
+const loadRsvps = () => loadPrivate('/api/admin/rsvps?limit=500', renderRsvps);
+const loadGuestbook = () => loadPrivate(`/api/admin/guestbook?status=${encodeURIComponent(byId('guestbook-status').value)}`, renderGuestbook);
 const resetInviteeForm = () => {
     editingInviteeId = null;
     byId('invitee-form').reset();
@@ -233,58 +300,190 @@ const renderInvitees = (rows) => {
         table.append(tr);
     });
 };
-const loadInvitees = async () => renderInvitees((await request('/api/admin/invitees')).data);
+const loadInvitees = () => loadPrivate('/api/admin/invitees', renderInvitees);
+const loadUsers = () => loadPrivate('/api/admin/users', renderUsers);
+let firstUserRequired = false;
+const renderUsers = (rows) => {
+    firstUserRequired = rows.length === 0;
+    const table = byId('users-table');
+    table.replaceChildren();
+    if (!rows.length) {
+        byId('user-role').value = 'admin';
+        byId('user-role').querySelector('option[value="operator"]').disabled = true;
+        const tr = document.createElement('tr');
+        const empty = cell('Belum ada akun. Buat akun admin pertama.', 'text-secondary');
+        empty.colSpan = 5;
+        tr.append(empty);
+        table.append(tr);
+        return;
+    }
+    byId('user-role').querySelector('option[value="operator"]').disabled = false;
+    rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const role = document.createElement('select');
+        role.className = 'form-select form-select-sm';
+        role.setAttribute('aria-label', `Peran ${row.username}`);
+        for (const value of ['operator', 'admin']) {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            role.append(option);
+        }
+        role.value = row.role;
+        role.addEventListener('change', () => {
+            if (!window.confirm(`Ubah peran ${row.username} menjadi ${role.value}?`)) { role.value = row.role; return; }
+            updateUser(row.id, { role: role.value });
+        });
+        const roleCell = document.createElement('td');
+        roleCell.append(role);
+        const statusCell = document.createElement('td');
+        statusCell.textContent = row.active ? 'Aktif' : 'Nonaktif';
+        const actions = document.createElement('td');
+        actions.append(actionButton(row.active ? 'Nonaktifkan' : 'Aktifkan', 'outline-secondary', () => {
+            if (!window.confirm(`${row.active ? 'Nonaktifkan' : 'Aktifkan'} akun ${row.username}?`)) { return; }
+            updateUser(row.id, { active: !row.active });
+        }));
+        const reset = actionButton('Reset password', 'outline-success', () => {
+            reset.hidden = true;
+            passwordInput.hidden = false;
+            savePassword.hidden = false;
+            passwordInput.focus();
+        });
+        const passwordInput = document.createElement('input');
+        passwordInput.type = 'password';
+        passwordInput.className = 'form-control form-control-sm mb-1';
+        passwordInput.autocomplete = 'new-password';
+        passwordInput.setAttribute('aria-label', `Password baru ${row.username}`);
+        passwordInput.minLength = 16;
+        passwordInput.maxLength = 1024;
+        passwordInput.hidden = true;
+        const savePassword = actionButton('Simpan password', 'success', async () => {
+            const password = passwordInput.value;
+            if (password.length < 16 || password.length > 1024) { setNotice('Password harus 16–1024 karakter.', 'danger'); return; }
+            passwordInput.value = '';
+            await updateUser(row.id, { password });
+        });
+        savePassword.hidden = true;
+        actions.append(reset, passwordInput, savePassword);
+        tr.append(cell(row.username), roleCell, statusCell, cell(row.created_at ? formatDate(row.created_at) : '—'), actions);
+        table.append(tr);
+    });
+};
+const updateUser = async (id, changes) => {
+    try {
+        await request(`/api/admin/users/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify(changes) });
+        await loadUsers();
+        setNotice('Akun diperbarui.', 'success');
+    } catch (error) { setNotice(error.status === 403 ? 'Akses ditolak (403).' : error.message, 'danger'); await loadUsers().catch(() => {}); }
+};
 const loadDashboard = async () => {
+    if (byId('users-table') && currentRole !== 'admin') { return; }
+    const epoch = authEpoch;
     clearNotice();
-    const results = await Promise.allSettled([loadStats(), loadRsvps(), loadGuestbook(), loadPublishedWedding(), loadInvitees()]);
-    if (publishedWedding && inviteeRows.length) { renderInvitees(inviteeRows); }
+    const loaders = [];
+    if (byId('stat-total')) { loaders.push(loadStats()); }
+    if (byId('rsvp-table')) { loaders.push(loadRsvps()); }
+    if (byId('guestbook-table')) { loaders.push(loadGuestbook()); }
+    if (byId('invitee-table')) { loaders.push(loadPublishedWedding(), loadInvitees()); }
+    if (byId('users-table') && currentRole === 'admin') { loaders.push(loadUsers()); }
+    const results = await Promise.allSettled(loaders);
+    if (!isCurrent(epoch)) { return; }
+    if (publishedWedding && inviteeRows.length && byId('invitee-table')) { renderInvitees(inviteeRows); }
     if (results.some((result) => result.status === 'rejected')) {
-        setNotice('Sebagian data dashboard atau metadata undangan gagal dimuat. Coba Refresh.', 'warning');
+        const denied = results.some((result) => result.reason?.status === 403);
+        setNotice(denied ? 'Akses ditolak (403). Hubungi admin jika Anda memerlukan izin.' : 'Sebagian data gagal dimuat. Coba Refresh.', 'warning');
     }
 };
 const moderate = async (id, status) => {
     try {
         await request(`/api/admin/guestbook/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify({ status }) });
         setNotice(`Ucapan berhasil diubah menjadi ${status}.`, 'success');
-        await Promise.all([loadStats(), loadGuestbook()]);
+        await loadGuestbook();
     } catch (error) { setNotice(error.message, 'danger'); }
 };
-const restoreSession = async () => {
+const restoreSession = async (explicitLogin = false) => {
+    invalidateSession();
+    if (!explicitLogin && localStorage.getItem(sessionSignalKey)?.startsWith('logout-start:')) { return; }
+    const epoch = authEpoch;
     try {
         const response = await request('/api/admin/session');
-        csrfToken = response.data.csrf_token;
-        sessionStorage.setItem(csrfStorageKey, csrfToken);
+        if (!isCurrent(epoch)) { return; }
+        if (response.data?.authenticated !== true || !response.data.csrf_token) { throw new Error('Sesi tidak aktif.'); }
+        beginSession(response.data);
         showApp();
         await loadDashboard();
-    } catch { showLogin(); }
+    } catch {
+        if (isCurrent(epoch)) { invalidateSession(); }
+    }
 };
+window.addEventListener('pageshow', (event) => { if (event.persisted) { restoreSession(); } });
+window.addEventListener('storage', (event) => {
+    if (event.key !== sessionSignalKey) { return; }
+    if (event.newValue?.startsWith('logout-start:')) { invalidateSession(); return; }
+    if (event.newValue?.startsWith('login:')) { restoreSession(true); }
+});
 
 byId('login-form').addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (outstandingLogout) { return; }
     const button = byId('login-button');
     button.disabled = true;
+    const epoch = authEpoch;
     try {
         const response = await request('/api/admin/login', { method: 'POST', body: JSON.stringify({ username: byId('admin-username').value, password: byId('admin-password').value }) });
-        csrfToken = response.data.csrf_token;
-        sessionStorage.setItem(csrfStorageKey, csrfToken);
+        if (!isCurrent(epoch)) { return; }
+        if (!response.data?.csrf_token) { throw new Error('Sesi tidak valid.'); }
+        beginSession(response.data);
+        localStorage.setItem(sessionSignalKey, `login:${Date.now()}`);
         byId('admin-password').value = '';
         showApp();
         await loadDashboard();
-    } catch (error) { setNotice(error.message, 'danger'); }
+    } catch (error) { if (isCurrent(epoch)) { setNotice(error.message, 'danger'); } }
     finally { button.disabled = false; }
 });
 byId('logout-button').addEventListener('click', async () => {
-    try { await request('/api/admin/logout', { method: 'POST' }); }
-    catch {
-        setNotice('Gagal keluar dari server. Sesi mungkin masih aktif; coba lagi.', 'danger');
-        return;
+    if (outstandingLogout) { return; }
+    byId('login-button').disabled = true;
+    const logout = request('/api/admin/logout', { method: 'POST' });
+    outstandingLogout = logout;
+    invalidateSession();
+    const epoch = authEpoch;
+    localStorage.setItem(sessionSignalKey, `logout-start:${Date.now()}`);
+    try {
+        await logout;
+        if (isCurrent(epoch)) { setNotice('Anda sudah keluar.', 'success'); }
+    } catch {
+        if (isCurrent(epoch)) { setNotice('Sesi lokal dibersihkan, tetapi keluar dari server gagal. Tutup browser atau coba masuk dan keluar kembali.', 'danger'); }
+    } finally {
+        if (outstandingLogout === logout) {
+            outstandingLogout = null;
+            byId('login-button').disabled = false;
+        }
     }
-    csrfToken = '';
-    sessionStorage.removeItem(csrfStorageKey);
-    showLogin();
-    setNotice('Anda sudah keluar.', 'success');
 });
-byId('refresh-button').addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
+byId('refresh-button')?.addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
+const clearInvitationPreview = () => {
+    byId('invitation-result').hidden = true;
+    byId('invitation-whatsapp').removeAttribute('href');
+    byId('invitation-link').removeAttribute('href');
+};
+const renderInvitationPreview = () => {
+    const result = buildWhatsAppInvitation({
+        name: byId('invitation-name').value,
+        phone: byId('invitation-phone').value,
+        template: byId('invitation-template').value,
+        wedding: publishedWedding,
+    });
+    byId('invitation-preview').value = result.message;
+    byId('invitation-link').href = result.invitationUrl;
+    byId('invitation-link').textContent = result.invitationUrl;
+    byId('invitation-whatsapp').href = result.whatsappUrl;
+    byId('invitation-result').hidden = false;
+};
+if (byId('invitation-template')) {
+    for (const id of ['invitation-name', 'invitation-phone', 'invitation-template']) {
+        byId(id).addEventListener('input', clearInvitationPreview);
+    }
 byId('invitation-template').value = defaultInvitationTemplate;
 byId('invitee-cancel').addEventListener('click', resetInviteeForm);
 byId('invitee-form').addEventListener('submit', async (event) => {
@@ -315,10 +514,13 @@ byId('invitee-import-cancel').addEventListener('click', clearImport);
 byId('invitee-csv').addEventListener('change', clearImport);
 byId('invitee-import').addEventListener('click', async () => {
     clearImport();
+    const epoch = authEpoch;
     const file = byId('invitee-csv').files?.[0];
     if (!file || file.size > 1_000_000) { setNotice('Pilih file CSV maksimal 1 MB.', 'danger'); return; }
     try {
-        const rows = parseGuestCsv(await file.text());
+        const text = await file.text();
+        if (!isCurrent(epoch)) { return; }
+        const rows = parseGuestCsv(text);
         const seen = new Set(inviteeRows.map((row) => row.phone));
         let duplicates = 0;
         const valid = [];
@@ -336,7 +538,7 @@ byId('invitee-import').addEventListener('click', async () => {
         byId('invitee-import-summary').textContent = `${valid.length} tamu baru, ${duplicates} nomor duplikat dilewati. Periksa file sebelum konfirmasi.`;
         byId('invitee-import-preview').hidden = false;
         byId('invitee-import-confirm').disabled = valid.length === 0;
-    } catch (error) { setNotice(error.message, 'danger'); }
+    } catch (error) { if (isCurrent(epoch)) { setNotice(error.message, 'danger'); } }
 });
 byId('invitee-import-confirm').addEventListener('click', async () => {
     if (!pendingImport?.length) { return; }
@@ -351,34 +553,33 @@ byId('invitee-import-confirm').addEventListener('click', async () => {
     } catch (error) { setNotice(error.message, 'danger'); }
     finally { button.disabled = false; }
 });
-const clearInvitationPreview = () => {
-    byId('invitation-result').hidden = true;
-    byId('invitation-whatsapp').removeAttribute('href');
-    byId('invitation-link').removeAttribute('href');
-};
-for (const id of ['invitation-name', 'invitation-phone', 'invitation-template']) {
-    byId(id).addEventListener('input', clearInvitationPreview);
-}
-const renderInvitationPreview = () => {
-    const result = buildWhatsAppInvitation({
-        name: byId('invitation-name').value,
-        phone: byId('invitation-phone').value,
-        template: byId('invitation-template').value,
-        wedding: publishedWedding,
-    });
-    byId('invitation-preview').value = result.message;
-    byId('invitation-link').href = result.invitationUrl;
-    byId('invitation-link').textContent = result.invitationUrl;
-    byId('invitation-whatsapp').href = result.whatsappUrl;
-    byId('invitation-result').hidden = false;
-};
 byId('invitation-form').addEventListener('submit', (event) => {
     event.preventDefault();
     clearInvitationPreview();
     try { renderInvitationPreview(); }
     catch (error) { setNotice(error.message, 'danger'); }
 });
-byId('guestbook-status').addEventListener('change', () => loadGuestbook().catch((error) => setNotice(error.message, 'danger')));
-byId('export-rsvp').addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at])));
-byId('export-guestbook').addEventListener('click', () => downloadCsv('betastoria-guestbook.csv', ['Nama', 'Pesan', 'Like', 'Status', 'Waktu'], guestbookRows.map((row) => [row.name, row.message, row.like_count, row.status, row.created_at])));
+}
+byId('guestbook-status')?.addEventListener('change', () => loadGuestbook().catch((error) => setNotice(error.message, 'danger')));
+byId('export-rsvp')?.addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at])));
+byId('export-guestbook')?.addEventListener('click', () => downloadCsv('betastoria-guestbook.csv', ['Nama', 'Pesan', 'Like', 'Status', 'Waktu'], guestbookRows.map((row) => [row.name, row.message, row.like_count, row.status, row.created_at])));
+if (byId('user-form')) {
+    byId('user-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const username = byId('user-username').value.trim();
+        const password = byId('user-password').value;
+        const role = byId('user-role').value;
+        if (firstUserRequired && role !== 'admin') { setNotice('Akun pertama harus berperan admin.', 'danger'); return; }
+        if (!/^[a-z0-9][a-z0-9._-]{2,63}$/.test(username.toLowerCase()) || password.length < 16 || password.length > 1024) { setNotice('Username 3–64 karakter dan password 16–1024 karakter diperlukan.', 'danger'); return; }
+        const button = byId('user-form').querySelector('button[type="submit"]');
+        button.disabled = true;
+        try {
+            await request('/api/admin/users', { method: 'POST', body: JSON.stringify({ username, password, role }) });
+            byId('user-form').reset();
+            await loadUsers();
+            setNotice('Akun dibuat.', 'success');
+        } catch (error) { setNotice(error.status === 403 ? 'Akses ditolak (403).' : error.message, 'danger'); }
+        finally { button.disabled = false; }
+    });
+}
 restoreSession();

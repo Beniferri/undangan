@@ -17,8 +17,8 @@
     <header class="dashboard-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
             <p class="text-uppercase small fw-semibold mb-1 brand-mark">Beta Storia · Workspace</p>
-            <h1 class="mb-0">Dashboard Admin</h1>
-            <p class="header-subtitle mb-0">Ringkasan RSVP dan ucapan. Pilih halaman kerja melalui navigasi.</p>
+            <h1 class="mb-0">Data RSVP</h1>
+            <p class="header-subtitle mb-0">Lihat kehadiran dan ekspor data RSVP.</p>
         </div>
         <button id="logout-button" class="btn btn-outline-secondary rounded-4" type="button" hidden>Keluar</button>
     </header>
@@ -41,26 +41,22 @@
 
     <section id="app-panel" hidden>
         <nav class="dashboard-nav" aria-label="Bagian dashboard">
-            <a href="./dashboard.html" aria-current="page">Ringkasan</a>
+            <a href="./dashboard.html">Ringkasan</a>
             <a href="./admin-tamu.html">Daftar tamu &amp; WA</a>
-            <a href="./admin-rsvp.html">RSVP</a>
+            <a href="./admin-rsvp.html" aria-current="page">RSVP</a>
             <a href="./admin-ucapan.html">Ucapan</a>
             <a href="./admin-pengguna.html" data-admin-only hidden>Pengguna</a>
         </nav>
         <p class="dashboard-nav-hint">Geser menu untuk melihat bagian lainnya.</p>
-        <div id="ringkasan" class="section-heading d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h3 mb-0">Ringkasan</h2>
-            <button id="refresh-button" class="btn btn-outline-success rounded-4" type="button">Refresh</button>
-        </div>
-        <div class="row g-3 mb-4">
-            <div class="col-6 col-lg-3"><div class="panel card h-100"><div class="card-body"><small class="text-secondary">Total RSVP</small><div id="stat-total" class="stat-value">—</div></div></div></div>
-            <div class="col-6 col-lg-3"><div class="panel card h-100"><div class="card-body"><small class="text-secondary">Hadir</small><div id="stat-hadir" class="stat-value">—</div></div></div></div>
-            <div class="col-6 col-lg-3"><div class="panel card h-100"><div class="card-body"><small class="text-secondary">Belum pasti</small><div id="stat-belum-pasti" class="stat-value">—</div></div></div></div>
-            <div class="col-6 col-lg-3"><div class="panel card h-100"><div class="card-body"><small class="text-secondary">Tidak hadir</small><div id="stat-tidak-hadir" class="stat-value">—</div></div></div></div>
-            <div class="col-6 col-lg-3"><div class="panel card h-100"><div class="card-body"><small class="text-secondary">Guestbook pending</small><div id="stat-pending" class="stat-value">—</div></div></div></div>
-            <div class="col-6 col-lg-3"><div class="panel card h-100"><div class="card-body"><small class="text-secondary">Guestbook approved</small><div id="stat-approved" class="stat-value">—</div></div></div></div>
-            <div class="col-6 col-lg-3"><div class="panel card h-100"><div class="card-body"><small class="text-secondary">Total like</small><div id="stat-likes" class="stat-value">—</div></div></div></div>
-        </div>
+        <section id="data-rsvp" class="panel card mb-4">
+            <div class="card-body p-3 p-md-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <h2 class="h3 mb-0">Data RSVP</h2>
+                    <div class="d-flex align-items-center gap-2"><span class="text-secondary small d-none d-md-inline">Maksimal 500 data terbaru</span><button id="export-rsvp" class="btn btn-outline-success btn-sm rounded-3" type="button">Export CSV</button></div>
+                </div>
+                <div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Nama</th><th>Jumlah</th><th>Status</th><th>Pesan</th><th>Waktu</th></tr></thead><tbody id="rsvp-table"><tr><td colspan="5" class="text-secondary">Memuat data…</td></tr></tbody></table></div>
+            </div>
+        </section>
 
     </section>
 </main>
