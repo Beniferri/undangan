@@ -24,6 +24,23 @@ test('two roster rows show independent manual status and actionable save errors'
 const html = readFileSync(new URL('../dashboard.html', import.meta.url), 'utf8');
 const js = readFileSync(new URL('../js/admin.js', import.meta.url), 'utf8');
 
+test('dashboard login submits username and password without admin token', () => {
+    assert.match(html, /id="admin-username"[^>]*autocomplete="username"/);
+    assert.match(html, /id="admin-password"[^>]*autocomplete="current-password"/);
+    assert.doesNotMatch(html, /id="admin-token"|token admin/i);
+    assert.match(js, /username: byId\('admin-username'\)\.value/);
+    assert.match(js, /password: byId\('admin-password'\)\.value/);
+    assert.doesNotMatch(js, /token: byId\('admin-token'\)/);
+});
+
+test('logout only clears local session after API confirms success', () => {
+    const handler = js.slice(js.indexOf("byId('logout-button').addEventListener"), js.indexOf("byId('refresh-button').addEventListener"));
+    assert.match(handler, /try \{[\s\S]*await request\('\/api\/admin\/logout'/);
+    assert.match(handler, /catch \{[\s\S]*Gagal keluar dari server/);
+    assert.match(handler, /return;[\s\S]*csrfToken = ''/);
+    assert.doesNotMatch(handler, /catch \{ \/\* session is cleared locally below \*\/ \}/);
+});
+
 test('parses BOM, quoted commas/newlines and CRLF CSV with name and phone headers', () => {
     const rows = parseGuestCsv('\ufeffnama,nomor\r\n"Ibu, Rahma",081234567890\r\n"Bapak\nHasan",6281234567891\r\n');
     assert.deepEqual(rows, [{ name: 'Ibu, Rahma', phone: '081234567890' }, { name: 'Bapak\nHasan', phone: '6281234567891' }]);
@@ -44,7 +61,7 @@ test('guest roster controls are behind login and reuse existing composer', () =>
     }
     assert.match(js, /\/api\/admin\/invitees/);
     assert.match(js, /buildWhatsAppInvitation/);
-    assert.match(html, /dist\/admin\.js\?v=guest-roster-2/);
+    assert.match(html, /dist\/admin\.js\?v=password-login-1/);
     assert.match(html, /setiap tamu perlu nomor WA yang berbeda/);
     assert.match(js, /inviteeSaveError\(error\.status, error\.message\)/);
     assert.doesNotMatch(js, /inviteeRows\.some\(\(row\) => row\.phone === phone/);
