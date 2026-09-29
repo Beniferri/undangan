@@ -17,6 +17,7 @@ let rsvpRows = [];
 let guestbookRows = [];
 let currentRole = null;
 let authEpoch = 0;
+let outstandingLogout = null;
 let privateRequests = new AbortController();
 const sessionSignalKey = 'betastoria-admin-session';
 const staleRequest = () => new Error('Sesi telah berubah.');
@@ -116,6 +117,7 @@ const showLogin = () => {
         byId('invitation-name').value = '';
         byId('invitation-phone').value = '';
         byId('invitation-preview').value = '';
+        byId('invitation-link').textContent = '';
         byId('invitation-generate').disabled = true;
         byId('invitation-result').hidden = true;
         byId('invitation-whatsapp').removeAttribute('href');
@@ -127,6 +129,8 @@ const showLogin = () => {
         byId('invitee-form').reset();
         byId('invitee-csv').value = '';
         byId('invitee-import-preview').hidden = true;
+        byId('invitee-import-summary').textContent = '';
+        byId('invitee-import-confirm').disabled = true;
         byId('invitee-cancel').hidden = true;
         byId('invitee-save').textContent = 'Simpan tamu';
     }
@@ -421,6 +425,7 @@ window.addEventListener('storage', (event) => {
 
 byId('login-form').addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (outstandingLogout) { return; }
     const button = byId('login-button');
     button.disabled = true;
     const epoch = authEpoch;
@@ -437,7 +442,10 @@ byId('login-form').addEventListener('submit', async (event) => {
     finally { button.disabled = false; }
 });
 byId('logout-button').addEventListener('click', async () => {
+    if (outstandingLogout) { return; }
+    byId('login-button').disabled = true;
     const logout = request('/api/admin/logout', { method: 'POST' });
+    outstandingLogout = logout;
     invalidateSession();
     const epoch = authEpoch;
     localStorage.setItem(sessionSignalKey, `logout-start:${Date.now()}`);
@@ -446,6 +454,11 @@ byId('logout-button').addEventListener('click', async () => {
         if (isCurrent(epoch)) { setNotice('Anda sudah keluar.', 'success'); }
     } catch {
         if (isCurrent(epoch)) { setNotice('Sesi lokal dibersihkan, tetapi keluar dari server gagal. Tutup browser atau coba masuk dan keluar kembali.', 'danger'); }
+    } finally {
+        if (outstandingLogout === logout) {
+            outstandingLogout = null;
+            byId('login-button').disabled = false;
+        }
     }
 });
 byId('refresh-button')?.addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
@@ -501,10 +514,13 @@ byId('invitee-import-cancel').addEventListener('click', clearImport);
 byId('invitee-csv').addEventListener('change', clearImport);
 byId('invitee-import').addEventListener('click', async () => {
     clearImport();
+    const epoch = authEpoch;
     const file = byId('invitee-csv').files?.[0];
     if (!file || file.size > 1_000_000) { setNotice('Pilih file CSV maksimal 1 MB.', 'danger'); return; }
     try {
-        const rows = parseGuestCsv(await file.text());
+        const text = await file.text();
+        if (!isCurrent(epoch)) { return; }
+        const rows = parseGuestCsv(text);
         const seen = new Set(inviteeRows.map((row) => row.phone));
         let duplicates = 0;
         const valid = [];
@@ -522,7 +538,7 @@ byId('invitee-import').addEventListener('click', async () => {
         byId('invitee-import-summary').textContent = `${valid.length} tamu baru, ${duplicates} nomor duplikat dilewati. Periksa file sebelum konfirmasi.`;
         byId('invitee-import-preview').hidden = false;
         byId('invitee-import-confirm').disabled = valid.length === 0;
-    } catch (error) { setNotice(error.message, 'danger'); }
+    } catch (error) { if (isCurrent(epoch)) { setNotice(error.message, 'danger'); } }
 });
 byId('invitee-import-confirm').addEventListener('click', async () => {
     if (!pendingImport?.length) { return; }

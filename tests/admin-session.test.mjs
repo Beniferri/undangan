@@ -3,6 +3,8 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import vm from 'node:vm';
 import { JSDOM } from 'jsdom';
+import { parseGuestCsv } from '../js/app/admin/guest-csv.js';
+import { buildWhatsAppInvitation, normalizeIndonesianPhone } from '../js/app/admin/invitation.js';
 
 const html = readFileSync(new URL('../dashboard.html', import.meta.url), 'utf8');
 const usersHtml = readFileSync(new URL('../admin-pengguna.html', import.meta.url), 'utf8');
@@ -21,7 +23,7 @@ function setup(handler, page = html) {
         return handler(path, options);
     };
     const context = dom.getInternalVMContext();
-    Object.assign(context, { fetch: window.fetch, Headers, console, defaultInvitationTemplate: 'Example template' });
+    Object.assign(context, { fetch: window.fetch, Headers, console, parseGuestCsv, buildWhatsAppInvitation, normalizeIndonesianPhone, defaultInvitationTemplate: 'Example template' });
     vm.runInContext(source, context);
     const id = (name) => window.document.getElementById(name);
     const login = async () => {
@@ -51,6 +53,70 @@ test('late roster and CMS responses cannot recreate contacts or draft links afte
     assert.equal(app.id('invitee-table').textContent, '');
     assert.equal(app.id('invitation-generate').disabled, true);
     assert.equal(app.id('invitation-whatsapp').hasAttribute('href'), false);
+});
+
+test('delayed CSV read cannot restore an old draft after logout and new login', async () => {
+    const read = deferred();
+    const app = setup((path) => path.endsWith('/invitees') ? response([]) : path.endsWith('/weddings') ? response([{ groom_name: 'A', bride_name: 'B', wedding_date: '2027-01-01' }]) : authenticated(), rosterHtml);
+    await flush();
+    Object.defineProperty(app.id('invitee-csv'), 'files', { configurable: true, value: [{ size: 35, text: () => read.promise }] });
+    app.id('invitee-import').click();
+    app.id('logout-button').click();
+    await flush();
+    await app.login();
+    read.resolve('nama,nomor\nOld Draft,081234567890');
+    await flush();
+    assert.equal(app.id('invitee-import-preview').hidden, true);
+    assert.equal(app.id('invitee-import-summary').textContent, '');
+    app.id('invitee-import-confirm').click();
+    await flush();
+    assert.equal(app.calls.filter((path) => path.endsWith('/invitees/import')).length, 0);
+});
+
+test('logout clears a previously prepared CSV draft and blocks its confirmation', async () => {
+    const app = setup((path) => path.endsWith('/invitees') ? response([]) : path.endsWith('/weddings') ? response([{ groom_name: 'A', bride_name: 'B', wedding_date: '2027-01-01' }]) : authenticated(), rosterHtml);
+    await flush();
+    Object.defineProperty(app.id('invitee-csv'), 'files', { configurable: true, value: [{ size: 35, text: async () => 'nama,nomor\nOld Draft,081234567890' }] });
+    app.id('invitee-import').click();
+    await flush();
+    assert.equal(app.id('invitee-import-preview').hidden, false);
+    app.id('logout-button').click();
+    assert.equal(app.id('invitee-import-summary').textContent, '');
+    await flush();
+    await app.login();
+    app.id('invitee-import-confirm').click();
+    await flush();
+    assert.equal(app.calls.filter((path) => path.endsWith('/invitees/import')).length, 0);
+});
+
+test('a rejected CSV read after logout does not show an old-session error', async () => {
+    const read = deferred();
+    const app = setup((path) => path.endsWith('/invitees') ? response([]) : path.endsWith('/weddings') ? response([{ groom_name: 'A', bride_name: 'B', wedding_date: '2027-01-01' }]) : authenticated(), rosterHtml);
+    await flush();
+    Object.defineProperty(app.id('invitee-csv'), 'files', { configurable: true, value: [{ size: 35, text: () => read.promise }] });
+    app.id('invitee-import').click();
+    app.id('logout-button').click();
+    await flush();
+    read.resolve(Promise.reject(new Error('Old CSV read failed')));
+    await flush();
+    assert.doesNotMatch(app.id('notice').textContent, /Old CSV read failed/);
+});
+
+test('logout removes generated invitation link text, preview, and guest info', async () => {
+    const app = setup((path) => path.endsWith('/invitees') ? response([]) : path.endsWith('/weddings') ? response([{ groom_name: 'A', bride_name: 'B', wedding_date: '2027-01-01' }]) : authenticated(), rosterHtml);
+    await flush();
+    app.id('invitation-name').value = 'Private Guest';
+    app.id('invitation-phone').value = '081234567890';
+    app.id('invitation-template').value = 'Dear {nama}: {link}';
+    app.id('invitation-form').dispatchEvent(new app.window.Event('submit', { cancelable: true }));
+    assert.match(app.id('invitation-link').textContent, /Private/);
+    assert.match(app.id('invitation-preview').value, /Private Guest/);
+    app.id('logout-button').click();
+    assert.equal(app.id('invitation-name').value, '');
+    assert.equal(app.id('invitation-phone').value, '');
+    assert.equal(app.id('invitation-preview').value, '');
+    assert.equal(app.id('invitation-link').textContent, '');
+    assert.equal(app.id('invitation-link').hasAttribute('href'), false);
 });
 
 test('account form, reset-password input and login password clear on logout', async () => {
@@ -160,17 +226,38 @@ test('first account submission cannot select operator even if form is changed', 
     assert.match(app.id('notice').textContent, /admin/);
 });
 
-test('late logout completion cannot sign out an account that logged in afterward', async () => {
+test('login is blocked until logout settles, then can authenticate', async () => {
     const pending = deferred();
     const app = setup((path) => path.endsWith('/logout') ? pending.promise : path.endsWith('/stats') ? response({ total: 7 }) : authenticated());
     await flush();
     app.id('logout-button').click();
-    await app.login();
+    assert.equal(app.id('login-button').disabled, true);
+    await app.login(); // synthetic submit must also be rejected
+    assert.equal(app.calls.filter((path) => path.endsWith('/login')).length, 0);
+    assert.equal(app.id('app-panel').hidden, true);
     pending.resolve(response(null));
     await flush();
+    assert.equal(app.id('login-button').disabled, false);
+    await app.login();
+    assert.equal(app.calls.filter((path) => path.endsWith('/login')).length, 1);
     assert.equal(app.id('app-panel').hidden, false);
     assert.equal(app.id('stat-total').textContent, '7');
-    assert.equal(app.id('notice').textContent, '');
+});
+
+test('failed logout also blocks login until settled and permits retry afterward', async () => {
+    const pending = deferred();
+    const app = setup((path) => path.endsWith('/logout') ? pending.promise : authenticated());
+    await flush();
+    app.id('logout-button').click();
+    await app.login();
+    assert.equal(app.calls.filter((path) => path.endsWith('/login')).length, 0);
+    pending.resolve(response(null, 500));
+    await flush();
+    assert.equal(app.id('login-button').disabled, false);
+    assert.match(app.id('notice').textContent, /server/);
+    await app.login();
+    assert.equal(app.calls.filter((path) => path.endsWith('/login')).length, 1);
+    assert.equal(app.id('app-panel').hidden, false);
 });
 
 test('401 hides private content before reading a delayed response body', async () => {
