@@ -24,6 +24,12 @@ test('two roster rows show independent manual status and actionable save errors'
 const html = readFileSync(new URL('../dashboard.html', import.meta.url), 'utf8');
 const js = readFileSync(new URL('../js/admin.js', import.meta.url), 'utf8');
 
+test('dashboard favicon uses the wedding icon instead of the old placeholder', () => {
+    assert.match(html, /rel="icon"[^>]+href="\.\/assets\/images\/dashboard-favicon\.png"/);
+    const icon = readFileSync(new URL('../assets/images/dashboard-favicon.png', import.meta.url));
+    assert.equal(icon.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+});
+
 test('dashboard login submits username and password without admin token', () => {
     assert.match(html, /id="admin-username"[^>]*autocomplete="username"/);
     assert.match(html, /id="admin-password"[^>]*autocomplete="current-password"/);
