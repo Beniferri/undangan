@@ -41,10 +41,12 @@
     <section id="login-panel" class="panel card mx-auto" style="max-width: 480px;">
         <div class="card-body p-4 p-md-5">
             <h2 class="h3 mb-2">Masuk sebagai admin</h2>
-            <p class="text-secondary mb-4">Gunakan token admin dari secret store Coolify. Token tidak disimpan di browser.</p>
+            <p class="text-secondary mb-4">Masuk menggunakan akun admin Anda.</p>
             <form id="login-form">
-                <label class="form-label" for="admin-token">Admin token</label>
-                <input id="admin-token" class="form-control rounded-4 mb-3" type="password" autocomplete="current-password" required>
+                <label class="form-label" for="admin-username">Username</label>
+                <input id="admin-username" class="form-control rounded-4 mb-3" type="text" autocomplete="username" required>
+                <label class="form-label" for="admin-password">Password</label>
+                <input id="admin-password" class="form-control rounded-4 mb-3" type="password" autocomplete="current-password" required>
                 <button id="login-button" class="btn btn-success rounded-4 w-100" type="submit">Masuk</button>
             </form>
         </div>
@@ -129,6 +131,6 @@
         </section>
     </section>
 </main>
-<script defer src="./dist/admin.js?v=guest-roster-2"></script>
+<script defer src="./dist/admin.js?v=password-login-1"></script>
 </body>
 </html>

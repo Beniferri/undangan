@@ -62,10 +62,15 @@ The following values are configured in Coolify secrets/environment settings. Val
 
 - `DATABASE_URL`
 - `DATABASE_SSL`
-- `ADMIN_TOKEN`
+- `ADMIN_USERNAME` (API; tidak rahasia, tetap dikonfigurasi di lingkungan)
+- `ADMIN_PASSWORD_HASH` (API; hasil scrypt, jangan simpan password polos)
+- `ADMIN_SESSION_SECRET` (API; acak minimal 32 karakter, berbeda dari password)
+- `ADMIN_TRUSTED_PROXY_IPS` (API; alamat/CIDR proxy tepercaya yang sudah diverifikasi, bukan trust-all)
 - `NOTION_API_KEY`
 - `NOTION_DATABASE_ID`
 - `PUBLIC_ORIGIN`
+
+`ADMIN_TOKEN` lama tidak dipakai lagi setelah backend login baru aktif. Siapkan keempat variabel baru sebelum merilis backend dan frontend; rilis API lebih dulu. Sesi lama akan berakhir saat secret sesi diganti.
 
 ## Frontend deployment procedure
 

@@ -264,17 +264,21 @@ byId('login-form').addEventListener('submit', async (event) => {
     const button = byId('login-button');
     button.disabled = true;
     try {
-        const response = await request('/api/admin/login', { method: 'POST', body: JSON.stringify({ token: byId('admin-token').value }) });
+        const response = await request('/api/admin/login', { method: 'POST', body: JSON.stringify({ username: byId('admin-username').value, password: byId('admin-password').value }) });
         csrfToken = response.data.csrf_token;
         sessionStorage.setItem(csrfStorageKey, csrfToken);
-        byId('admin-token').value = '';
+        byId('admin-password').value = '';
         showApp();
         await loadDashboard();
     } catch (error) { setNotice(error.message, 'danger'); }
     finally { button.disabled = false; }
 });
 byId('logout-button').addEventListener('click', async () => {
-    try { await request('/api/admin/logout', { method: 'POST' }); } catch { /* session is cleared locally below */ }
+    try { await request('/api/admin/logout', { method: 'POST' }); }
+    catch {
+        setNotice('Gagal keluar dari server. Sesi mungkin masih aktif; coba lagi.', 'danger');
+        return;
+    }
     csrfToken = '';
     sessionStorage.removeItem(csrfStorageKey);
     showLogin();
