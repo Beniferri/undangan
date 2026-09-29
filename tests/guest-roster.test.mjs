@@ -30,6 +30,17 @@ test('dashboard favicon uses the wedding icon instead of the old placeholder', (
     assert.equal(icon.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
 });
 
+test('dashboard navigation targets real admin sections and loads the fresh design', () => {
+    assert.match(html, /css\/admin\.css\?v=glass-dashboard-1/);
+    assert.match(html, /<nav class="dashboard-nav" aria-label="Bagian dashboard">/);
+    assert.match(html, /class="dashboard-nav-hint">Geser menu/);
+    for (const id of ['ringkasan', 'daftar-tamu', 'kirim-undangan', 'data-rsvp', 'moderasi-ucapan']) {
+        assert.match(html, new RegExp(`href="#${id}"`));
+        assert.match(html, new RegExp(`id="${id}"`));
+    }
+    assert.match(html, /id="app-panel" hidden>[\s\S]*?<nav class="dashboard-nav"/);
+});
+
 test('dashboard login submits username and password without admin token', () => {
     assert.match(html, /id="admin-username"[^>]*autocomplete="username"/);
     assert.match(html, /id="admin-password"[^>]*autocomplete="current-password"/);

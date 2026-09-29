@@ -10,28 +10,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/admin.css">
-    <style>
-        :root { --bs-body-font-family: "DM Sans", sans-serif; --bs-heading-font-family: "Cormorant Garamond", Georgia, serif; }
-        body { min-height: 100vh; background: #f7f3eb; }
-        h1, h2, h3, h4 { font-family: var(--bs-heading-font-family); }
-        .admin-shell { max-width: 1180px; }
-        .brand-mark { color: #365447; }
-        .panel { border: 0; border-radius: 1rem; box-shadow: 0 .35rem 1.5rem rgba(44, 62, 50, .08); }
-        .stat-value { font-size: 2rem; font-weight: 600; color: #365447; }
-        .table > :not(caption) > * > * { padding: .8rem .75rem; vertical-align: middle; }
-        .message-cell { min-width: 220px; max-width: 420px; white-space: pre-wrap; word-break: break-word; }
-        .status-badge { min-width: 5.5rem; }
-        #app-panel[hidden], #login-panel[hidden] { display: none !important; }
-        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; } }
-    </style>
+    <link rel="stylesheet" href="./css/admin.css?v=glass-dashboard-1">
 </head>
-<body>
+<body class="dashboard-ui">
 <main class="container admin-shell py-4 py-md-5">
-    <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <header class="dashboard-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <p class="text-uppercase small fw-semibold mb-1 brand-mark">Beta Storia Wedding</p>
+            <p class="text-uppercase small fw-semibold mb-1 brand-mark">Beta Storia · Workspace</p>
             <h1 class="mb-0">Dashboard Admin</h1>
+            <p class="header-subtitle mb-0">Kelola tamu, undangan, dan ucapan dalam satu tempat.</p>
         </div>
         <button id="logout-button" class="btn btn-outline-secondary rounded-4" type="button" hidden>Keluar</button>
     </header>
@@ -53,7 +40,15 @@
     </section>
 
     <section id="app-panel" hidden>
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <nav class="dashboard-nav" aria-label="Bagian dashboard">
+            <a href="#ringkasan">Ringkasan</a>
+            <a href="#daftar-tamu">Daftar tamu</a>
+            <a href="#kirim-undangan">Kirim undangan</a>
+            <a href="#data-rsvp">RSVP</a>
+            <a href="#moderasi-ucapan">Ucapan</a>
+        </nav>
+        <p class="dashboard-nav-hint">Geser menu untuk melihat bagian lainnya.</p>
+        <div id="ringkasan" class="section-heading d-flex justify-content-between align-items-center mb-3">
             <h2 class="h3 mb-0">Ringkasan</h2>
             <button id="refresh-button" class="btn btn-outline-success rounded-4" type="button">Refresh</button>
         </div>
@@ -67,7 +62,7 @@
             <div class="col-6 col-lg-3"><div class="panel card h-100"><div class="card-body"><small class="text-secondary">Total like</small><div id="stat-likes" class="stat-value">—</div></div></div></div>
         </div>
 
-        <section class="panel card mb-4" aria-labelledby="invitee-heading">
+        <section id="daftar-tamu" class="panel card mb-4" aria-labelledby="invitee-heading">
             <div class="card-body p-3 p-md-4">
                 <h2 id="invitee-heading" class="h3">Daftar Tamu</h2>
                 <p class="text-secondary small">Nomor hanya tersedia untuk admin; setiap tamu perlu nomor WA yang berbeda. Setelah mengirim pesan di WhatsApp, klik “Tandai sudah dikirim” pada baris tamu. Status ini dicatat manual, bukan konfirmasi WhatsApp.</p>
@@ -89,7 +84,7 @@
             </div>
         </section>
 
-        <section class="panel card mb-4" aria-labelledby="invitation-heading">
+        <section id="kirim-undangan" class="panel card mb-4" aria-labelledby="invitation-heading">
             <div class="card-body p-3 p-md-4">
                 <h2 id="invitation-heading" class="h3">Kirim Undangan via WhatsApp</h2>
                 <p class="text-secondary small">Satu tamu per chat. WhatsApp hanya membuka draf; periksa lalu tekan Kirim sendiri. Nomor tidak disimpan di dashboard.</p>
@@ -108,7 +103,7 @@
             </div>
         </section>
 
-        <section class="panel card mb-4">
+        <section id="data-rsvp" class="panel card mb-4">
             <div class="card-body p-3 p-md-4">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <h2 class="h3 mb-0">Data RSVP</h2>
@@ -118,7 +113,7 @@
             </div>
         </section>
 
-        <section class="panel card">
+        <section id="moderasi-ucapan" class="panel card">
             <div class="card-body p-3 p-md-4">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <h2 class="h3 mb-0">Moderasi Guestbook</h2>
