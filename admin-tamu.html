@@ -27,8 +27,8 @@
 
     <section id="login-panel" class="panel card mx-auto" style="max-width: 480px;">
         <div class="card-body p-4 p-md-5">
-            <h2 class="h3 mb-2">Masuk sebagai admin</h2>
-            <p class="text-secondary mb-4">Masuk menggunakan akun admin Anda.</p>
+            <h2 class="h3 mb-2">Masuk ke dashboard</h2>
+            <p class="text-secondary mb-4">Masuk menggunakan akun yang diberikan admin.</p>
             <form id="login-form">
                 <label class="form-label" for="admin-username">Username</label>
                 <input id="admin-username" class="form-control rounded-4 mb-3" type="text" autocomplete="username" required>
@@ -42,7 +42,7 @@
     <section id="app-panel" hidden>
         <nav class="dashboard-nav" aria-label="Bagian dashboard">
             <a href="./dashboard.html">Ringkasan</a>
-            <a href="./admin-tamu.html">Daftar tamu &amp; WA</a>
+            <a href="./admin-tamu.html" aria-current="page">Daftar tamu &amp; WA</a>
             <a href="./admin-rsvp.html">RSVP</a>
             <a href="./admin-ucapan.html">Ucapan</a>
             <a href="./admin-pengguna.html" data-admin-only hidden>Pengguna</a>
@@ -91,6 +91,6 @@
 
     </section>
 </main>
-<script defer src="./dist/admin.js?v=admin-pages-1"></script>
+<script defer src="./dist/admin.js?v=admin-pages-2"></script>
 </body>
 </html>

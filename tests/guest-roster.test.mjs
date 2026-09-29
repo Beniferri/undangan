@@ -50,12 +50,11 @@ test('dashboard login submits username and password without admin token', () => 
     assert.doesNotMatch(js, /token: byId\('admin-token'\)/);
 });
 
-test('logout only clears local session after API confirms success', () => {
-    const handler = js.slice(js.indexOf("byId('logout-button').addEventListener"), js.indexOf("byId('refresh-button').addEventListener"));
-    assert.match(handler, /try \{[\s\S]*await request\('\/api\/admin\/logout'/);
-    assert.match(handler, /catch \{[\s\S]*Gagal keluar dari server/);
-    assert.match(handler, /return;[\s\S]*csrfToken = ''/);
-    assert.doesNotMatch(handler, /catch \{ \/\* session is cleared locally below \*\/ \}/);
+test('logout invalidates the local session even if server revocation fails', () => {
+    const handler = js.slice(js.indexOf("byId('logout-button').addEventListener"), js.indexOf("byId('refresh-button')?.addEventListener"));
+    assert.match(handler, /request\('\/api\/admin\/logout'[\s\S]*invalidateSession\(\)/);
+    assert.match(handler, /catch \{[\s\S]*Sesi lokal dibersihkan/);
+    assert.match(handler, /logout-start:/);
 });
 
 test('parses BOM, quoted commas/newlines and CRLF CSV with name and phone headers', () => {
@@ -78,7 +77,7 @@ test('guest roster controls are behind login and reuse existing composer', () =>
     }
     assert.match(js, /\/api\/admin\/invitees/);
     assert.match(js, /buildWhatsAppInvitation/);
-    assert.match(rosterHtml, /dist\/admin\.js\?v=admin-pages-1/);
+    assert.match(rosterHtml, /dist\/admin\.js\?v=admin-pages-2/);
     assert.match(rosterHtml, /setiap tamu perlu nomor WA yang berbeda/);
     assert.match(js, /inviteeSaveError\(error\.status, error\.message\)/);
     assert.doesNotMatch(js, /inviteeRows\.some\(\(row\) => row\.phone === phone/);

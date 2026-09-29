@@ -9,7 +9,7 @@ test('all pages load the same JS and CSS cache keys', () => {
     for (const page of pages) {
         const html = read(page);
         assert.match(html, /css\/admin\.css\?v=admin-pages-1/);
-        assert.match(html, /dist\/admin\.js\?v=admin-pages-1/);
+        assert.match(html, /dist\/admin\.js\?v=admin-pages-2/);
     }
 });
 
@@ -20,7 +20,7 @@ test('five independent pages share gated glass navigation and login', () => {
         assert.match(html, /id="login-form"/);
         assert.match(html, /class="dashboard-nav"/);
         for (const destination of pages) assert.ok(html.includes(`href="./${destination}"`), `${page}: ${destination}`);
-        assert.match(html, /dist\/admin\.js\?v=admin-pages-1/);
+        assert.match(html, /dist\/admin\.js\?v=admin-pages-2/);
     }
 });
 
@@ -40,7 +40,7 @@ test('users page offers create and account management, not private guest contact
     assert.doesNotMatch(html, /id="invitee-table"|id="invitation-phone"/);
     const js = read('js/admin.js');
     assert.match(js, /\/api\/admin\/users/);
-    assert.match(js, /response\.data\.role/);
+    assert.match(js, /beginSession\(response\.data\)/);
     assert.match(js, /error\.status === 403/);
 });
 
@@ -72,6 +72,24 @@ test('create and reset password enforce the backend minimum of 16 characters', (
     assert.match(html, /id="user-password"[^>]*minlength="16"/);
     assert.match(js, /passwordInput\.minLength = 16/);
     assert.match(js, /password\.length < 16/g);
+});
+
+test('first account guidance and password bounds are visible in the account UI', () => {
+    const html = read('admin-pengguna.html');
+    const js = read('js/admin.js');
+    assert.match(html, /Akun pertama.*admin/);
+    assert.match(html, /id="user-password"[^>]*maxlength="1024"/);
+    assert.match(js, /passwordInput\.maxLength = 1024/);
+    assert.match(js, /if \(!rows\.length\) \{\s*byId\('user-role'\)\.value = 'admin'/);
+});
+
+test('login and RSVP copy reflect operator read-only permissions', () => {
+    for (const page of pages) {
+        assert.match(read(page), /Masuk ke dashboard/);
+        assert.doesNotMatch(read(page), /Masuk sebagai admin|akun admin Anda/);
+        assert.match(read(page), new RegExp(`href="\\./${page.replace('.', '\\.')}" aria-current="page"`));
+    }
+    assert.match(read('admin-pengguna.html'), /melihat RSVP tanpa mengubahnya/);
 });
 
 test('all hidden controls remain hidden despite Bootstrap display rules', () => {

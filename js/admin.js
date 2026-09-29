@@ -16,6 +16,27 @@ let csrfToken = sessionStorage.getItem(csrfStorageKey) || '';
 let rsvpRows = [];
 let guestbookRows = [];
 let currentRole = null;
+let authEpoch = 0;
+let privateRequests = new AbortController();
+const sessionSignalKey = 'betastoria-admin-session';
+const staleRequest = () => new Error('Sesi telah berubah.');
+const isCurrent = (epoch) => epoch === authEpoch;
+const invalidateSession = () => {
+    authEpoch += 1;
+    privateRequests.abort();
+    privateRequests = new AbortController();
+    csrfToken = '';
+    sessionStorage.removeItem(csrfStorageKey);
+    showLogin();
+};
+const beginSession = (data) => {
+    authEpoch += 1;
+    privateRequests.abort();
+    privateRequests = new AbortController();
+    csrfToken = data.csrf_token;
+    currentRole = data.role;
+    sessionStorage.setItem(csrfStorageKey, csrfToken);
+};
 
 const byId = (id) => document.getElementById(id);
 const setNotice = (message, type = 'info') => {
@@ -39,6 +60,8 @@ const downloadCsv = (filename, headers, rows) => {
 };
 
 const request = async (path, options = {}) => {
+    const epoch = authEpoch;
+    const privateCall = !['/api/admin/session', '/api/admin/login', '/api/admin/logout'].includes(path);
     const headers = new Headers(options.headers || {});
     headers.set('Accept', 'application/json');
     if (options.body && !headers.has('Content-Type')) {
@@ -47,8 +70,14 @@ const request = async (path, options = {}) => {
     if (csrfToken && options.method && options.method !== 'GET') {
         headers.set('X-CSRF-Token', csrfToken);
     }
-    const response = await fetch(`${API_BASE}${path}`, { ...options, headers, credentials: 'include' });
+    const response = await fetch(`${API_BASE}${path}`, { ...options, headers, credentials: 'include', signal: privateCall ? privateRequests.signal : options.signal });
+    if (privateCall && !isCurrent(epoch)) { throw staleRequest(); }
+    if (response.status === 401 && privateCall) {
+        invalidateSession();
+        setNotice('Sesi tidak aktif. Silakan masuk kembali.', 'danger');
+    }
     const body = await response.json().catch(() => ({}));
+    if (privateCall && response.status !== 401 && !isCurrent(epoch)) { throw staleRequest(); }
     if (!response.ok) {
         const error = new Error(body.error || `Request gagal (${response.status})`);
         error.status = response.status;
@@ -72,6 +101,12 @@ const showApp = () => {
 };
 const showLogin = () => {
     byId('login-panel').hidden = false;
+    byId('admin-password').value = '';
+    if (byId('user-form')) {
+        byId('user-form').reset();
+        firstUserRequired = false;
+        byId('user-role').querySelector('option[value="operator"]').disabled = false;
+    }
     byId('app-panel').hidden = true;
     byId('logout-button').hidden = true;
     publishedWedding = null;
@@ -100,8 +135,10 @@ const showLogin = () => {
     if (byId('rsvp-table')) { byId('rsvp-table').replaceChildren(); }
     if (byId('guestbook-table')) { byId('guestbook-table').replaceChildren(); }
     if (byId('users-table')) { byId('users-table').replaceChildren(); }
+    document.querySelectorAll('[id^="stat-"]').forEach((stat) => { stat.textContent = '—'; });
 };
 const loadPublishedWedding = async () => {
+    const epoch = authEpoch;
     publishedWedding = null;
     byId('invitation-generate').disabled = true;
     byId('invitation-result').hidden = true;
@@ -111,9 +148,11 @@ const loadPublishedWedding = async () => {
         fields: 'groom_name,bride_name,wedding_date,timezone',
         limit: '1',
     });
-    const response = await fetch(`${CMS_BASE}/items/weddings?${params}`, { headers: { Accept: 'application/json' } });
+    const response = await fetch(`${CMS_BASE}/items/weddings?${params}`, { headers: { Accept: 'application/json' }, signal: privateRequests.signal });
+    if (!isCurrent(epoch)) { throw staleRequest(); }
     if (!response.ok) {throw new Error('Data pernikahan terbit tidak bisa dimuat.');}
     const wedding = (await response.json()).data?.[0];
+    if (!isCurrent(epoch)) { throw staleRequest(); }
     if (!wedding?.groom_name || !wedding?.bride_name || !wedding?.wedding_date) {throw new Error('Data pernikahan terbit belum lengkap.');}
     publishedWedding = wedding;
     byId('invitation-generate').disabled = false;
@@ -181,9 +220,15 @@ const actionButton = (label, style, handler) => {
     button.addEventListener('click', handler);
     return button;
 };
-const loadStats = async () => setStats((await request('/api/admin/stats')).data);
-const loadRsvps = async () => renderRsvps((await request('/api/admin/rsvps?limit=500')).data);
-const loadGuestbook = async () => renderGuestbook((await request(`/api/admin/guestbook?status=${encodeURIComponent(byId('guestbook-status').value)}`)).data);
+const loadPrivate = async (path, render) => {
+    const epoch = authEpoch;
+    const result = await request(path);
+    if (!isCurrent(epoch)) { throw staleRequest(); }
+    render(result.data);
+};
+const loadStats = () => loadPrivate('/api/admin/stats', setStats);
+const loadRsvps = () => loadPrivate('/api/admin/rsvps?limit=500', renderRsvps);
+const loadGuestbook = () => loadPrivate(`/api/admin/guestbook?status=${encodeURIComponent(byId('guestbook-status').value)}`, renderGuestbook);
 const resetInviteeForm = () => {
     editingInviteeId = null;
     byId('invitee-form').reset();
@@ -251,19 +296,24 @@ const renderInvitees = (rows) => {
         table.append(tr);
     });
 };
-const loadInvitees = async () => renderInvitees((await request('/api/admin/invitees')).data);
-const loadUsers = async () => renderUsers((await request('/api/admin/users')).data);
+const loadInvitees = () => loadPrivate('/api/admin/invitees', renderInvitees);
+const loadUsers = () => loadPrivate('/api/admin/users', renderUsers);
+let firstUserRequired = false;
 const renderUsers = (rows) => {
+    firstUserRequired = rows.length === 0;
     const table = byId('users-table');
     table.replaceChildren();
     if (!rows.length) {
+        byId('user-role').value = 'admin';
+        byId('user-role').querySelector('option[value="operator"]').disabled = true;
         const tr = document.createElement('tr');
-        const empty = cell('Belum ada akun.', 'text-secondary');
+        const empty = cell('Belum ada akun. Buat akun admin pertama.', 'text-secondary');
         empty.colSpan = 5;
         tr.append(empty);
         table.append(tr);
         return;
     }
+    byId('user-role').querySelector('option[value="operator"]').disabled = false;
     rows.forEach((row) => {
         const tr = document.createElement('tr');
         const role = document.createElement('select');
@@ -301,10 +351,11 @@ const renderUsers = (rows) => {
         passwordInput.autocomplete = 'new-password';
         passwordInput.setAttribute('aria-label', `Password baru ${row.username}`);
         passwordInput.minLength = 16;
+        passwordInput.maxLength = 1024;
         passwordInput.hidden = true;
         const savePassword = actionButton('Simpan password', 'success', async () => {
             const password = passwordInput.value;
-            if (password.length < 16) { setNotice('Password minimal 16 karakter.', 'danger'); return; }
+            if (password.length < 16 || password.length > 1024) { setNotice('Password harus 16–1024 karakter.', 'danger'); return; }
             passwordInput.value = '';
             await updateUser(row.id, { password });
         });
@@ -323,6 +374,7 @@ const updateUser = async (id, changes) => {
 };
 const loadDashboard = async () => {
     if (byId('users-table') && currentRole !== 'admin') { return; }
+    const epoch = authEpoch;
     clearNotice();
     const loaders = [];
     if (byId('stat-total')) { loaders.push(loadStats()); }
@@ -331,6 +383,7 @@ const loadDashboard = async () => {
     if (byId('invitee-table')) { loaders.push(loadPublishedWedding(), loadInvitees()); }
     if (byId('users-table') && currentRole === 'admin') { loaders.push(loadUsers()); }
     const results = await Promise.allSettled(loaders);
+    if (!isCurrent(epoch)) { return; }
     if (publishedWedding && inviteeRows.length && byId('invitee-table')) { renderInvitees(inviteeRows); }
     if (results.some((result) => result.status === 'rejected')) {
         const denied = results.some((result) => result.reason?.status === 403);
@@ -344,44 +397,56 @@ const moderate = async (id, status) => {
         await loadGuestbook();
     } catch (error) { setNotice(error.message, 'danger'); }
 };
-const restoreSession = async () => {
+const restoreSession = async (explicitLogin = false) => {
+    invalidateSession();
+    if (!explicitLogin && localStorage.getItem(sessionSignalKey)?.startsWith('logout-start:')) { return; }
+    const epoch = authEpoch;
     try {
         const response = await request('/api/admin/session');
-        if (response.data.authenticated === false || !response.data.csrf_token) { throw new Error('Sesi tidak aktif.'); }
-        csrfToken = response.data.csrf_token;
-        currentRole = response.data.role;
-        sessionStorage.setItem(csrfStorageKey, csrfToken);
+        if (!isCurrent(epoch)) { return; }
+        if (response.data?.authenticated !== true || !response.data.csrf_token) { throw new Error('Sesi tidak aktif.'); }
+        beginSession(response.data);
         showApp();
         await loadDashboard();
-    } catch { csrfToken = ''; sessionStorage.removeItem(csrfStorageKey); showLogin(); }
+    } catch {
+        if (isCurrent(epoch)) { invalidateSession(); }
+    }
 };
+window.addEventListener('pageshow', (event) => { if (event.persisted) { restoreSession(); } });
+window.addEventListener('storage', (event) => {
+    if (event.key !== sessionSignalKey) { return; }
+    if (event.newValue?.startsWith('logout-start:')) { invalidateSession(); return; }
+    if (event.newValue?.startsWith('login:')) { restoreSession(true); }
+});
 
 byId('login-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     const button = byId('login-button');
     button.disabled = true;
+    const epoch = authEpoch;
     try {
         const response = await request('/api/admin/login', { method: 'POST', body: JSON.stringify({ username: byId('admin-username').value, password: byId('admin-password').value }) });
+        if (!isCurrent(epoch)) { return; }
         if (!response.data?.csrf_token) { throw new Error('Sesi tidak valid.'); }
-        csrfToken = response.data.csrf_token;
-        currentRole = response.data.role;
-        sessionStorage.setItem(csrfStorageKey, csrfToken);
+        beginSession(response.data);
+        localStorage.setItem(sessionSignalKey, `login:${Date.now()}`);
         byId('admin-password').value = '';
         showApp();
         await loadDashboard();
-    } catch (error) { setNotice(error.message, 'danger'); }
+    } catch (error) { if (isCurrent(epoch)) { setNotice(error.message, 'danger'); } }
     finally { button.disabled = false; }
 });
 byId('logout-button').addEventListener('click', async () => {
-    try { await request('/api/admin/logout', { method: 'POST' }); }
-    catch {
-        setNotice('Gagal keluar dari server. Sesi mungkin masih aktif; coba lagi.', 'danger');
-        return;
+    const logout = request('/api/admin/logout', { method: 'POST' });
+    invalidateSession();
+    const epoch = authEpoch;
+    localStorage.setItem(sessionSignalKey, `logout-start:${Date.now()}`);
+    try {
+        await logout;
+        if (isCurrent(epoch)) { setNotice('Anda sudah keluar.', 'success'); }
+    } catch {
+        if (isCurrent(epoch)) { setNotice('Sesi lokal dibersihkan, tetapi keluar dari server gagal. Tutup browser atau coba masuk dan keluar kembali.', 'danger'); }
     }
-    csrfToken = '';
-    sessionStorage.removeItem(csrfStorageKey);
-    showLogin();
-    setNotice('Anda sudah keluar.', 'success');
 });
 byId('refresh-button')?.addEventListener('click', () => loadDashboard().catch((error) => setNotice(error.message, 'danger')));
 const clearInvitationPreview = () => {
@@ -488,6 +553,7 @@ if (byId('user-form')) {
         const username = byId('user-username').value.trim();
         const password = byId('user-password').value;
         const role = byId('user-role').value;
+        if (firstUserRequired && role !== 'admin') { setNotice('Akun pertama harus berperan admin.', 'danger'); return; }
         if (!/^[a-z0-9][a-z0-9._-]{2,63}$/.test(username.toLowerCase()) || password.length < 16 || password.length > 1024) { setNotice('Username 3–64 karakter dan password 16–1024 karakter diperlukan.', 'danger'); return; }
         const button = byId('user-form').querySelector('button[type="submit"]');
         button.disabled = true;
