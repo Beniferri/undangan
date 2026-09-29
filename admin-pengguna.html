@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Dashboard administrasi RSVP dan guestbook Beta Storia Wedding">
+    <meta name="description" content="Dashboard administrasi RSVP Beta Storia Wedding">
     <title>Admin — Beta Storia Wedding</title>
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/images/dashboard-favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,14 +44,13 @@
             <a href="./dashboard.html">Ringkasan</a>
             <a href="./admin-tamu.html">Daftar tamu &amp; WA</a>
             <a href="./admin-rsvp.html">RSVP</a>
-            <a href="./admin-ucapan.html">Ucapan</a>
             <a href="./admin-pengguna.html" aria-current="page" data-admin-only hidden>Pengguna</a>
         </nav>
         <p class="dashboard-nav-hint">Geser menu untuk melihat bagian lainnya.</p>
         <section class="panel card mb-4" aria-labelledby="users-heading">
             <div class="card-body p-3 p-md-4">
                 <h2 id="users-heading" class="h3">Kelola Pengguna</h2>
-                <p class="text-secondary small">Hanya admin dapat mengelola akun. Operator dapat mengelola tamu dan memoderasi ucapan, serta melihat RSVP tanpa mengubahnya; halaman ini hanya untuk admin.</p>
+                <p class="text-secondary small">Hanya admin dapat mengelola akun. Operator dapat mengelola tamu serta mengatur tampilan publik ucapan RSVP; halaman ini hanya untuk admin.</p>
                 <p class="text-secondary small">Akun pertama dalam database harus berperan admin. Pertahankan setidaknya satu admin aktif sebelum membuat operator.</p>
                 <form id="user-form" class="row g-2 align-items-end mb-4">
                     <div class="col-md-4"><label class="form-label" for="user-username">Username</label><input id="user-username" class="form-control" required autocomplete="off" minlength="3" maxlength="64" pattern="[A-Za-z0-9][A-Za-z0-9._-]*" title="3–64 karakter: huruf, angka, titik, garis bawah, atau tanda hubung"></div>
@@ -64,6 +63,6 @@
         </section>
     </section>
 </main>
-<script defer src="./dist/admin.js?v=admin-pages-2"></script>
+<script defer src="./dist/admin.js?v=rsvp-wish-visibility-1"></script>
 </body>
 </html>

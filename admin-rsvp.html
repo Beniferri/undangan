@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Dashboard administrasi RSVP dan guestbook Beta Storia Wedding">
+    <meta name="description" content="Dashboard administrasi RSVP Beta Storia Wedding">
     <title>Admin — Beta Storia Wedding</title>
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/images/dashboard-favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +18,7 @@
         <div>
             <p class="text-uppercase small fw-semibold mb-1 brand-mark">Beta Storia · Workspace</p>
             <h1 class="mb-0">Data RSVP</h1>
-            <p class="header-subtitle mb-0">Lihat kehadiran dan ekspor data RSVP.</p>
+            <p class="header-subtitle mb-0">Lihat kehadiran, atur tampilan ucapan publik, dan ekspor data RSVP.</p>
         </div>
         <button id="logout-button" class="btn btn-outline-secondary rounded-4" type="button" hidden>Keluar</button>
     </header>
@@ -44,7 +44,6 @@
             <a href="./dashboard.html">Ringkasan</a>
             <a href="./admin-tamu.html">Daftar tamu &amp; WA</a>
             <a href="./admin-rsvp.html" aria-current="page">RSVP</a>
-            <a href="./admin-ucapan.html">Ucapan</a>
             <a href="./admin-pengguna.html" data-admin-only hidden>Pengguna</a>
         </nav>
         <p class="dashboard-nav-hint">Geser menu untuk melihat bagian lainnya.</p>
@@ -54,12 +53,13 @@
                     <h2 class="h3 mb-0">Data RSVP</h2>
                     <div class="d-flex align-items-center gap-2"><span class="text-secondary small d-none d-md-inline">Maksimal 500 data terbaru</span><button id="export-rsvp" class="btn btn-outline-success btn-sm rounded-3" type="button">Export CSV</button></div>
                 </div>
-                <div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Nama</th><th>Jumlah</th><th>Status</th><th>Pesan</th><th>Waktu</th></tr></thead><tbody id="rsvp-table"><tr><td colspan="5" class="text-secondary">Memuat data…</td></tr></tbody></table></div>
+                <p class="text-secondary small">Menyembunyikan ucapan hanya menghapusnya dari tampilan publik. Data RSVP dan pesan tetap tersedia di sini.</p>
+                <div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Nama</th><th>Jumlah</th><th>Kehadiran</th><th>Pesan</th><th>Waktu</th><th>Ucapan publik</th><th>Aksi</th></tr></thead><tbody id="rsvp-table"><tr><td colspan="7" class="text-secondary">Memuat data…</td></tr></tbody></table></div>
             </div>
         </section>
 
     </section>
 </main>
-<script defer src="./dist/admin.js?v=admin-pages-2"></script>
+<script defer src="./dist/admin.js?v=rsvp-wish-visibility-1"></script>
 </body>
 </html>

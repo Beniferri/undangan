@@ -14,7 +14,6 @@ let publishedWedding = null;
 const csrfStorageKey = 'betastoria-admin-csrf';
 let csrfToken = sessionStorage.getItem(csrfStorageKey) || '';
 let rsvpRows = [];
-let guestbookRows = [];
 let currentRole = null;
 let authEpoch = 0;
 let outstandingLogout = null;
@@ -135,9 +134,7 @@ const showLogin = () => {
         byId('invitee-save').textContent = 'Simpan tamu';
     }
     rsvpRows = [];
-    guestbookRows = [];
     if (byId('rsvp-table')) { byId('rsvp-table').replaceChildren(); }
-    if (byId('guestbook-table')) { byId('guestbook-table').replaceChildren(); }
     if (byId('users-table')) { byId('users-table').replaceChildren(); }
     document.querySelectorAll('[id^="stat-"]').forEach((stat) => { stat.textContent = '—'; });
 };
@@ -166,9 +163,6 @@ const setStats = (data) => {
     byId('stat-hadir').textContent = formatNumber(data.hadir);
     byId('stat-belum-pasti').textContent = formatNumber(data.belum_pasti);
     byId('stat-tidak-hadir').textContent = formatNumber(data.tidak_hadir);
-    byId('stat-pending').textContent = formatNumber(data.guestbook?.pending);
-    byId('stat-approved').textContent = formatNumber(data.guestbook?.approved);
-    byId('stat-likes').textContent = formatNumber(data.likes);
 };
 const cell = (value, className = '') => {
     const element = document.createElement('td');
@@ -184,35 +178,29 @@ const renderRsvps = (rows) => {
     table.replaceChildren();
     if (!rows.length) {
         table.append(cell('Belum ada RSVP.', 'text-secondary'));
-        table.firstChild.colSpan = 5;
+        table.firstChild.colSpan = 7;
         return;
     }
     rows.forEach((row) => {
         const tr = document.createElement('tr');
-        tr.append(cell(row.name), cell(`${row.guest_count} orang`), cell(statusLabel[row.attendance] || row.attendance), cell(row.message, 'message-cell'), cell(formatDate(row.created_at)));
-        table.append(tr);
-    });
-};
-const renderGuestbook = (rows) => {
-    guestbookRows = rows;
-    const table = byId('guestbook-table');
-    table.replaceChildren();
-    if (!rows.length) {
-        table.append(cell('Tidak ada data pada filter ini.', 'text-secondary'));
-        table.firstChild.colSpan = 5;
-        return;
-    }
-    rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.append(cell(row.name), cell(row.message, 'message-cell'), cell(row.like_count), cell(row.status));
+        const visible = row.message_visible !== false;
         const actions = document.createElement('td');
-        if (row.status !== 'approved') {
-            actions.append(actionButton('Setujui', 'success', () => moderate(row.id, 'approved')));
-        }
-        if (row.status !== 'rejected') {
-            actions.append(actionButton('Tolak', 'outline-danger', () => moderate(row.id, 'rejected')));
-        }
-        tr.append(actions);
+        const button = actionButton(visible ? 'Sembunyikan' : 'Tampilkan', visible ? 'outline-secondary' : 'outline-success', async () => {
+            button.disabled = true;
+            const epoch = authEpoch;
+            try {
+                await request(`/api/admin/rsvps/${encodeURIComponent(row.id)}/wish-visibility`, { method: 'PATCH', body: JSON.stringify({ visible: !visible }) });
+                if (!isCurrent(epoch)) { return; }
+                row.message_visible = !visible;
+                renderRsvps(rows);
+                setNotice(visible ? 'Ucapan disembunyikan dari publik; RSVP dan pesan tetap tersimpan.' : 'Ucapan kembali tampil untuk publik.', 'success');
+            } catch (error) {
+                if (isCurrent(epoch)) { setNotice(error.message, 'danger'); }
+            } finally { button.disabled = false; }
+        });
+        button.setAttribute('aria-label', `${visible ? 'Sembunyikan' : 'Tampilkan'} ucapan ${row.name}`);
+        actions.append(button);
+        tr.append(cell(row.name), cell(`${row.guest_count} orang`), cell(statusLabel[row.attendance] || row.attendance), cell(row.message, 'message-cell'), cell(formatDate(row.created_at)), cell(visible ? 'Tampil' : 'Disembunyikan'), actions);
         table.append(tr);
     });
 };
@@ -232,7 +220,6 @@ const loadPrivate = async (path, render) => {
 };
 const loadStats = () => loadPrivate('/api/admin/stats', setStats);
 const loadRsvps = () => loadPrivate('/api/admin/rsvps?limit=500', renderRsvps);
-const loadGuestbook = () => loadPrivate(`/api/admin/guestbook?status=${encodeURIComponent(byId('guestbook-status').value)}`, renderGuestbook);
 const resetInviteeForm = () => {
     editingInviteeId = null;
     byId('invitee-form').reset();
@@ -383,7 +370,6 @@ const loadDashboard = async () => {
     const loaders = [];
     if (byId('stat-total')) { loaders.push(loadStats()); }
     if (byId('rsvp-table')) { loaders.push(loadRsvps()); }
-    if (byId('guestbook-table')) { loaders.push(loadGuestbook()); }
     if (byId('invitee-table')) { loaders.push(loadPublishedWedding(), loadInvitees()); }
     if (byId('users-table') && currentRole === 'admin') { loaders.push(loadUsers()); }
     const results = await Promise.allSettled(loaders);
@@ -393,13 +379,6 @@ const loadDashboard = async () => {
         const denied = results.some((result) => result.reason?.status === 403);
         setNotice(denied ? 'Akses ditolak (403). Hubungi admin jika Anda memerlukan izin.' : 'Sebagian data gagal dimuat. Coba Refresh.', 'warning');
     }
-};
-const moderate = async (id, status) => {
-    try {
-        await request(`/api/admin/guestbook/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify({ status }) });
-        setNotice(`Ucapan berhasil diubah menjadi ${status}.`, 'success');
-        await loadGuestbook();
-    } catch (error) { setNotice(error.message, 'danger'); }
 };
 const restoreSession = async (explicitLogin = false) => {
     invalidateSession();
@@ -560,9 +539,7 @@ byId('invitation-form').addEventListener('submit', (event) => {
     catch (error) { setNotice(error.message, 'danger'); }
 });
 }
-byId('guestbook-status')?.addEventListener('change', () => loadGuestbook().catch((error) => setNotice(error.message, 'danger')));
-byId('export-rsvp')?.addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at])));
-byId('export-guestbook')?.addEventListener('click', () => downloadCsv('betastoria-guestbook.csv', ['Nama', 'Pesan', 'Like', 'Status', 'Waktu'], guestbookRows.map((row) => [row.name, row.message, row.like_count, row.status, row.created_at])));
+byId('export-rsvp')?.addEventListener('click', () => downloadCsv('betastoria-rsvp.csv', ['Nama', 'Jumlah tamu', 'Status', 'Pesan', 'Waktu', 'Ucapan publik'], rsvpRows.map((row) => [row.name, row.guest_count, statusLabel[row.attendance] || row.attendance, row.message, row.created_at, row.message_visible === false ? 'Disembunyikan' : 'Tampil'])));
 if (byId('user-form')) {
     byId('user-form').addEventListener('submit', async (event) => {
         event.preventDefault();
